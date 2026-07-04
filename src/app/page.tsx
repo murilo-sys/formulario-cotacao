@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Input } from "@/components/Input"
+import Image from "next/image"
 
 export default function Home() {
 
@@ -9,7 +10,7 @@ export default function Home() {
   const [email, setEmail] = useState("")
   const [redeSocial, setRedeSocial] = useState("")
 
-  function handlerSubmeterCotacao(e: React.FormEvent<HTMLFormElement>) {
+  function handlerSubmeterCotacao(e: React.SubmitEvent) {
 
     e.preventDefault()
 
@@ -35,7 +36,18 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-900 flex items-center justify-center">
+    <div className="relative min-h-screen flex items-center justify-center">
+
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/caminhao.webp"
+          alt="Caminão de fundo"
+          fill
+          priority
+          className="object-cover"
+        />
+      </div>
+
       <div className="bg-white w-full max-w-md p-8 rounded-xl shadow-lg">
         <h1 className="text-2xl font-bold text-center mb-6">Solicite sua cotação</h1>
         <p>A rede social é {redeSocial}</p>
