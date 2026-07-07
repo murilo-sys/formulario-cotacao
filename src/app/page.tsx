@@ -82,7 +82,7 @@ export default function Home() {
 
             <div>
 
-              <h2 className="font-bold text-xl">Dados dos participantes</h2>
+              <h2 className="font-bold text-xl">Dados dos endereços</h2>
               <p className="text-gray-500 text-md font-light">Lugar de onde a carga irá sair e ser entregue</p>
 
               <div className="flex flex-col mt-3 gap-3 lg:flex-row lg:justify-between w-full">
@@ -110,17 +110,17 @@ export default function Home() {
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true}>Peso Real</Label>
-                  <Input type="text" onChange={(e) => { setCepDestino(e.target.value) }} />
+                  <Input type="text" className="w-[90%] lg:w-full" onChange={(e) => { setCepDestino(e.target.value) }} />
                 </div>
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true}>Valor total NF-e</Label>
-                  <Input type="text" onChange={(e) => { setCepDestino(e.target.value) }} />
+                  <Input type="text" className="w-[90%] lg:w-full" onChange={(e) => { setCepDestino(e.target.value) }} />
                 </div>
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true}>Número NF-e</Label>
-                  <Input type="text" onChange={(e) => { setCepDestino(e.target.value) }} />
+                  <Input type="text" className="w-[90%] lg:w-full" onChange={(e) => { setCepDestino(e.target.value) }} />
                 </div>
 
               </div>
