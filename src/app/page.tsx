@@ -3,36 +3,18 @@
 import { useState } from "react"
 import { Input } from "@/components/Input"
 import Image from "next/image"
+import { Label } from "@/components/Label"
 
 export default function Home() {
 
-  const [nome, setNome] = useState("")
-  const [email, setEmail] = useState("")
-  const [redeSocial, setRedeSocial] = useState("")
+  const [cepOrigem, setCepOrigem] = useState("")
+  const [cepDestino, setCepDestino] = useState("")
 
   function handlerSubmeterCotacao(e: React.SubmitEvent) {
 
     e.preventDefault()
 
-    if (nome.trim() == "" || !isNaN(Number(nome))) {
 
-      alert("Nome inválido")
-
-      return
-    }
-
-    if (email.trim() == "" || !isNaN(Number(email))) {
-
-      alert("Email inválido")
-
-      return
-    }
-
-    console.log("Formulário enviado")
-    console.log("Nome:", nome);
-    console.log("Email:", email)
-
-    alert(`Cotação solicitada por ${nome}`)
   }
 
   return (
@@ -51,7 +33,7 @@ export default function Home() {
 
       <div className="flex flex-col items-center lg:flex-row lg:justify-center gap-8 w-full px-4">
 
-        <div className="bg-white w-full max-w-md lg:max-w-sm rounded-3xl shadow-lg pb-1 pt-4 pl-7 pr-5">
+        <div className="bg-white w-full max-w-md lg:max-w-[345px] rounded-3xl shadow-lg pb-1 pt-4 pl-7 pr-7">
 
           <h1 className="font-bold text-center text-2xl mb-3">Realize sua cotação</h1>
 
@@ -82,19 +64,19 @@ export default function Home() {
             </ul>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center m-3">
             <Image
-              src="/logo.webp"
+              src="/logo-novo.webp"
               alt="Logo Global Cargo"
-              height={420}
-              width={594}
-              className="h-32 w-auto"
+              height={90}
+              width={350}
+              className="h-10 w-auto"
             />
           </div>
 
         </div>
 
-        <div className="bg-white w-full max-w-md lg:max-w-3xl p-8 rounded-xl shadow-lg">
+        <div className="bg-white w-full max-w-md  p-8  rounded-xl shadow-lg lg:max-w-2xl">
 
           <form onSubmit={handlerSubmeterCotacao}>
 
@@ -103,14 +85,42 @@ export default function Home() {
               <h2 className="font-bold text-xl">Dados dos participantes</h2>
               <p className="text-gray-500 text-md font-light">Lugar de onde a carga irá sair e ser entregue</p>
 
-              <div className="grid grid-rows-1 grid-cols-1">
+              <div className="flex flex-col mt-3 gap-3 lg:flex-row lg:justify-between w-full">
 
-                <div>
-                  <h3 className="text-md text-black">Documento do Remetente</h3>
+                <div className="w-[90%] lg:w-[43%] flex flex-col">
+
+                  <Label obrigatorio={true}>CEP de origem</Label>
+                  <Input type="text" onChange={(e) => { setCepOrigem(e.target.value) }} />
+
                 </div>
 
-                <div>
-                  <h3 className="text-md text-black">Documento do Destinatário</h3>
+                <div className="w-[90%] lg:w-[43%] flex flex-col">
+
+                  <Label obrigatorio={true}>CEP de destino</Label>
+                  <Input type="text" onChange={(e) => { setCepDestino(e.target.value) }} />
+
+                </div>
+
+              </div> traduza em pt-br
+
+              <h2 className="font-bold text-xl mt-7">Dados da mercadoria</h2>
+              <p className="text-gray-500 text-md font-light">Lugar de onde a carga irá sair e ser entregue</p>
+
+              <div className="flex flex-col gap-4 mt-3 lg:grid lg:grid-cols-3 lg:gap-6 w-full">
+
+                <div className="flex flex-col">
+                  <Label obrigatorio={true}>Peso Real</Label>
+                  <Input type="text"  onChange={(e) => { setCepDestino(e.target.value) }} />
+                </div>
+
+                <div className="flex flex-col">
+                  <Label obrigatorio={true}>Valor total NF-e</Label>
+                  <Input type="text"  onChange={(e) => { setCepDestino(e.target.value) }} />
+                </div>
+
+                <div className="flex flex-col">
+                  <Label obrigatorio={true}>Número NF-e</Label>
+                  <Input type="text"  onChange={(e) => { setCepDestino(e.target.value) }} />
                 </div>
 
               </div>
