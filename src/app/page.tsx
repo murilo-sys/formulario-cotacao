@@ -101,7 +101,7 @@ export default function Home() {
 
                 </div>
 
-              </div> traduza em pt-br
+              </div>
 
               <h2 className="font-bold text-xl mt-7">Dados da mercadoria</h2>
               <p className="text-gray-500 text-md font-light">Lugar de onde a carga irá sair e ser entregue</p>
@@ -110,17 +110,17 @@ export default function Home() {
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true}>Peso Real</Label>
-                  <Input type="text"  onChange={(e) => { setCepDestino(e.target.value) }} />
+                  <Input type="text" onChange={(e) => { setCepDestino(e.target.value) }} />
                 </div>
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true}>Valor total NF-e</Label>
-                  <Input type="text"  onChange={(e) => { setCepDestino(e.target.value) }} />
+                  <Input type="text" onChange={(e) => { setCepDestino(e.target.value) }} />
                 </div>
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true}>Número NF-e</Label>
-                  <Input type="text"  onChange={(e) => { setCepDestino(e.target.value) }} />
+                  <Input type="text" onChange={(e) => { setCepDestino(e.target.value) }} />
                 </div>
 
               </div>
