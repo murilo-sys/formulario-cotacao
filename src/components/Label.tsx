@@ -1,4 +1,4 @@
-type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement> & {
+interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
     obrigatorio?: boolean
 }
 

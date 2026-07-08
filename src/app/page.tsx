@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { Input } from "@/components/Input"
+import { Input } from "@/components/inputs/Input"
 import { Label } from "@/components/Label"
 import { Button } from "@/components/Button"
 import Image from "next/image"
+import { InputNumber } from "@/components/inputs/InputNumber"
 
 export default function Home() {
 
@@ -13,7 +14,7 @@ export default function Home() {
   const [pesoReal, setPesoReal] = useState("")
   const [valorNfe, setValorNfe] = useState("")
   const [totalVolumes, setTotalVolumes] = useState("")
-  const [simulando, setSimulando] = useState(false)
+  const [carregando, setSimulando] = useState(false)
 
 
   function handlerSubmeterCotacao(e: React.SubmitEvent) {
@@ -51,7 +52,8 @@ export default function Home() {
 
           <div className="flex flex-col gap-1 border-b border-gray-200 pb-3">
             <h3 className="font-bold">Bem-vindo(a)!</h3>
-            <p className="text-gray-400">Para facilitar o atendimento, disponibilizamos este formulário para que você realize simulação da sua cotação de forma rápida e prática</p>
+            <p className="text-gray-400">Para facilitar o atendimento, disponibilizamos este
+              formulário para que você realize simulação da sua cotação de forma rápida e prática</p>
           </div>
 
           <div className="flex flex-col gap-1 mt-3 border-b border-gray-200 pb-3">
@@ -101,38 +103,62 @@ export default function Home() {
 
                 <div className="lg:w-[43%] flex flex-col">
 
-                  <Label obrigatorio={true}>CEP de origem</Label>
-                  <Input type="text" onChange={(e) => { setCepOrigem(e.target.value) }} />
+                  <Label obrigatorio={true} htmlFor="cepOrigem">CEP de origem</Label>
+                  <Input id="cepOrigem"
+                    type="text"
+                    mask="00000-000"
+                    onAccept={(valor) => { setCepOrigem(valor) }} />
 
                 </div>
 
                 <div className="lg:w-[43%] flex flex-col">
 
-                  <Label obrigatorio={true}>CEP de destino</Label>
-                  <Input type="text" onChange={(e) => { setCepDestino(e.target.value) }} />
+                  <Label obrigatorio={true} htmlFor="cepDestino">CEP de destino</Label>
+                  <Input
+                    id="cepDestino"
+                    type="text"
+                    mask="00000-000"
+                    value={cepDestino}
+                    onAccept={(valor) => { setCepDestino(valor) }} />
 
                 </div>
 
               </div>
 
               <h2 className="font-bold text-xl mt-7">Dados da mercadoria</h2>
-              <p className="text-gray-500 text-md font-light">Informações das cargas que seram despachadas</p>
+              <p className="text-gray-500 text-md font-light">Informações das cargas que serão despachadas</p>
 
               <div className="flex flex-col gap-4 mt-3 lg:grid lg:grid-cols-3 lg:gap-6 w-full">
 
                 <div className="flex flex-col">
-                  <Label obrigatorio={true}>Peso Real</Label>
-                  <Input type="text" className="lg:w-full" onChange={(e) => { setPesoReal(e.target.value) }} />
+                  <Label obrigatorio={true} htmlFor="pesoReal">Peso Real</Label>
+
+                  <div className="relative w-full">
+                    <InputNumber id="pesoReal"
+                      type="text"
+                      className="w-full pr-11"
+                      value={pesoReal}
+                      onAccept={(valor) => { setPesoReal(valor) }} />
+
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">| KG</span>
+                  </div>
+
                 </div>
 
                 <div className="flex flex-col">
-                  <Label obrigatorio={true}>Valor total NF-e</Label>
-                  <Input type="text" className="lg:w-full" onChange={(e) => { setValorNfe(e.target.value) }} />
+                  <Label obrigatorio={true} htmlFor="valorNfe">Valor total NF-e</Label>
+                  <InputNumber id="valorNfe"
+                    type="text"
+                    value={valorNfe}
+                    onAccept={(valor) => { setValorNfe(valor) }} />
                 </div>
 
                 <div className="flex flex-col">
-                  <Label obrigatorio={true}>Total de Volumes</Label>
-                  <Input type="text" className="lg:w-full" onChange={(e) => { setTotalVolumes(e.target.value) }} />
+                  <Label obrigatorio={true} htmlFor="totalVolumes">Total de Volumes</Label>
+                  <Input id="totalVolumes"
+                    type="text"
+                    value={totalVolumes}
+                    onChange={(e) => { setTotalVolumes(e.target.value) }} />
                 </div>
 
               </div>
@@ -140,7 +166,7 @@ export default function Home() {
             </div>
 
             <div className="flex justify-end mt-8">
-              <Button type="submit" carregando={simulando}>
+              <Button type="submit" carregando={carregando}>
                 Simular Cotação
               </Button>
             </div>

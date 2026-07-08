@@ -12,7 +12,7 @@ export function Button({ carregando, children, className, ...props }: ButtonProp
                 hover:bg-blue-500  transition-all transform-transition 
                 overflow-hidden whitespace-nowrap
                 border-2 border-transparent hover:border-blue-600
-                ${carregando ? "w-14 h-14 p-0" : "w-48 h-14 hover:-translate-y-0.5 active:scale-95"} ${className ? className : ""}`}
+                ${carregando ? "w-12 h-12 p-0" : "w-46 h-12 hover:-translate-y-0.5 active:scale-95"} ${className ? className : ""}`}
         >
             {carregando ? (
                 <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
