@@ -2,17 +2,29 @@
 
 import { useState } from "react"
 import { Input } from "@/components/Input"
-import Image from "next/image"
 import { Label } from "@/components/Label"
+import { Button } from "@/components/Button"
+import Image from "next/image"
 
 export default function Home() {
 
   const [cepOrigem, setCepOrigem] = useState("")
   const [cepDestino, setCepDestino] = useState("")
+  const [pesoReal, setPesoReal] = useState("")
+  const [valorNfe, setValorNfe] = useState("")
+  const [totalVolumes, setTotalVolumes] = useState("")
+  const [simulando, setSimulando] = useState(false)
+
 
   function handlerSubmeterCotacao(e: React.SubmitEvent) {
 
     e.preventDefault()
+
+    setSimulando(true)
+
+    setTimeout(() => {
+      setSimulando(false)
+    }, 2000);
 
 
   }
@@ -76,7 +88,7 @@ export default function Home() {
 
         </div>
 
-        <div className="bg-white w-full max-w-md  p-8  rounded-xl shadow-lg lg:max-w-2xl">
+        <div className="bg-white w-full max-w-md p-5 pr-10 pl-10 rounded-xl shadow-lg lg:max-w-2xl">
 
           <form onSubmit={handlerSubmeterCotacao}>
 
@@ -87,14 +99,14 @@ export default function Home() {
 
               <div className="flex flex-col mt-3 gap-3 lg:flex-row lg:justify-between w-full">
 
-                <div className="w-[90%] lg:w-[43%] flex flex-col">
+                <div className="lg:w-[43%] flex flex-col">
 
                   <Label obrigatorio={true}>CEP de origem</Label>
                   <Input type="text" onChange={(e) => { setCepOrigem(e.target.value) }} />
 
                 </div>
 
-                <div className="w-[90%] lg:w-[43%] flex flex-col">
+                <div className="lg:w-[43%] flex flex-col">
 
                   <Label obrigatorio={true}>CEP de destino</Label>
                   <Input type="text" onChange={(e) => { setCepDestino(e.target.value) }} />
@@ -104,27 +116,33 @@ export default function Home() {
               </div>
 
               <h2 className="font-bold text-xl mt-7">Dados da mercadoria</h2>
-              <p className="text-gray-500 text-md font-light">Lugar de onde a carga irá sair e ser entregue</p>
+              <p className="text-gray-500 text-md font-light">Informações das cargas que seram despachadas</p>
 
               <div className="flex flex-col gap-4 mt-3 lg:grid lg:grid-cols-3 lg:gap-6 w-full">
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true}>Peso Real</Label>
-                  <Input type="text" className="w-[90%] lg:w-full" onChange={(e) => { setCepDestino(e.target.value) }} />
+                  <Input type="text" className="lg:w-full" onChange={(e) => { setPesoReal(e.target.value) }} />
                 </div>
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true}>Valor total NF-e</Label>
-                  <Input type="text" className="w-[90%] lg:w-full" onChange={(e) => { setCepDestino(e.target.value) }} />
+                  <Input type="text" className="lg:w-full" onChange={(e) => { setValorNfe(e.target.value) }} />
                 </div>
 
                 <div className="flex flex-col">
-                  <Label obrigatorio={true}>Número NF-e</Label>
-                  <Input type="text" className="w-[90%] lg:w-full" onChange={(e) => { setCepDestino(e.target.value) }} />
+                  <Label obrigatorio={true}>Total de Volumes</Label>
+                  <Input type="text" className="lg:w-full" onChange={(e) => { setTotalVolumes(e.target.value) }} />
                 </div>
 
               </div>
 
+            </div>
+
+            <div className="flex justify-end mt-8">
+              <Button type="submit" carregando={simulando}>
+                Simular Cotação
+              </Button>
             </div>
 
           </form>
