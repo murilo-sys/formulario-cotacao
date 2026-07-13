@@ -9,7 +9,7 @@ export function Input({ className, mask, onAccept, ...props }: InputProps) {
 
     const baseClasses = `border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`
 
-    if (mask) {
+    if (mask && onAccept) {
         return (
             // @ts-expect-error: Ignorando a tipagem complexa da biblioteca react-imask
             <IMaskInput

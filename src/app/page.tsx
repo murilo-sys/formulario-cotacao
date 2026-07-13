@@ -6,6 +6,7 @@ import { Label } from "@/components/Label"
 import { Button } from "@/components/Button"
 import Image from "next/image"
 import { InputNumber } from "@/components/inputs/InputNumber"
+import { CotacaoSchema } from "@/utils/validacoes"
 
 export default function Home() {
 
@@ -15,11 +16,39 @@ export default function Home() {
   const [valorNfe, setValorNfe] = useState("")
   const [totalVolumes, setTotalVolumes] = useState("")
   const [carregando, setSimulando] = useState(false)
+  const [erros, setErros] = useState<Record<string, string>>({})
 
 
   function handlerSubmeterCotacao(e: React.SubmitEvent) {
-
     e.preventDefault()
+
+    const dadosDoFormulario = {
+      cepOrigem,
+      cepDestino,
+      pesoReal,
+      valorNfe,
+      totalVolumes
+    }
+
+    const resultado = CotacaoSchema.safeParse(dadosDoFormulario)
+
+    if (!resultado.success) {
+      const mensagensDeErro = resultado.error.flatten().fieldErrors
+      const errosFormatados: Record<string, string> = {}
+
+      for (const campo in mensagensDeErro) {
+
+        const chave = campo as keyof typeof mensagensDeErro
+
+        errosFormatados[chave] = mensagensDeErro[chave]?.[0] || "Campo inválido"
+
+
+      }
+
+      setErros(errosFormatados)
+      console.log(erros)
+      return
+    }
 
     setSimulando(true)
 
@@ -107,6 +136,7 @@ export default function Home() {
                   <Input id="cepOrigem"
                     type="text"
                     mask="00000-000"
+                    value={cepOrigem}
                     onAccept={(valor) => { setCepOrigem(valor) }} />
 
                 </div>
@@ -136,29 +166,43 @@ export default function Home() {
                   <div className="relative w-full">
                     <InputNumber id="pesoReal"
                       type="text"
-                      className="w-full pr-11"
+                      className="w-full pl-11"
                       value={pesoReal}
                       onAccept={(valor) => { setPesoReal(valor) }} />
 
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">| KG</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">KG |</span>
                   </div>
 
                 </div>
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true} htmlFor="valorNfe">Valor total NF-e</Label>
-                  <InputNumber id="valorNfe"
-                    type="text"
-                    value={valorNfe}
-                    onAccept={(valor) => { setValorNfe(valor) }} />
+
+                  <div className="relative w-full">
+                    <InputNumber id="valorNfe"
+                      type="text"
+                      className="w-full pl-11"
+                      value={valorNfe}
+                      onAccept={(valor) => { setValorNfe(valor) }} />
+
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">R$ |</span>
+                  </div>
+
                 </div>
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true} htmlFor="totalVolumes">Total de Volumes</Label>
-                  <Input id="totalVolumes"
-                    type="text"
-                    value={totalVolumes}
-                    onChange={(e) => { setTotalVolumes(e.target.value) }} />
+
+                  <div className="relative w-full">
+                    <Input id="totalVolumes"
+                      type="text"
+                      className="w-full pl-12"
+                      value={totalVolumes}
+                      onChange={(e) => { setTotalVolumes(e.target.value) }} />
+
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">UN |</span>
+                  </div>
+
                 </div>
 
               </div>

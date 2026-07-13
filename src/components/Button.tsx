@@ -7,7 +7,7 @@ export function Button({ carregando, children, className, ...props }: ButtonProp
         <button
             {...props}
             disabled={carregando}
-            className={`flex flex-row items-center justify-center gap-2 group
+            className={`flex flex-row items-center justify-center gap-2 group duration-300
                 bg-blue-600 text-white rounded-full cursor-pointer disabled:cursor-not-allowed
                 hover:bg-blue-500  transition-all transform-transition 
                 overflow-hidden whitespace-nowrap
@@ -19,7 +19,7 @@ export function Button({ carregando, children, className, ...props }: ButtonProp
             ) : (
                 <>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5
-                    transition-transform duration-300 group-hover:translate-x-1.5">
+                    transition-transform duration-500 group-hover:translate-x-1.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                     </svg>
                     {children}
