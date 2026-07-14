@@ -51,6 +51,7 @@ export default function Home() {
     }
 
     setSimulando(true)
+    setErros({})
 
     setTimeout(() => {
       setSimulando(false)
