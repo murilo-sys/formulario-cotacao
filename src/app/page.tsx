@@ -133,7 +133,10 @@ export default function Home() {
                 <div className="lg:w-[43%] flex flex-col">
 
                   <Label obrigatorio={true} htmlFor="cepOrigem">CEP de origem</Label>
-                  <Input id="cepOrigem"
+                  <Input
+                    placeholder="00000-000"
+                    erro={erros["cepOrigem"]}
+                    id="cepOrigem"
                     type="text"
                     mask="00000-000"
                     value={cepOrigem}
@@ -145,6 +148,8 @@ export default function Home() {
 
                   <Label obrigatorio={true} htmlFor="cepDestino">CEP de destino</Label>
                   <Input
+                    placeholder="00000-000"
+                    erro={erros["cepDestino"]}
                     id="cepDestino"
                     type="text"
                     mask="00000-000"
@@ -163,45 +168,42 @@ export default function Home() {
                 <div className="flex flex-col">
                   <Label obrigatorio={true} htmlFor="pesoReal">Peso Real</Label>
 
-                  <div className="relative w-full">
-                    <InputNumber id="pesoReal"
-                      type="text"
-                      className="w-full pl-11"
-                      value={pesoReal}
-                      onAccept={(valor) => { setPesoReal(valor) }} />
-
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">KG |</span>
-                  </div>
+                  <InputNumber
+                    erro={erros["pesoReal"]}
+                    prefixo="KG"
+                    id="pesoReal"
+                    type="text"
+                    className="w-full pl-11"
+                    value={pesoReal}
+                    onAccept={(valor) => { setPesoReal(valor) }} />
 
                 </div>
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true} htmlFor="valorNfe">Valor total NF-e</Label>
 
-                  <div className="relative w-full">
-                    <InputNumber id="valorNfe"
-                      type="text"
-                      className="w-full pl-11"
-                      value={valorNfe}
-                      onAccept={(valor) => { setValorNfe(valor) }} />
-
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">R$ |</span>
-                  </div>
+                  <InputNumber
+                    erro={erros["valorNfe"]}
+                    prefixo="R$"
+                    id="valorNfe"
+                    type="text"
+                    className="w-full"
+                    value={valorNfe}
+                    onAccept={(valor) => { setValorNfe(valor) }} />
 
                 </div>
 
                 <div className="flex flex-col">
                   <Label obrigatorio={true} htmlFor="totalVolumes">Total de Volumes</Label>
 
-                  <div className="relative w-full">
-                    <Input id="totalVolumes"
-                      type="text"
-                      className="w-full pl-12"
-                      value={totalVolumes}
-                      onChange={(e) => { setTotalVolumes(e.target.value) }} />
-
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">UN |</span>
-                  </div>
+                  <Input
+                    erro={erros["totalVolumes"]}
+                    prefixo="UN"
+                    id="totalVolumes"
+                    type="text"
+                    className="w-full pl-12"
+                    value={totalVolumes}
+                    onChange={(e) => { setTotalVolumes(e.target.value) }} />
 
                 </div>
 
