@@ -19,6 +19,7 @@ export function InputNumber({ className, erro, prefixo, ...props }: InputNumberP
                 className={`${baseClasses} ${prefixo ? "pl-11" : ""}`}
                 mask={Number}
                 scale={2}
+                unmask={true}
                 thousandsSeparator="."
                 radix=","
                 padFractionalZeros={true}

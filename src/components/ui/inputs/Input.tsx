@@ -18,6 +18,7 @@ export function Input({ className, mask, onAccept, erro, prefixo, ...props }: In
                 <IMaskInput
                     {...(props)}
                     mask={mask}
+                    unmask={true}
                     onAccept={onAccept}
                     className={baseClasses}
                 />
