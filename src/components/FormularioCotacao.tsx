@@ -14,7 +14,18 @@ import CotacaoCard, { CotacaoCardType } from "./CotacaoCard";
 export default function FormularioCotacao() {
 
     //Dados da cotação
-    const [cotacaoDados, setCotacaoDados] = useState<CotacaoCardType | null>(null)
+    const [cotacaoDados, setCotacaoDados] = useState<CotacaoCardType | null>({
+        rodo: {
+            total: "500.00",
+            subtotal: "100",
+            imposto: "100",
+        },
+        air: {
+            total: "500.00",
+            subtotal: "100",
+            imposto: "100",
+        }
+    })
 
     // Botão carregando
     const [carregando, setSimulando] = useState(false)
@@ -42,15 +53,13 @@ export default function FormularioCotacao() {
 
             setCotacaoDados({
                 rodo: {
-                    entrega: "100",
-                    coleta: "100",
-                    transferencia: "100",
+                    total: "500.00",
+                    subtotal: "100",
                     imposto: "100",
                 },
                 air: {
-                    entrega: "100",
-                    coleta: "100",
-                    transferencia: "100",
+                    total: "500.00",
+                    subtotal: "100",
                     imposto: "100",
                 }
             })
