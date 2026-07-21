@@ -11,6 +11,7 @@ import { CotacaoSchema, CotacaoDados } from "@/schemas/cotacaoSchema"
 import validarCep from "@/utils/validarCep";
 import CotacaoCard, { CotacaoCardType } from "./CotacaoCard";
 import { AnimatePresence } from "framer-motion";
+import { simularCotacao } from "@/services/cotacao";
 
 export default function FormularioCotacao() {
 
@@ -40,10 +41,12 @@ export default function FormularioCotacao() {
         }
     })
 
-    function handlerSubmeterCotacao() {
+    async function handlerSubmeterCotacao(dadosFormulario: CotacaoDados) {
 
         setCarregando(true)
         setCotacaoDados(null)
+
+        const dados = await simularCotacao(dadosFormulario)
 
 
 
@@ -254,12 +257,12 @@ export default function FormularioCotacao() {
 
                     </div>
 
-                </div>
+                    <div className="flex justify-end">
+                        <Button type="submit" carregando={carregando}>
+                            Simular Cotação
+                        </Button>
+                    </div>
 
-                <div className="flex justify-end mt-8">
-                    <Button type="submit" carregando={carregando}>
-                        Simular Cotação
-                    </Button>
                 </div>
 
             </form >
