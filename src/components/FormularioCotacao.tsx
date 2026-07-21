@@ -10,6 +10,7 @@ import { InputNumber } from "@/components/ui/inputs/InputNumber"
 import { CotacaoSchema, CotacaoDados } from "@/schemas/cotacaoSchema"
 import validarCep from "@/utils/validarCep";
 import CotacaoCard, { CotacaoCardType } from "./CotacaoCard";
+import { AnimatePresence } from "framer-motion";
 
 export default function FormularioCotacao() {
 
@@ -42,6 +43,7 @@ export default function FormularioCotacao() {
     function handlerSubmeterCotacao() {
 
         setCarregando(true)
+        setCotacaoDados(null)
 
 
 
@@ -50,12 +52,12 @@ export default function FormularioCotacao() {
             setCotacaoDados({
                 rodo: {
                     total: "500.00",
-                    subtotal: "100",
+                    subtotal: "400",
                     imposto: "100",
                 },
                 air: {
-                    total: "500.00",
-                    subtotal: "100",
+                    total: "400.00",
+                    subtotal: "300",
                     imposto: "100",
                 }
             })
@@ -264,10 +266,12 @@ export default function FormularioCotacao() {
 
         </div >
 
-        {cotacaoDados && (
-            <CotacaoCard dados={cotacaoDados} />
-        )
-        }
+        <AnimatePresence>
+            {cotacaoDados && (
+                <CotacaoCard dados={cotacaoDados} />
+            )
+            }
+        </AnimatePresence>
 
     </>
     )

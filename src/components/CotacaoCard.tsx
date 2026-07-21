@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { motion } from "framer-motion"
 
 export interface CotacaoCardType {
@@ -22,39 +23,161 @@ interface CotacaoCardProps {
 export default function CotacaoCard({ dados }: CotacaoCardProps) {
 
     return (
-        <motion.div className="bg-white w-full max-w-md p-5 pr-10 pl-10 rounded-xl shadow-lg lg:max-w-2xl">
+        <motion.div className="overflow-hidden bg-white w-full max-w-md p-5 px-5 rounded-xl shadow-lg lg:max-w-2xl"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            exit={{ opacity: 0, height: 0 }}
+        >
 
-            <div className="grid grid-cols-2 grid-rows-1 gap-3 lg:gap-10">
+            <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-1 lg:gap-10">
 
-                <div className="bg-blue-900 flex flex-col pl-5 p-3 w-full border border-red-300 rounded-xl">
-                    <div>
+                <div className="bg-radial-[at_30%_0%] from-blue-600 to-blue-950 flex flex-col px-5 py-3 w-full border border-blue-600 rounded-xl shadow-lg/40">
 
-                        <div className="border-b border-dotted border-white">
-                            <h2 className="text-white">Rodoviário</h2>
-                            <p className="text-white lg:text-2xl">R$ {dados.rodo.total}</p>
+                    <div className="flex flex-col gap-3 text-white">
+
+                        <div className="flex flex-row items-center gap-2">
+
+                            <Image
+                                src={"/icons/truck.svg"}
+                                alt="Caminhão"
+                                width={18}
+                                height={18}
+                                className="w-[40px] h-auto bg-radial-[at_75%_75%] from-blue-600 to-blue-800 to-75% rounded-md shadow-md/30 p-[5px] "
+                            />
+
+                            <div className="flex flex-col ">
+                                <span className="font-bold">Rodoviário</span>
+                                <span className="font-md text-xs/3 text-gray-300">Transporte terrestre</span>
+                            </div>
+
                         </div>
 
-                        <div>
-                            <p className="text-white">Sub-total R$100</p>
-                            <p className="text-white">Impostos R$400</p>
+                        <div className="flex flex-col gap-2">
+
+                            <p className="text-2xl font-bold pb-1 border-b border-blue-500">R$ {dados.rodo.total}</p>
+
+                            <div className="flex flex-col gap-3">
+
+                                <div className="flex flex-row items-center gap-2">
+
+                                    <Image
+                                        src={"/icons/notes.svg"}
+                                        alt="Nota fiscal"
+                                        width={18}
+                                        height={18}
+                                        className="h-[32px] w-auto rounded-full bg-gradient-to-b from-blue-700 to-blue-900 shadow-md/30 p-[2px]"
+                                    />
+
+                                    <div className="w-full flex flex-row gap-2 items-center justify-between border-b border-dotted border-blue-700">
+
+                                        <span>Sub-total</span>
+
+                                        <span>R$ {dados.rodo.subtotal}</span>
+
+                                    </div>
+
+                                </div>
+
+                                <div className="flex flex-row items-center gap-2">
+
+                                    <Image
+                                        src={"/icons/tax.svg"}
+                                        alt="Simbolo de imposto"
+                                        width={18}
+                                        height={18}
+                                        className="h-[32px] w-auto rounded-full bg-gradient-to-b from-blue-700 to-blue-900 shadow-md/30 p-[2px]"
+                                    />
+
+                                    <div className="w-full flex flex-row gap-2 items-center justify-between border-b border-dotted border-blue-700">
+
+                                        <span>Impostos</span>
+
+                                        <span>R$ {dados.rodo.imposto}</span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
 
                     </div>
 
                 </div>
 
-                <div className="flex flex-col pl-5 p-3 w-full border border-red-300 rounded-xl">
+                <div className="bg-radial-[at_70%_100%] from-red-600 to-red-950 flex flex-col px-5 py-3 w-full border border-red-600 rounded-xl shadow-lg/40">
 
+                    <div className="flex flex-col gap-3 text-white">
 
-                    <div className="flex flex-col gap-2">
-                        <div>
-                            <h2>Aéreo</h2>
-                            <p>R$ {dados.air?.total}</p>
+                        <div className="flex flex-row items-center gap-2">
+
+                            <Image
+                                src={"/icons/aviao.svg"}
+                                alt="Caminhão"
+                                width={18}
+                                height={18}
+                                className="w-[40px] h-auto bg-radial-[at_75%_75%] from-red-600 to-red-800 to-75% rounded-md shadow-md/30 p-[5px] "
+                            />
+
+                            <div className="flex flex-col ">
+                                <span className="font-bold">Aéreo</span>
+                                <span className="font-md text-xs/3 text-gray-300">Transporte aéreo</span>
+                            </div>
+
                         </div>
-                        <div>
-                            <p>Sub-total R${dados.air?.total}</p>
-                            <p>Impostos R${dados.air?.total}</p>
+
+                        <div className="flex flex-col gap-2">
+
+                            <p className="text-2xl font-bold pb-1 border-b border-red-500">R$ {dados.air?.total}</p>
+
+                            <div className="flex flex-col gap-3">
+
+                                <div className="flex flex-row items-center gap-2">
+
+                                    <Image
+                                        src={"/icons/notes.svg"}
+                                        alt="Nota fiscal"
+                                        width={18}
+                                        height={18}
+                                        className="h-[32px] w-auto rounded-full bg-gradient-to-b from-red-700 to-red-900 shadow-md/30 p-[2px]"
+                                    />
+
+                                    <div className="w-full flex flex-row gap-2 items-center justify-between border-b border-dotted border-red-300">
+
+                                        <span>Sub-total</span>
+
+                                        <span>R$ {dados.air?.subtotal}</span>
+
+                                    </div>
+
+                                </div>
+
+                                <div className="flex flex-row items-center gap-2">
+
+                                    <Image
+                                        src={"/icons/tax.svg"}
+                                        alt="Simbolo de imposto"
+                                        width={18}
+                                        height={18}
+                                        className="h-[32px] w-auto rounded-full bg-gradient-to-b from-red-700 to-red-900 shadow-md/30 p-[2px]"
+                                    />
+
+                                    <div className="w-full flex flex-row gap-2 items-center justify-between border-b border-dotted border-red-300">
+
+                                        <span>Impostos</span>
+
+                                        <span>R$ {dados.air?.imposto}</span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
+
                     </div>
 
                 </div>

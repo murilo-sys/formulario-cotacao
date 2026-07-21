@@ -18,7 +18,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="flex flex-col items-center lg:flex-row lg:justify-center gap-8 w-full px-4">
+      <div className="flex flex-col lg:items-start items-center lg:flex-row lg:justify-center gap-8 w-full px-4">
 
         <div className="bg-white w-full max-w-md lg:max-w-[345px] rounded-3xl shadow-lg pb-1 pt-4 pl-7 pr-7">
 

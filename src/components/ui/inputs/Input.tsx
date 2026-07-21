@@ -54,10 +54,11 @@ export function Input({ className, mask, onAccept, erro, prefixo, rua, ...props 
                     transition={{ duration: 0.3, ease: "easeOut" }}
                     className="flex flex-row border border-blue-200 bg-blue-50 w-fit rounded-xl px-2 gap-1">
                     <Image
-                        src={"/address.svg"}
+                        src={"/icons/address.svg"}
                         alt="Icone de localização"
                         width={18}
                         height={18}
+                        className="w-[14px] h-auto"
                     />
 
                     <span className={"text-sm"}>
