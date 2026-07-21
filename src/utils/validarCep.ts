@@ -1,13 +1,17 @@
 export default async function validarCep(cep: string) {
 
     // Valida se existe
-    if (!cep) return false
+    if (!cep) return {
+        cepValido: false
+    }
 
     //Formata com regex deixando apenas números
     const cepFormatado = cep.replace(/\D/g, "")
 
     // Valida tamanho do cep
-    if (cepFormatado.length !== 8) return false
+    if (cepFormatado.length !== 8) return {
+        cepValido: false
+    }
 
     const url = `https://viacep.com.br/ws/${cepFormatado}/json/`
 
@@ -24,13 +28,20 @@ export default async function validarCep(cep: string) {
 
         //Caso contenha erro
         if (cepDados.erro == "true" || cepDados.erro == true) {
-            return false
+            return {
+                cepValido: false
+            }
         }
 
-        return true
+        return {
+            cepValido: true,
+            rua: cepDados.logradouro
+        }
 
     } catch {
-        return null
+        return {
+            cepValido: null
+        }
     }
 
 

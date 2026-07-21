@@ -1,3 +1,7 @@
+"use client"
+
+import { motion } from "framer-motion"
+
 export interface CotacaoCardType {
     rodo: {
         total: string
@@ -18,7 +22,7 @@ interface CotacaoCardProps {
 export default function CotacaoCard({ dados }: CotacaoCardProps) {
 
     return (
-        <div className="bg-white w-full max-w-md p-5 pr-10 pl-10 rounded-xl shadow-lg lg:max-w-2xl">
+        <motion.div className="bg-white w-full max-w-md p-5 pr-10 pl-10 rounded-xl shadow-lg lg:max-w-2xl">
 
             <div className="grid grid-cols-2 grid-rows-1 gap-3 lg:gap-10">
 
@@ -27,7 +31,7 @@ export default function CotacaoCard({ dados }: CotacaoCardProps) {
 
                         <div className="border-b border-dotted border-white">
                             <h2 className="text-white">Rodoviário</h2>
-                            <p className="text-white lg:text-2xl">R$ {dados.air?.total}</p>
+                            <p className="text-white lg:text-2xl">R$ {dados.rodo.total}</p>
                         </div>
 
                         <div>
@@ -57,7 +61,7 @@ export default function CotacaoCard({ dados }: CotacaoCardProps) {
 
             </div>
 
-        </div>
+        </motion.div>
     )
 
 }

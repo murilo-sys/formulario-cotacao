@@ -14,21 +14,16 @@ import CotacaoCard, { CotacaoCardType } from "./CotacaoCard";
 export default function FormularioCotacao() {
 
     //Dados da cotação
-    const [cotacaoDados, setCotacaoDados] = useState<CotacaoCardType | null>({
-        rodo: {
-            total: "500.00",
-            subtotal: "100",
-            imposto: "100",
-        },
-        air: {
-            total: "500.00",
-            subtotal: "100",
-            imposto: "100",
-        }
-    })
+    const [cotacaoDados, setCotacaoDados] = useState<CotacaoCardType | null>(null)
 
     // Botão carregando
-    const [carregando, setSimulando] = useState(false)
+    const [carregando, setCarregando] = useState(false)
+
+    // Nome Rua Origem
+    const [ruaOrigem, setRuaOrigem] = useState<string>("")
+
+    // Nome Rua Destino
+    const [ruaDestino, setRuaDestino] = useState<string>("")
 
     // React-hook-form
     const { control, register, handleSubmit, clearErrors, getValues, setError, formState: { errors } } = useForm<CotacaoDados>({
@@ -45,7 +40,8 @@ export default function FormularioCotacao() {
     })
 
     function handlerSubmeterCotacao() {
-        setSimulando(true)
+
+        setCarregando(true)
 
 
 
@@ -64,7 +60,7 @@ export default function FormularioCotacao() {
                 }
             })
 
-            setSimulando(false)
+            setCarregando(false)
         }, 2000);
     }
 
@@ -73,138 +69,184 @@ export default function FormularioCotacao() {
 
             <form onSubmit={handleSubmit(handlerSubmeterCotacao)}>
 
-                <div>
+                <div className="flex flex-col gap-5">
 
-                    <h2 className="font-bold text-xl">Dados dos endereços</h2>
-                    <p className="text-gray-500 text-md font-light">Lugar de onde a carga irá sair e ser entregue</p>
+                    <div className="flex flex-col gap-2">
 
-                    <div className="flex flex-col mt-3 gap-3 lg:flex-row lg:justify-between w-full">
-
-                        <div className="lg:w-[43%] flex flex-col">
-
-                            <Label obrigatorio={true} htmlFor="cepOrigem">CEP de origem</Label>
-                            <Controller
-                                name="cepOrigem"
-                                control={control}
-                                render={({ field }) => (
-                                    <Input
-                                        placeholder="00000-000"
-                                        erro={errors.cepOrigem?.message}
-                                        id="cepOrigem"
-                                        type="text"
-                                        mask="00000-000"
-                                        onBlur={async () => {
-                                            const cepValido = await validarCep(field.value)
-                                            if (cepValido === false) setError("cepOrigem", { type: "manual", message: "Cep Inválido" })
-                                            field.onBlur()
-                                            return cepValido
-                                        }}
-                                        value={field.value}
-                                        onAccept={(valor) => {
-                                            clearErrors("cepOrigem")
-                                            field.onChange(valor)
-                                        }} />
-                                )}
-                            />
-
+                        <div>
+                            <h2 className="font-bold text-xl">Dados dos endereços</h2>
+                            <p className="text-gray-500 text-md font-light">Lugar de onde a carga irá sair e ser entregue</p>
                         </div>
 
-                        <div className="lg:w-[43%] flex flex-col">
+                        <div>
 
-                            <Label obrigatorio={true} htmlFor="cepDestino">CEP de destino</Label>
-                            <Controller
-                                name="cepDestino"
-                                control={control}
-                                render={({ field }) => (
-                                    <Input
-                                        placeholder="00000-000"
-                                        erro={errors.cepDestino?.message}
-                                        id="cepDestino"
-                                        type="text"
-                                        mask="00000-000"
-                                        value={field.value}
-                                        onBlur={async () => {
-                                            const cepValido = await validarCep(field.value)
-                                            if (cepValido === false) setError("cepDestino", { type: "manual", message: "Cep Inválido" })
-                                            field.onBlur()
-                                            return cepValido
-                                        }}
-                                        onAccept={(valor) => {
-                                            clearErrors("cepDestino")
-                                            field.onChange(valor)
-                                        }} />
-                                )}
-                            />
+                            <div className="flex flex-col gap-2 lg:flex-row lg:justify-between w-full">
+
+                                <div className="lg:w-[43%] flex flex-col">
+
+                                    <Label obrigatorio={true} htmlFor="cepOrigem">CEP de origem</Label>
+                                    <Controller
+                                        name="cepOrigem"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Input
+                                                rua={ruaOrigem}
+                                                placeholder="00000-000"
+                                                erro={errors.cepOrigem?.message}
+                                                id="cepOrigem"
+                                                type="text"
+                                                mask="00000-000"
+                                                onBlur={async () => {
+
+                                                    if (field.value.trim() === "") return
+
+                                                    const { cepValido, rua } = await validarCep(field.value)
+
+                                                    if (cepValido === false) {
+                                                        setError("cepOrigem", { type: "manual", message: "Cep Inválido" })
+
+                                                        setRuaOrigem("")
+
+                                                        field.onBlur()
+                                                        return cepValido
+                                                    }
+
+                                                    setRuaOrigem(rua)
+
+                                                    field.onBlur()
+                                                    return cepValido
+                                                }}
+                                                value={field.value}
+                                                onAccept={(valor) => {
+                                                    clearErrors("cepOrigem")
+                                                    field.onChange(valor)
+                                                }} />
+                                        )}
+                                    />
+
+                                </div>
+
+                                <div className="lg:w-[43%] flex flex-col">
+
+                                    <Label obrigatorio={true} htmlFor="cepDestino">CEP de destino</Label>
+                                    <Controller
+                                        name="cepDestino"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Input
+                                                placeholder="00000-000"
+                                                rua={ruaDestino}
+                                                erro={errors.cepDestino?.message}
+                                                id="cepDestino"
+                                                type="text"
+                                                mask="00000-000"
+                                                value={field.value}
+                                                onBlur={async () => {
+
+                                                    if (field.value.trim() === "") return
+
+                                                    const { cepValido, rua } = await validarCep(field.value)
+
+                                                    if (cepValido === false) {
+                                                        setError("cepDestino", { type: "manual", message: "Cep Inválido" })
+
+                                                        setRuaDestino("")
+
+                                                        field.onBlur()
+                                                        return cepValido
+                                                    }
+
+                                                    setRuaDestino(rua)
+
+                                                    field.onBlur()
+                                                    return cepValido
+                                                }}
+                                                onAccept={(valor) => {
+                                                    clearErrors("cepDestino")
+                                                    field.onChange(valor)
+                                                }} />
+                                        )}
+                                    />
+
+                                </div>
+
+                            </div>
 
                         </div>
 
                     </div>
 
-                    <h2 className="font-bold text-xl mt-7">Dados da mercadoria</h2>
-                    <p className="text-gray-500 text-md font-light">Informações das cargas que serão despachadas</p>
+                    <div className="flex flex-col gap-2">
 
-                    <div className="flex flex-col gap-4 mt-3 lg:grid lg:grid-cols-3 lg:gap-6 w-full">
-
-                        <div className="flex flex-col">
-                            <Label obrigatorio={true} htmlFor="pesoReal">Peso Real</Label>
-
-                            <Controller
-                                name="pesoReal"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputNumber
-                                        className="w-full pl-11"
-                                        prefixo="KG"
-                                        erro={errors.pesoReal?.message}
-                                        id="pesoReal"
-                                        type="text"
-                                        value={field.value}
-                                        onAccept={(valor) => {
-                                            clearErrors("pesoReal")
-                                            field.onChange(valor)
-                                        }} />
-                                )}
-                            />
-
+                        <div>
+                            <h2 className="font-bold text-xl">Dados da mercadoria</h2>
+                            <p className="text-gray-500 text-md font-light">Informações das cargas que serão despachadas</p>
                         </div>
 
-                        <div className="flex flex-col">
-                            <Label obrigatorio={true} htmlFor="valorNfe">Valor total NF-e</Label>
+                        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:gap-6 w-full">
 
-                            <Controller
-                                name="valorNfe"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputNumber
-                                        erro={errors.valorNfe?.message}
-                                        className="w-full pl-11"
-                                        prefixo="R$"
-                                        id="valorNfe"
-                                        type="text"
-                                        value={field.value}
-                                        onAccept={(valor) => {
-                                            clearErrors("valorNfe")
-                                            field.onChange(valor)
-                                        }} />
-                                )}
-                            />
+                            <div className="flex flex-col">
+                                <Label obrigatorio={true} htmlFor="pesoReal">Peso Real</Label>
 
-                        </div>
+                                <Controller
+                                    name="pesoReal"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <InputNumber
+                                            className="w-full pl-11"
+                                            prefixo="KG"
+                                            erro={errors.pesoReal?.message}
+                                            id="pesoReal"
+                                            type="text"
+                                            value={field.value}
+                                            onAccept={(valor) => {
+                                                clearErrors("pesoReal")
+                                                field.onChange(valor)
+                                            }} />
+                                    )}
+                                />
 
-                        <div className="flex flex-col">
-                            <Label obrigatorio={true} htmlFor="totalVolumes">Total de Volumes</Label>
+                            </div>
+
+                            <div className="flex flex-col">
+                                <Label obrigatorio={true} htmlFor="valorNfe">Valor total NF-e</Label>
+
+                                <Controller
+                                    name="valorNfe"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <InputNumber
+                                            erro={errors.valorNfe?.message}
+                                            className="w-full pl-11"
+                                            prefixo="R$"
+                                            id="valorNfe"
+                                            type="text"
+                                            value={field.value}
+                                            onAccept={(valor) => {
+                                                clearErrors("valorNfe")
+                                                field.onChange(valor)
+                                            }} />
+                                    )}
+                                />
+
+                            </div>
+
+                            <div className="flex flex-col">
+                                <Label obrigatorio={true} htmlFor="totalVolumes">Total de Volumes</Label>
 
 
-                            <Input
-                                className="w-full pl-11"
-                                prefixo="UN"
-                                erro={errors.totalVolumes?.message}
-                                id="totalVolumes"
-                                type="text"
-                                {...register("totalVolumes", {
-                                    onChange: () => clearErrors("totalVolumes")
-                                })}
-                            />
+                                <Input
+                                    className="w-full pl-11"
+                                    prefixo="UN"
+                                    erro={errors.totalVolumes?.message}
+                                    id="totalVolumes"
+                                    type="text"
+                                    {...register("totalVolumes", {
+                                        onChange: () => clearErrors("totalVolumes")
+                                    })}
+                                />
+
+                            </div>
 
                         </div>
 
@@ -218,13 +260,14 @@ export default function FormularioCotacao() {
                     </Button>
                 </div>
 
-            </form>
+            </form >
 
-        </div>
+        </div >
 
         {cotacaoDados && (
             <CotacaoCard dados={cotacaoDados} />
-        )}
+        )
+        }
 
     </>
     )
