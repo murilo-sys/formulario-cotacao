@@ -10,9 +10,10 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     rua?: string
     mask?: string
     onAccept?: (value: string) => void;
+    ref?: React.Ref<HTMLInputElement>;
 }
 
-export function Input({ className, mask, onAccept, erro, prefixo, rua, ...props }: InputProps) {
+export function Input({ className, mask, onAccept, erro, prefixo, rua, ref, ...props }: InputProps) {
 
     const baseClasses = `w-full border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`
 
@@ -25,6 +26,7 @@ export function Input({ className, mask, onAccept, erro, prefixo, rua, ...props 
                     {/*@ts-expect-error: Ignorando a tipagem complexa da biblioteca react-imask */}
                     <IMaskInput
                         {...(props)}
+                        inputRef={ref}
                         mask={mask}
                         unmask={true}
                         onAccept={onAccept}

@@ -83,6 +83,7 @@ export default function FormularioCotacao() {
                                         control={control}
                                         render={({ field }) => (
                                             <Input
+                                                ref={field.ref}
                                                 rua={ruaOrigem}
                                                 placeholder="00000-000"
                                                 erro={errors.cepOrigem?.message}
@@ -127,6 +128,7 @@ export default function FormularioCotacao() {
                                         control={control}
                                         render={({ field }) => (
                                             <Input
+                                                ref={field.ref}
                                                 placeholder="00000-000"
                                                 rua={ruaDestino}
                                                 erro={errors.cepDestino?.message}
@@ -186,6 +188,7 @@ export default function FormularioCotacao() {
                                     control={control}
                                     render={({ field }) => (
                                         <InputNumber
+                                            ref={field.ref}
                                             className="w-full pl-11"
                                             prefixo="KG"
                                             erro={errors.pesoReal?.message}
@@ -209,6 +212,7 @@ export default function FormularioCotacao() {
                                     control={control}
                                     render={({ field }) => (
                                         <InputNumber
+                                            ref={field.ref}
                                             erro={errors.valorNfe?.message}
                                             className="w-full pl-11"
                                             prefixo="R$"
