@@ -46,9 +46,13 @@ export default function FormularioCotacao() {
         setCarregando(true)
         setCotacaoDados(null)
 
-        const dados = await simularCotacao(dadosFormulario)
+        try {
+            const dados = await simularCotacao(dadosFormulario)
+            setCotacaoDados(dados)
+        } catch (error) {
+            setCarregando(false)
+        }
 
-        setCotacaoDados(dados)
 
         setCarregando(false)
     }
