@@ -5,7 +5,7 @@ import Image from "next/image"
 export default function Home() {
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-4">
+    <div className="relative min-h-screen flex items-center justify-center p-4 text-[#0c3d7c]">
 
       {/* Imagem de fundo */}
       <div className="absolute inset-0 -z-10">
