@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Cria a variavel resultado
-    const resultado: { rodo?: unknown; aereo?: unknown } = {}
+    const resultado: { rodo?: unknown; air?: unknown } = {}
 
     // REQUISIÇÃO MODAL RODOVIÁRIO
     try {
@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
         const cotacaoAereo = await simularValores("air", validacao.data, token)
 
         //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
-        resultado.aereo = cotacaoAereo.data
+        resultado.air = cotacaoAereo.data
 
     } catch (error) {
 

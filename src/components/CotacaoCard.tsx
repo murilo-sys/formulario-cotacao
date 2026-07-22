@@ -23,6 +23,9 @@ interface CotacaoCardProps {
 export default function CotacaoCard({ dados }: CotacaoCardProps) {
 
     return (
+
+        // Card branco do fundo
+
         <motion.div className="overflow-hidden bg-white w-full max-w-md p-5 px-5 rounded-xl shadow-lg lg:max-w-2xl"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -32,6 +35,8 @@ export default function CotacaoCard({ dados }: CotacaoCardProps) {
 
             <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-1 lg:gap-10">
 
+
+                {/* Card Rodoviario */}
                 <div className="bg-radial-[at_30%_0%] from-blue-600 to-blue-950 flex flex-col px-5 py-3 w-full border border-blue-600 rounded-xl shadow-lg/40">
 
                     <div className="flex flex-col gap-3 text-white">
@@ -107,6 +112,8 @@ export default function CotacaoCard({ dados }: CotacaoCardProps) {
 
                 </div>
 
+
+                {/* Card Aéreo */}
                 <div className="bg-radial-[at_70%_100%] from-red-600 to-red-950 flex flex-col px-5 py-3 w-full border border-red-600 rounded-xl shadow-lg/40">
 
                     <div className="flex flex-col gap-3 text-white">
@@ -130,7 +137,7 @@ export default function CotacaoCard({ dados }: CotacaoCardProps) {
 
                         <div className="flex flex-col gap-2">
 
-                            <p className="text-2xl font-bold pb-1 border-b border-red-500">R$ {dados.air?.total}</p>
+                            <p className="text-2xl font-bold pb-1 border-b border-red-500">{dados.air ? `R$ ${dados.air?.total}` : "Não disponível"}</p>
 
                             <div className="flex flex-col gap-3">
 
@@ -148,7 +155,7 @@ export default function CotacaoCard({ dados }: CotacaoCardProps) {
 
                                         <span>Sub-total</span>
 
-                                        <span>R$ {dados.air?.subtotal}</span>
+                                        <span>{dados.air ? `R$ ${dados.air?.subtotal}` : "R$0"}</span>
 
                                     </div>
 
@@ -168,7 +175,7 @@ export default function CotacaoCard({ dados }: CotacaoCardProps) {
 
                                         <span>Impostos</span>
 
-                                        <span>R$ {dados.air?.imposto}</span>
+                                        <span>{dados.air ? `R$ ${dados.air?.imposto}` : "R$0"}</span>
 
                                     </div>
 

@@ -28,7 +28,7 @@ export default function FormularioCotacao() {
     const [ruaDestino, setRuaDestino] = useState<string>("")
 
     // React-hook-form
-    const { control, register, handleSubmit, clearErrors, getValues, setError, formState: { errors } } = useForm<CotacaoDados>({
+    const { control, register, handleSubmit, clearErrors, setError, formState: { errors } } = useForm<CotacaoDados>({
         resolver: zodResolver(CotacaoSchema),
         mode: "onSubmit",
         reValidateMode: "onSubmit",
@@ -48,25 +48,9 @@ export default function FormularioCotacao() {
 
         const dados = await simularCotacao(dadosFormulario)
 
+        setCotacaoDados(dados)
 
-
-        setTimeout(() => {
-
-            setCotacaoDados({
-                rodo: {
-                    total: "500.00",
-                    subtotal: "400",
-                    imposto: "100",
-                },
-                air: {
-                    total: "400.00",
-                    subtotal: "300",
-                    imposto: "100",
-                }
-            })
-
-            setCarregando(false)
-        }, 2000);
+        setCarregando(false)
     }
 
     return (<>
