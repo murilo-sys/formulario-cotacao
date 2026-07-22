@@ -22,16 +22,16 @@ export default function Home() {
 
         <div className="bg-white w-full max-w-md lg:max-w-[345px] rounded-3xl shadow-lg pb-1 pt-4 pl-7 pr-7">
 
-          <h1 className="font-bold text-center text-2xl mb-3">Realize sua cotação</h1>
+          <h1 className="font-bold text-center text-2xl mb-3 text-[#0c3d7c]">Realize sua cotação</h1>
 
           <div className="flex flex-col gap-1 border-b border-gray-200 pb-3">
-            <h3 className="font-bold">Bem-vindo(a)!</h3>
+            <h3 className="font-bold text-[#0c3d7c]">Bem-vindo(a)!</h3>
             <p className="text-gray-400">Para facilitar o atendimento, disponibilizamos este
               formulário para que você realize simulação da sua cotação de forma rápida e prática</p>
           </div>
 
           <div className="flex flex-col gap-1 mt-3 border-b border-gray-200 pb-3">
-            <h3 className="font-bold">Fale Conosco - Segunda a Sexta: Das 08h às 18h</h3>
+            <h3 className="font-bold text-[#0c3d7c]">Fale Conosco - Segunda a Sexta: Das 08h às 18h</h3>
             <ul className="list-disc list-inside text-sm marker:text-xs text-gray-400">
               <li>(11) 3017-8990</li>
               <li>(11) 2222-1260</li>
@@ -40,12 +40,12 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-1 mt-3 border-b border-gray-200 pb-5">
-            <h3 className="font-bold">Chat Pelo Whatsapp</h3>
-            <a href="https://wa.me/5511977120119" className="underline underline-offset-4 text-sm font-medium">CLIQUE E FALE COM NOSSOS ATENDENTES</a>
+            <h3 className="font-bold text-[#0c3d7c]">Chat Pelo Whatsapp</h3>
+            <a href="https://wa.me/5511977120119" className="text-[#0c3d7c] underline underline-offset-4 text-sm font-medium">CLIQUE E FALE COM NOSSOS ATENDENTES</a>
           </div>
 
           <div className="flex flex-col gap-1 mt-3 border-b border-gray-200 pb-3">
-            <h3 className="font-bold">Onde estamos?</h3>
+            <h3 className="font-bold text-[#0c3d7c]">Onde estamos?</h3>
             <ul className="list-disc list-inside text-sm marker:text-xs text-gray-400">
               <li>Sede: Av. Forte do leme, 873 São Mateus</li>
               <li>São Paulo - CEP 08340-010</li>

@@ -49,7 +49,7 @@ export default function FormularioCotacao() {
         try {
             const dados = await simularCotacao(dadosFormulario)
             setCotacaoDados(dados)
-        } catch (error) {
+        } catch {
             setCarregando(false)
         }
 
@@ -67,7 +67,7 @@ export default function FormularioCotacao() {
                     <div className="flex flex-col gap-2">
 
                         <div>
-                            <h2 className="font-bold text-xl">Dados dos endereços</h2>
+                            <h2 className="font-bold text-xl text-[#0c3d7c]">Dados dos endereços</h2>
                             <p className="text-gray-500 text-md font-light">Lugar de onde a carga irá sair e ser entregue</p>
                         </div>
 
@@ -172,7 +172,7 @@ export default function FormularioCotacao() {
                     <div className="flex flex-col gap-2">
 
                         <div>
-                            <h2 className="font-bold text-xl">Dados da mercadoria</h2>
+                            <h2 className="font-bold text-xl text-[#0c3d7c]">Dados da mercadoria</h2>
                             <p className="text-gray-500 text-md font-light">Informações das cargas que serão despachadas</p>
                         </div>
 
