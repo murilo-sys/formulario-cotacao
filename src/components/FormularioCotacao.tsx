@@ -132,10 +132,11 @@ export default function FormularioCotacao() {
 
                                                     const { cepValido, cidade, estado } = await validarCep(field.value)
 
+                                                    setEnderecoOrigem("")
+
                                                     if (cepValido === false) {
                                                         setError("cepOrigem", { type: "manual", message: "Cep Inválido" })
 
-                                                        setEnderecoOrigem("")
 
                                                         field.onBlur()
                                                         return cepValido
@@ -179,12 +180,13 @@ export default function FormularioCotacao() {
 
                                                     if (field.value.trim() === "" || cepDestino.current === field.value) return
 
+                                                    setEnderecoDestino("")
+
                                                     const { cepValido, cidade, estado } = await validarCep(field.value)
 
                                                     if (cepValido === false) {
                                                         setError("cepDestino", { type: "manual", message: "Cep Inválido" })
 
-                                                        setEnderecoDestino("")
 
                                                         field.onBlur()
                                                         return cepValido
