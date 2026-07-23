@@ -8,11 +8,11 @@ const redis = Redis.fromEnv()
 const ratelimit = new Ratelimit({
     redis: redis,
     // Regra: limite de 5 requisições em um intervalo de 10 segundos
-    limiter: Ratelimit.slidingWindow(5, "10 s"),
+    limiter: Ratelimit.slidingWindow(1, "15 s"),
     analytics: true
 })
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
 
     const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1"
 
@@ -26,6 +26,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: "api/cotacao/:path*"
+    matcher: "/api/cotacao/:path*"
 }
 
