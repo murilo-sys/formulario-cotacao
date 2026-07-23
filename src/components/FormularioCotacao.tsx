@@ -232,15 +232,24 @@ export default function FormularioCotacao() {
                                 <Label obrigatorio={true} htmlFor="totalVolumes">Total de Volumes</Label>
 
 
-                                <Input
-                                    className="w-full pl-11"
-                                    prefixo="UN"
-                                    erro={errors.totalVolumes?.message}
-                                    id="totalVolumes"
-                                    type="text"
-                                    {...register("totalVolumes", {
-                                        onChange: () => clearErrors("totalVolumes")
-                                    })}
+                                <Controller
+                                    name="totalVolumes"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Input
+                                            className="w-full pl-11"
+                                            prefixo="UN"
+                                            erro={errors.totalVolumes?.message}
+                                            id="totalVolumes"
+                                            type="text"
+                                            ref={field.ref}
+                                            value={field.value}
+                                            onChange={(e) => {
+                                                clearErrors("totalVolumes")
+                                                field.onChange(e.target.value)
+                                            }}
+                                        />
+                                    )}
                                 />
 
                             </div>

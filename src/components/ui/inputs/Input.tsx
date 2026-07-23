@@ -35,6 +35,7 @@ export function Input({ className, mask, onAccept, erro, prefixo, rua, ref, ...p
                 </> :
                     <input
                         {...props}
+                        ref={ref}
                         className={`w-full ${baseClasses}`}
                     />
                 }
