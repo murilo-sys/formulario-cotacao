@@ -60,7 +60,7 @@ export default function CotacaoCard({ resultado }: CotacaoCardProps) {
                                                 height={18}
                                                 className="w-[18px] h-auto"
                                             />
-                                            <span className="text-black text-[11px] font-semibold">Coleta e Entrega</span>
+                                            <span className="text-black text-[11px] font-semibold">Inclui Coleta e Entrega</span>
                                         </div>
 
                                     </div>
@@ -149,7 +149,7 @@ export default function CotacaoCard({ resultado }: CotacaoCardProps) {
                                                 height={18}
                                                 className="w-[18px] h-auto"
                                             />
-                                            <span className="text-black text-[11px] font-semibold">Coleta e Entrega</span>
+                                            <span className="text-black text-[11px] font-semibold">Inclui Coleta e Entrega</span>
                                         </div>
                                     </div>
 
