@@ -52,7 +52,7 @@ export default function CotacaoCard({ resultado }: CotacaoCardProps) {
                                         <span className="font-bold">Rodoviário</span>
                                         <span className="font-md text-xs/3 text-gray-300">Transporte terrestre</span>
 
-                                        <div className="mt-1 px-1 flex flex-row gap-1 justify-center items-center rounded-md shadow-md/30 bg-white ">
+                                        <div className="mt-1 px-1 flex flex-row gap-1 justify-center items-center rounded-md shadow-md/30 bg-gray-200 ">
                                             <Image
                                                 src={"/icons/box.svg"}
                                                 alt="Caixa"
@@ -141,7 +141,7 @@ export default function CotacaoCard({ resultado }: CotacaoCardProps) {
                                         <span className="font-bold">Aéreo</span>
                                         <span className="font-md text-xs/3 text-gray-300">Transporte aéreo</span>
 
-                                        <div className="mt-1 px-1 flex flex-row gap-1 justify-center items-center rounded-md shadow-md/30 bg-white">
+                                        <div className="mt-1 px-1 flex flex-row gap-1 justify-center items-center rounded-md shadow-md/30 bg-gray-200">
                                             <Image
                                                 src={"/icons/box.svg"}
                                                 alt="Caixa"

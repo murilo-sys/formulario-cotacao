@@ -77,12 +77,22 @@ export default function FormularioCotacao() {
         }
 
         try {
+
             const resultado = await simularCotacao(dadosFormulario)
 
             console.log(resultado)
 
             setCotacaoDados(resultado)
-        } catch {
+
+        } catch (erro) {
+
+            // Verificamos se a variável erro foi criada por um throw new Error
+            if (erro instanceof Error) {
+                setError("root", { type: "server", message: erro.message })
+            } else {
+                setError("root", { type: "server", message: "Ocorreu um erro inesperado." })
+            }
+
             setCarregando(false)
         }
 
@@ -299,10 +309,13 @@ export default function FormularioCotacao() {
 
                     </div>
 
-                    <div className="flex justify-end">
+                    <div className="flex flex-col items-end">
                         <Button type="submit" carregando={carregando}>
                             Simular Cotação
                         </Button>
+                        {errors.root && (
+                            <div className="text-red-500"><p>{errors.root.message}</p></div>
+                        )}
                     </div>
 
                 </div>

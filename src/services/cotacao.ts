@@ -24,6 +24,11 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
             };
         }
 
+        //Caso tenha sido barrado pelo Rate Limit
+        if (resposta.status === 429) {
+            throw new Error("Muitas simulações seguidas! Aguarde alguns segundos.");
+        }
+
         //Caso tenha sido diferente de 404
         throw new Error("Erro durante a simulação. Tente novamente mais tarde.");
     }
