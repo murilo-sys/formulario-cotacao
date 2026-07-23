@@ -309,12 +309,12 @@ export default function FormularioCotacao() {
 
                     </div>
 
-                    <div className="flex flex-col items-end">
+                    <div className="flex flex-col items-end gap-1">
                         <Button type="submit" carregando={carregando}>
                             Simular Cotação
                         </Button>
                         {errors.root && (
-                            <div className="text-red-500"><p>{errors.root.message}</p></div>
+                            <div className="text-red-500 text-md"><p>{errors.root.message}</p></div>
                         )}
                     </div>
 
