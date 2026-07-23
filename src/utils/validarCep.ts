@@ -35,7 +35,8 @@ export default async function validarCep(cep: string) {
 
         return {
             cepValido: true,
-            rua: cepDados.logradouro
+            cidade: cepDados.localidade,
+            estado: cepDados.uf
         }
 
     } catch {

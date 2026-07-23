@@ -2,33 +2,37 @@
 
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Input } from "@/components/ui/inputs/Input"
 import { Label } from "@/components/ui/Label"
 import { Button } from "@/components/ui/Button"
 import { InputNumber } from "@/components/ui/inputs/InputNumber"
-import { CotacaoSchema, CotacaoDados } from "@/schemas/cotacaoSchema"
+import { CotacaoSchema, CotacaoDados, CotacaoResponse } from "@/schemas/cotacaoSchema"
 import validarCep from "@/utils/validarCep";
-import CotacaoCard, { CotacaoCardType } from "./CotacaoCard";
 import { AnimatePresence } from "framer-motion";
 import { simularCotacao } from "@/services/cotacao";
+import CotacaoCard from "./CotacaoCard";
 
 export default function FormularioCotacao() {
 
     //Dados da cotação
-    const [cotacaoDados, setCotacaoDados] = useState<CotacaoCardType | null>(null)
+    const [cotacaoDados, setCotacaoDados] = useState<CotacaoResponse | null>(null)
 
     // Botão carregando
     const [carregando, setCarregando] = useState(false)
 
-    // Nome Rua Origem
-    const [ruaOrigem, setRuaOrigem] = useState<string>("")
+    // Nome Rua Origem - Nome Rua Destino
+    const [enderecoOrigem, setEnderecoOrigem] = useState<string>("")
+    const [enderecoDestino, setEnderecoDestino] = useState<string>("")
 
-    // Nome Rua Destino
-    const [ruaDestino, setRuaDestino] = useState<string>("")
+    // Cep origem - Cep destino /-/-/ 
+    // Usado para quando o usuario clicar no campo, guardar o valor, 
+    // e se quando ele sair, verificar se ambos são iguais, se for igual, não verifica novamente na API
+    const cepOrigem = useRef<string>("")
+    const cepDestino = useRef<string>("")
 
     // React-hook-form
-    const { control, register, handleSubmit, clearErrors, setError, formState: { errors } } = useForm<CotacaoDados>({
+    const { control, handleSubmit, clearErrors, setError, formState: { errors } } = useForm<CotacaoDados>({
         resolver: zodResolver(CotacaoSchema),
         mode: "onSubmit",
         reValidateMode: "onSubmit",
@@ -43,12 +47,41 @@ export default function FormularioCotacao() {
 
     async function handlerSubmeterCotacao(dadosFormulario: CotacaoDados) {
 
+        // Seta animação de carregando como true
         setCarregando(true)
+
+        //Seta os dados da cotação como null
         setCotacaoDados(null)
 
         try {
-            const dados = await simularCotacao(dadosFormulario)
-            setCotacaoDados(dados)
+            const { cepValido: cepValidoDestino } = await validarCep(dadosFormulario.cepDestino)
+
+            //Valida se o CEP destino é valido
+            if (cepValidoDestino === false) {
+                setError("cepDestino", { type: "manual", message: "Cep Inválido" })
+                setCarregando(false)
+                return
+            }
+
+            const { cepValido: cepValidoOrigem } = await validarCep(dadosFormulario.cepOrigem)
+
+            //Valida se o CEP origem é valido
+            if (cepValidoOrigem === false) {
+                setError("cepOrigem", { type: "manual", message: "Cep Inválido" })
+                setCarregando(false)
+                return
+            }
+
+        } catch {
+            console.error("Não foi possivel validar o CEP. Continuando...")
+        }
+
+        try {
+            const resultado = await simularCotacao(dadosFormulario)
+
+            console.log(resultado)
+
+            setCotacaoDados(resultado)
         } catch {
             setCarregando(false)
         }
@@ -84,7 +117,10 @@ export default function FormularioCotacao() {
                                         render={({ field }) => (
                                             <Input
                                                 ref={field.ref}
-                                                rua={ruaOrigem}
+                                                onFocus={() => {
+                                                    cepOrigem.current = field.value
+                                                }}
+                                                rua={enderecoOrigem}
                                                 placeholder="00000-000"
                                                 erro={errors.cepOrigem?.message}
                                                 id="cepOrigem"
@@ -92,20 +128,20 @@ export default function FormularioCotacao() {
                                                 mask="00000-000"
                                                 onBlur={async () => {
 
-                                                    if (field.value.trim() === "") return
+                                                    if (field.value.trim() === "" || cepOrigem.current === field.value) return
 
-                                                    const { cepValido, rua } = await validarCep(field.value)
+                                                    const { cepValido, cidade, estado } = await validarCep(field.value)
 
                                                     if (cepValido === false) {
                                                         setError("cepOrigem", { type: "manual", message: "Cep Inválido" })
 
-                                                        setRuaOrigem("")
+                                                        setEnderecoOrigem("")
 
                                                         field.onBlur()
                                                         return cepValido
                                                     }
 
-                                                    setRuaOrigem(rua)
+                                                    setEnderecoOrigem(`${cidade} - ${estado}`)
 
                                                     field.onBlur()
                                                     return cepValido
@@ -128,9 +164,12 @@ export default function FormularioCotacao() {
                                         control={control}
                                         render={({ field }) => (
                                             <Input
+                                                onFocus={() => {
+                                                    cepDestino.current = field.value
+                                                }}
                                                 ref={field.ref}
                                                 placeholder="00000-000"
-                                                rua={ruaDestino}
+                                                rua={enderecoDestino}
                                                 erro={errors.cepDestino?.message}
                                                 id="cepDestino"
                                                 type="text"
@@ -138,20 +177,20 @@ export default function FormularioCotacao() {
                                                 value={field.value}
                                                 onBlur={async () => {
 
-                                                    if (field.value.trim() === "") return
+                                                    if (field.value.trim() === "" || cepDestino.current === field.value) return
 
-                                                    const { cepValido, rua } = await validarCep(field.value)
+                                                    const { cepValido, cidade, estado } = await validarCep(field.value)
 
                                                     if (cepValido === false) {
                                                         setError("cepDestino", { type: "manual", message: "Cep Inválido" })
 
-                                                        setRuaDestino("")
+                                                        setEnderecoDestino("")
 
                                                         field.onBlur()
                                                         return cepValido
                                                     }
 
-                                                    setRuaDestino(rua)
+                                                    setEnderecoDestino(`${cidade} - ${estado}`)
 
                                                     field.onBlur()
                                                     return cepValido
@@ -271,10 +310,9 @@ export default function FormularioCotacao() {
         </div >
 
         <AnimatePresence>
-            {cotacaoDados && (
-                <CotacaoCard dados={cotacaoDados} />
-            )
-            }
+
+            {cotacaoDados && <CotacaoCard resultado={cotacaoDados} />}
+
         </AnimatePresence>
 
     </>

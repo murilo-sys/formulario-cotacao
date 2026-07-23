@@ -1,12 +1,12 @@
-import { CotacaoCardType } from "@/components/CotacaoCard";
-import { CotacaoDados } from "@/schemas/cotacaoSchema";
+import { CotacaoDados, CotacaoResponse } from "@/schemas/cotacaoSchema";
 
-export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoCardType | null> {
 
-    console.log(dados)
+export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoResponse> {
 
+    //Transforme os dados recebidos em parametros para o fetch
     const params = new URLSearchParams(dados).toString()
 
+    // Fetch das cotações
     const resposta = await fetch(`/api/cotacao?${params}`, {
         method: "GET",
         headers: {
@@ -19,13 +19,16 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoCardTy
 
         //Caso tenha sido 404 status
         if (resposta.status === 404) {
-            throw new Error("Não foi possivel simular a cotação");
+            return {
+                notFound: true
+            };
         }
 
         //Caso tenha sido diferente de 404
         throw new Error("Erro durante a simulação. Tente novamente mais tarde.");
     }
 
+    // Transforma em
     const respostaDados = await resposta.json()
 
     const resultado: {
@@ -47,5 +50,5 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoCardTy
         }
     }
 
-    return resultado
+    return { notFound: false, dados: resultado }
 }
