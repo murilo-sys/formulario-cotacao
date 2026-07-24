@@ -229,10 +229,6 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                                             <div className="flex flex-col gap-2 px-3 py-2 justify-center border border-red-800 bg-gradient-to-b from-red-900 to-red-700 px-1 rounded-md shadow-md/40">
 
                                                 <span className="bg-red-500 rounded-md text-white w-fit px-1 text-xs font-medium">Caso aplicável</span>
-                                        {resultado.dados.rodo.difal != "0.0" &&
-                                            <div className="flex flex-col gap-2 px-3 py-2 justify-center border border-blue-800 bg-gradient-to-b from-blue-900 to-blue-700 px-1 rounded-md shadow-md/40">
-
-                                                <span className="bg-blue-500 rounded-md text-white w-fit px-1 text-xs font-medium">Caso aplicável</span>
 
                                                 <div className="flex flex-row gap-1 items-center" >
                                                     <Image
@@ -245,9 +241,6 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                                                     <div className="flex flex-row w-full justify-between border-b border-dotted border-red-500">
                                                         <span>Difal</span>
                                                         <span>R${resultado.dados.air?.difal}</span>
-                                                    <div className="flex flex-row w-full justify-between border-b border-dotted border-blue-500">
-                                                        <span>Difal</span>
-                                                        <span>R${resultado.dados.rodo.difal}</span>
                                                     </div>
                                                 </div>
 

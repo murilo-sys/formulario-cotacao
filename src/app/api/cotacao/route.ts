@@ -53,9 +53,6 @@ export async function GET(request: NextRequest) {
     //Faz a validação usando o zod (princio de verdade unica)
     const validacao = await CotacaoSchema.safeParseAsync(dados)
 
-    console.log(dados.valorNfe);
-    console.log(validacao.data?.valorNfe)
-
     //Caso a validacao não tenha sido um sucesso
     if (!validacao.success) {
 
