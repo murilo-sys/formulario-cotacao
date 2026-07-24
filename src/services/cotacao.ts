@@ -50,10 +50,10 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
 
     if (respostaDados.air) {
         resultado.air = {
-            total: respostaDados.rodo.data[0].summary.total,
-            subtotal: respostaDados.rodo.data[0].details.subtotal,
-            difal: respostaDados.rodo.data[0].details.fiscal_detail.difal_tax_value_destination,
-            icms: respostaDados.rodo.data[0].details.fiscal_detail.tax_value
+            total: respostaDados.air.data[0].summary.total,
+            subtotal: respostaDados.air.data[0].details.subtotal,
+            difal: respostaDados.air.data[0].details.fiscal_detail.difal_tax_value_destination,
+            icms: respostaDados.air.data[0].details.fiscal_detail.tax_value
         }
     }
 

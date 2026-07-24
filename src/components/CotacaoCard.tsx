@@ -71,7 +71,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                 <div className="flex flex-col gap-2">
 
-                                    <p className="text-2xl font-bold pb-1 border-b border-blue-500">R$ {resultado.dados.rodo.total}</p>
+                                    <p className="text-2xl font-bold pb-1 border-b border-blue-500">R$ {Number(Number(resultado.dados.rodo.total) - Number(resultado.dados.rodo.difal)).toFixed(2)}</p>
 
                                     <div className="flex flex-col gap-3">
 
@@ -107,7 +107,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                             <div className="w-full flex flex-row gap-2 items-center justify-between border-b border-dotted border-blue-700">
 
-                                                <span>Impostos</span>
+                                                <span>ICMS</span>
 
                                                 <span>R$ {resultado.dados.rodo.icms}</span>
 
@@ -130,7 +130,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                                                     />
                                                     <div className="flex flex-row w-full justify-between border-b border-dotted border-blue-500">
                                                         <span>Difal</span>
-                                                        <span>R${resultado.dados.rodo.difal}</span>
+                                                        <span>R$ {resultado.dados.rodo.difal}</span>
                                                     </div>
                                                 </div>
 
@@ -147,7 +147,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
 
                         {/* Card Aéreo */}
-                        <div className="bg-radial-[at_70%_100%] from-red-600 to-red-950 flex flex-col px-5 py-3 w-full border border-red-600 rounded-xl shadow-lg/40">
+                        <div className="bg-radial-[at_70%_100%] from-red-600 to-red-950 flex flex-col h-fit px-5 py-3 w-full border border-red-600 rounded-xl shadow-lg/40">
 
                             <div className="flex flex-col gap-3 text-white">
 
@@ -180,7 +180,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                 <div className="flex flex-col gap-2">
 
-                                    <p className="text-2xl font-bold pb-1 border-b border-red-500">{resultado.dados.air ? `R$ ${resultado.dados.air?.total}` : "Não disponível"}</p>
+                                    <p className="text-2xl font-bold pb-1 border-b border-red-500">{resultado.dados.air ? `R$ ${Number((Number(resultado.dados.air?.total) - Number(resultado.dados.air?.difal))).toFixed(2)}` : "Não disponível"}</p>
 
                                     <div className="flex flex-col gap-3">
 
@@ -216,7 +216,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                             <div className="w-full flex flex-row gap-2 items-center justify-between border-b border-dotted border-red-300">
 
-                                                <span>Impostos</span>
+                                                <span>ICMS</span>
 
                                                 <span>R${resultado.dados.air?.icms || 0}</span>
 
@@ -225,7 +225,27 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                         </div>
 
-                                        <p>Caso aplicavel: Difal R${resultado.dados.air?.difal || 0}</p>
+                                        {resultado.dados.air?.difal && resultado.dados.air?.difal != "0.0" &&
+                                            <div className="flex flex-col gap-2 px-3 py-2 justify-center border border-red-800 bg-gradient-to-b from-red-900 to-red-700 px-1 rounded-md shadow-md/40">
+
+                                                <span className="bg-red-500 rounded-md text-white w-fit px-1 text-xs font-medium">Caso aplicável</span>
+
+                                                <div className="flex flex-row gap-1 items-center" >
+                                                    <Image
+                                                        src={"/icons/attention.svg"}
+                                                        alt="Icone de correto"
+                                                        width={18}
+                                                        height={18}
+                                                        className="w-[24px] h-auto"
+                                                    />
+                                                    <div className="flex flex-row w-full justify-between border-b border-dotted border-red-500">
+                                                        <span>Difal</span>
+                                                        <span>R${resultado.dados.air?.difal}</span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        }
 
                                     </div>
 
@@ -236,8 +256,6 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                         </div>
 
                     </div>
-
-                    {/* teste */}
 
                     <div className="flex flex-col justify-center items-center gap-3">
                         <p className="text-sm text-gray-500 font-sm text-center">Valores apresentados sujeitos a alteração mediante conferência de carga e documentação</p>

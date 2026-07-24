@@ -22,8 +22,8 @@ export default function ButtonCriar({ clicarFuncao }: ButtonProps) {
                 <Image
                     src={"/icons/correct.svg"}
                     alt="Simbolo de correto"
-                    width={18}
-                    height={18}
+                    width={20}
+                    height={20}
                     className="w-[18px] h-auto"
                 />
                 Criar Cotação
