@@ -93,7 +93,16 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                                                     </div>
                                                 </div>
 
-                                                    <span className="bg-blue-500 rounded-md text-white w-fit px-1 text-xs font-medium">Aplicável quando - Destinatário tomador não contribuimte de ICMS</span>
+                                                <div className="flex flex-row gap-2 bg-blue-300 text-blue-900 text-sm/4 rounded-md px-2 py-1">
+                                                    <Image
+                                                        src={"/icons/attention-black.svg"}
+                                                        alt="Icone de correto"
+                                                        width={18}
+                                                        height={18}
+                                                        className="w-[24px] h-auto"
+                                                    />
+                                                    <span className="text-xs/3 font-medium">Aplicável quando - Tomador destinatário não contribuinte de ICMS</span>
+                                                </div>
 
                                             </div>
                                         }
@@ -148,7 +157,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                                         {resultado.dados.air?.difal && resultado.dados.air?.difal != "0.0" &&
                                             <div className="flex flex-col gap-2 px-3 py-2 justify-center border border-red-800 bg-gradient-to-b from-red-900 to-red-700 px-1 rounded-md shadow-md/40">
 
-                                                
+
 
                                                 <div className="flex flex-row gap-1 items-center" >
                                                     <Image
@@ -164,7 +173,16 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                                                     </div>
                                                 </div>
 
-                                                    <span className="bg-red-500 rounded-md text-white w-fit px-1 text-xs font-medium">Aplicável quando - Destinatário tomador não contribuimte de ICMS</span>
+                                                <div className="flex flex-row gap-2 bg-red-300 text-red-900 text-sm/4 rounded-md px-2 py-1">
+                                                    <Image
+                                                        src={"/icons/attention-black.svg"}
+                                                        alt="Icone de correto"
+                                                        width={18}
+                                                        height={18}
+                                                        className="w-[24px] h-auto"
+                                                    />
+                                                    <span className="text-xs/3 font-medium">Aplicável quando - Tomador destinatário não contribuinte de ICMS</span>
+                                                </div>
 
                                             </div>
                                         }
