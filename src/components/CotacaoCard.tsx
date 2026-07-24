@@ -75,50 +75,9 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                     <div className="flex flex-col gap-3">
 
-                                        <div className="flex flex-row items-center gap-2">
-
-                                            <Image
-                                                src={"/icons/notes.svg"}
-                                                alt="Nota fiscal"
-                                                width={18}
-                                                height={18}
-                                                className="h-[32px] w-auto rounded-full bg-gradient-to-b from-blue-700 to-blue-900 shadow-md/30 p-[2px]"
-                                            />
-
-                                            <div className="w-full flex flex-row gap-2 items-center justify-between border-b border-dotted border-blue-700">
-
-                                                <span>Sub-total</span>
-
-                                                <span>R$ {resultado.dados.rodo.subtotal}</span>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className="flex flex-row items-center gap-2">
-
-                                            <Image
-                                                src={"/icons/tax.svg"}
-                                                alt="Simbolo de imposto"
-                                                width={18}
-                                                height={18}
-                                                className="h-[32px] w-auto rounded-full bg-gradient-to-b from-blue-700 to-blue-900 shadow-md/30 p-[2px]"
-                                            />
-
-                                            <div className="w-full flex flex-row gap-2 items-center justify-between border-b border-dotted border-blue-700">
-
-                                                <span>ICMS</span>
-
-                                                <span>R$ {resultado.dados.rodo.icms}</span>
-
-                                            </div>
-
-                                        </div>
 
                                         {resultado.dados.rodo.difal != "0.0" &&
                                             <div className="flex flex-col gap-2 px-3 py-2 justify-center border border-blue-800 bg-gradient-to-b from-blue-900 to-blue-700 px-1 rounded-md shadow-md/40">
-
-                                                <span className="bg-blue-500 rounded-md text-white w-fit px-1 text-xs font-medium">Caso aplicável</span>
 
                                                 <div className="flex flex-row gap-1 items-center" >
                                                     <Image
@@ -133,6 +92,8 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                                                         <span>R$ {resultado.dados.rodo.difal}</span>
                                                     </div>
                                                 </div>
+
+                                                    <span className="bg-blue-500 rounded-md text-white w-fit px-1 text-xs font-medium">Aplicável quando - Destinatário tomador não contribuimte de ICMS</span>
 
                                             </div>
                                         }
@@ -184,51 +145,10 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                     <div className="flex flex-col gap-3">
 
-                                        <div className="flex flex-row items-center gap-2">
-
-                                            <Image
-                                                src={"/icons/notes.svg"}
-                                                alt="Nota fiscal"
-                                                width={18}
-                                                height={18}
-                                                className="h-[32px] w-auto rounded-full bg-gradient-to-b from-red-700 to-red-900 shadow-md/30 p-[2px]"
-                                            />
-
-                                            <div className="w-full flex flex-row gap-2 items-center justify-between border-b border-dotted border-red-300">
-
-                                                <span>Sub-total</span>
-
-                                                <span>{resultado.dados.air ? `R$ ${resultado.dados.air?.subtotal}` : "R$0"}</span>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className="flex flex-row items-center gap-2">
-
-                                            <Image
-                                                src={"/icons/tax.svg"}
-                                                alt="Simbolo de imposto"
-                                                width={18}
-                                                height={18}
-                                                className="h-[32px] w-auto rounded-full bg-gradient-to-b from-red-700 to-red-900 shadow-md/30 p-[2px]"
-                                            />
-
-                                            <div className="w-full flex flex-row gap-2 items-center justify-between border-b border-dotted border-red-300">
-
-                                                <span>ICMS</span>
-
-                                                <span>R${resultado.dados.air?.icms || 0}</span>
-
-                                            </div>
-
-
-                                        </div>
-
                                         {resultado.dados.air?.difal && resultado.dados.air?.difal != "0.0" &&
                                             <div className="flex flex-col gap-2 px-3 py-2 justify-center border border-red-800 bg-gradient-to-b from-red-900 to-red-700 px-1 rounded-md shadow-md/40">
 
-                                                <span className="bg-red-500 rounded-md text-white w-fit px-1 text-xs font-medium">Caso aplicável</span>
+                                                
 
                                                 <div className="flex flex-row gap-1 items-center" >
                                                     <Image
@@ -243,6 +163,8 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                                                         <span>R${resultado.dados.air?.difal}</span>
                                                     </div>
                                                 </div>
+
+                                                    <span className="bg-red-500 rounded-md text-white w-fit px-1 text-xs font-medium">Aplicável quando - Destinatário tomador não contribuimte de ICMS</span>
 
                                             </div>
                                         }
