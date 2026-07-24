@@ -257,6 +257,8 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                     </div>
 
+                    {/* teste */}
+
                     <div className="flex flex-col justify-center items-center gap-3">
                         <p className="text-sm text-gray-500 font-sm text-center">Valores apresentados sujeitos a alteração mediante conferência de carga e documentação</p>
 
