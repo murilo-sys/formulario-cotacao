@@ -14,12 +14,14 @@ export interface CotacaoCardType {
     rodo: {
         total: string
         subtotal: string
-        imposto: string
+        icms: string
+        difal: string
     }
     air?: {
         total: string
         subtotal: string
-        imposto: string
+        icms: string
+        difal: string
     }
 }
 

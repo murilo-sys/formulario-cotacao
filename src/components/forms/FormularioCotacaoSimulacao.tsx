@@ -145,7 +145,12 @@ export default function FormularioCotacaoSimulacao() {
                                                 mask="00000-000"
                                                 onBlur={async () => {
 
-                                                    if (field.value.trim() === "" || cepOrigem.current === field.value) return
+                                                    if (cepOrigem.current === field.value) return
+
+                                                    if (field.value.trim() === "") {
+                                                        setEnderecoOrigem("")
+                                                        return
+                                                    }
 
                                                     const { cepValido, cidade, estado } = await validarCep(field.value)
 
@@ -195,9 +200,12 @@ export default function FormularioCotacaoSimulacao() {
                                                 value={field.value}
                                                 onBlur={async () => {
 
-                                                    if (field.value.trim() === "" || cepDestino.current === field.value) return
+                                                    if (cepDestino.current === field.value) return
 
-                                                    setEnderecoDestino("")
+                                                    if (field.value.trim() === "") {
+                                                        setEnderecoDestino("")
+                                                        return
+                                                    }
 
                                                     const { cepValido, cidade, estado } = await validarCep(field.value)
 

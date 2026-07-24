@@ -24,7 +24,7 @@ export default function ButtonCriar({ clicarFuncao }: ButtonProps) {
                     alt="Simbolo de correto"
                     width={18}
                     height={18}
-                    className="width=[18px] height-auto"
+                    className="w-[18px] h-auto"
                 />
                 Criar Cotação
             </button>

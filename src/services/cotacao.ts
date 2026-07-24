@@ -37,21 +37,23 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
     const respostaDados = await resposta.json()
 
     const resultado: {
-        rodo: { total: string, imposto: string, subtotal: string },
-        air?: { total: string, imposto: string, subtotal: string }
+        rodo: { total: string, icms: string, difal: string, subtotal: string },
+        air?: { total: string, icms: string, difal: string, subtotal: string }
     } = {
         rodo: {
             total: respostaDados.rodo.data[0].summary.total,
-            imposto: respostaDados.rodo.data[0].details.tax_total,
-            subtotal: respostaDados.rodo.data[0].details.subtotal
+            subtotal: respostaDados.rodo.data[0].details.subtotal,
+            difal: respostaDados.rodo.data[0].details.fiscal_detail.difal_tax_value_destination,
+            icms: respostaDados.rodo.data[0].details.fiscal_detail.tax_value
         }
     }
 
     if (respostaDados.air) {
         resultado.air = {
-            total: respostaDados.air.data[0].summary.total,
-            imposto: respostaDados.air.data[0].details.tax_total,
-            subtotal: respostaDados.air.data[0].details.subtotal
+            total: respostaDados.rodo.data[0].summary.total,
+            subtotal: respostaDados.rodo.data[0].details.subtotal,
+            difal: respostaDados.rodo.data[0].details.fiscal_detail.difal_tax_value_destination,
+            icms: respostaDados.rodo.data[0].details.fiscal_detail.tax_value
         }
     }
 

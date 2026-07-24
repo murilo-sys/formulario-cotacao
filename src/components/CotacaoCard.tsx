@@ -62,7 +62,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                                                 height={18}
                                                 className="w-[18px] h-auto"
                                             />
-                                            <span className="text-black text-[11px] font-semibold">Inclui Coleta e Entrega</span>
+                                            <span className="text-black text-[11px] font-semibold">Incluso Coleta e Entrega</span>
                                         </div>
 
                                     </div>
@@ -109,11 +109,33 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                                 <span>Impostos</span>
 
-                                                <span>R$ {resultado.dados.rodo.imposto}</span>
+                                                <span>R$ {resultado.dados.rodo.icms}</span>
 
                                             </div>
 
                                         </div>
+
+                                        {resultado.dados.rodo.difal != "0.0" &&
+                                            <div className="flex flex-col gap-2 px-3 py-2 justify-center border border-blue-800 bg-gradient-to-b from-blue-900 to-blue-700 px-1 rounded-md shadow-md/40">
+
+                                                <span className="bg-blue-500 rounded-md text-white w-fit px-1 text-xs font-medium">Caso aplicável</span>
+
+                                                <div className="flex flex-row gap-1 items-center" >
+                                                    <Image
+                                                        src={"/icons/attention.svg"}
+                                                        alt="Icone de correto"
+                                                        width={18}
+                                                        height={18}
+                                                        className="w-[24px] h-auto"
+                                                    />
+                                                    <div className="flex flex-row w-full justify-between border-b border-dotted border-blue-500">
+                                                        <span>Difal</span>
+                                                        <span>R${resultado.dados.rodo.difal}</span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        }
 
                                     </div>
 
@@ -150,7 +172,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                                                 height={18}
                                                 className="w-[18px] h-auto"
                                             />
-                                            <span className="text-black text-[11px] font-semibold">Inclui Coleta e Entrega</span>
+                                            <span className="text-black text-[11px] font-semibold">Incluso Coleta e Entrega</span>
                                         </div>
                                     </div>
 
@@ -196,11 +218,14 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                                 <span>Impostos</span>
 
-                                                <span>{resultado.dados.air ? `R$ ${resultado.dados.air?.imposto}` : "R$0"}</span>
+                                                <span>R${resultado.dados.air?.icms || 0}</span>
 
                                             </div>
 
+
                                         </div>
+
+                                        <p>Caso aplicavel: Difal R${resultado.dados.air?.difal || 0}</p>
 
                                     </div>
 
