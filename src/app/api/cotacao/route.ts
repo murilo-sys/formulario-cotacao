@@ -25,7 +25,7 @@ async function simularValores(modal: "rodo" | "air", dados: CotacaoDados, token:
                     "customer_price_table_code": `${modal === "rodo" ? "REXP 2026" : "ACON"}`,
 
                     // CNPJ USADO PARA CALCULO DE DIFAL
-                    "recipient_document": "65971717000126",
+                    //"recipient_document": "65971717000126",
                     "real_weight": dados.pesoReal,
                     "invoices_value": dados.valorNfe,
                     "invoices_volumes": dados.totalVolumes,
