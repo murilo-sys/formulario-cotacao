@@ -1,3 +1,5 @@
+"use client"
+
 import { IMaskInput } from "react-imask";
 
 interface InputNumberProps extends React.InputHTMLAttributes<HTMLInputElement> {

@@ -1,3 +1,5 @@
+"use client"
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     carregando?: boolean;
 }

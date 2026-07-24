@@ -5,15 +5,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState } from "react"
 import { Input } from "@/components/ui/inputs/Input"
 import { Label } from "@/components/ui/Label"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/buttons/ButtonSimular"
 import { InputNumber } from "@/components/ui/inputs/InputNumber"
 import { CotacaoSchema, CotacaoDados, CotacaoResponse } from "@/schemas/cotacaoSchema"
 import validarCep from "@/utils/validarCep";
 import { AnimatePresence } from "framer-motion";
 import { simularCotacao } from "@/services/cotacao";
-import CotacaoCard from "./CotacaoCard";
+import CotacaoCard from "../CotacaoCard";
+import FormularioCotacaoCompleto from "./FormularioCotacaoCompleto";
 
-export default function FormularioCotacao() {
+export default function FormularioCotacaoSimulacao() {
 
     //Dados da cotação
     const [cotacaoDados, setCotacaoDados] = useState<CotacaoResponse | null>(null)
@@ -30,6 +31,9 @@ export default function FormularioCotacao() {
     // e se quando ele sair, verificar se ambos são iguais, se for igual, não verifica novamente na API
     const cepOrigem = useRef<string>("")
     const cepDestino = useRef<string>("")
+
+    // Botão de estado - Se o usuario clicou em realizar cotação completa ou não
+    const [cotacaoCompleta, setCotacaoCompleta] = useState<boolean>(false)
 
     // React-hook-form
     const { control, handleSubmit, clearErrors, setError, formState: { errors } } = useForm<CotacaoDados>({
@@ -52,6 +56,9 @@ export default function FormularioCotacao() {
 
         //Seta os dados da cotação como null
         setCotacaoDados(null)
+
+        // Seta opção de cotação completa como false
+        setCotacaoCompleta(false)
 
         try {
             const { cepValido: cepValidoDestino } = await validarCep(dadosFormulario.cepDestino)
@@ -152,7 +159,7 @@ export default function FormularioCotacao() {
                                                         return cepValido
                                                     }
 
-                                                    setEnderecoOrigem(`${cidade} - ${estado}`)
+                                                    if (cidade) setEnderecoOrigem(`${cidade} - ${estado}`)
 
                                                     field.onBlur()
                                                     return cepValido
@@ -202,7 +209,7 @@ export default function FormularioCotacao() {
                                                         return cepValido
                                                     }
 
-                                                    setEnderecoDestino(`${cidade} - ${estado}`)
+                                                    if (cidade) setEnderecoDestino(`${cidade} - ${estado}`)
 
                                                     field.onBlur()
                                                     return cepValido
@@ -326,9 +333,13 @@ export default function FormularioCotacao() {
 
         <AnimatePresence>
 
-            {cotacaoDados && <CotacaoCard resultado={cotacaoDados} />}
+            {cotacaoDados && <CotacaoCard key={"cotacao-card"} resultado={cotacaoDados} clicadoFuncao={() => { setCotacaoCompleta(true) }} clicado={cotacaoCompleta} />}
+
+            {cotacaoCompleta && <FormularioCotacaoCompleto key={"formulario-completo"} />}
 
         </AnimatePresence>
+
+
 
     </>
     )

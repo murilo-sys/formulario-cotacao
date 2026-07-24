@@ -1,14 +1,17 @@
 "use client"
 
 import Image from "next/image"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import { CotacaoResponse } from "@/schemas/cotacaoSchema"
+import ButtonCriar from "./ui/buttons/ButtonCriar"
 
 interface CotacaoCardProps {
     resultado: CotacaoResponse
+    clicadoFuncao: () => void
+    clicado: boolean
 }
 
-export default function CotacaoCard({ resultado }: CotacaoCardProps) {
+export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: CotacaoCardProps) {
 
     const classNameBase = `flex flex-col overflow-hidden bg-white w-full max-w-md p-5 ${!resultado.notFound && "pb-2"} rounded-xl shadow-lg lg:max-w-2xl`
 
@@ -28,7 +31,7 @@ export default function CotacaoCard({ resultado }: CotacaoCardProps) {
                     <span></span>
                 </div> :
 
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-2">
 
                     <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-1 lg:gap-10">
 
@@ -50,7 +53,6 @@ export default function CotacaoCard({ resultado }: CotacaoCardProps) {
 
                                     <div className="flex flex-col">
                                         <span className="font-bold">Rodoviário</span>
-                                        <span className="font-md text-xs/3 text-gray-300">Transporte terrestre</span>
 
                                         <div className="mt-1 px-1 flex flex-row gap-1 justify-center items-center rounded-md shadow-md/30 bg-gray-200 ">
                                             <Image
@@ -139,7 +141,6 @@ export default function CotacaoCard({ resultado }: CotacaoCardProps) {
 
                                     <div className="flex flex-col ">
                                         <span className="font-bold">Aéreo</span>
-                                        <span className="font-md text-xs/3 text-gray-300">Transporte aéreo</span>
 
                                         <div className="mt-1 px-1 flex flex-row gap-1 justify-center items-center rounded-md shadow-md/30 bg-gray-200">
                                             <Image
@@ -211,7 +212,14 @@ export default function CotacaoCard({ resultado }: CotacaoCardProps) {
 
                     </div>
 
-                    <p className="text-sm text-gray-400 font-sm text-center">Valores apresentados sujeitos a alteração mediante conferência de carga e documentação</p>
+                    <div className="flex flex-col justify-center items-center gap-3">
+                        <p className="text-sm text-gray-500 font-sm text-center">Valores apresentados sujeitos a alteração mediante conferência de carga e documentação</p>
+
+                        <AnimatePresence>
+                            {!clicado && <ButtonCriar key={"botao-criar"} clicarFuncao={clicadoFuncao} />}
+                        </AnimatePresence>
+
+                    </div>
 
                 </div>
             }

@@ -1,4 +1,4 @@
-import FormularioCotacao from "@/components/FormularioCotacao"
+import FormularioCotacaoSimulacao from "@/components/forms/FormularioCotacaoSimulacao"
 import Image from "next/image"
 
 
@@ -22,7 +22,7 @@ export default function Home() {
 
         <div className="bg-white w-full max-w-md lg:max-w-[345px] rounded-3xl shadow-lg pb-1 pt-4 pl-7 pr-7">
 
-          <h1 className="font-bold text-center text-2xl mb-3 ">Realize sua cotação</h1>
+          <h1 className="font-bold text-center text-2xl mb-3 ">Faça sua cotação</h1>
 
           <div className="flex flex-col gap-1 border-b border-gray-200 pb-3">
             <h3 className="font-bold ">Bem-vindo(a)!</h3>
@@ -65,7 +65,7 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-3">
-          <FormularioCotacao />
+          <FormularioCotacaoSimulacao />
         </div>
       </div>
 

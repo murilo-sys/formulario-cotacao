@@ -23,6 +23,9 @@ async function simularValores(modal: "rodo" | "air", dados: CotacaoDados, token:
                     "origin_postal_code": dados.cepOrigem,
                     "destination_postal_code": dados.cepDestino,
                     "customer_price_table_code": `${modal === "rodo" ? "REXP 2026" : "ACON"}`,
+
+                    // CNPJ USADO PARA CALCULO DE DIFAL
+                    // "recipient_document": "65971717000126",
                     "real_weight": dados.pesoReal,
                     "invoices_value": dados.valorNfe,
                     "invoices_volumes": dados.totalVolumes,
@@ -44,11 +47,14 @@ export async function GET(request: NextRequest) {
         cepDestino: searchParams.get('cepDestino')?.replace(/\D/g, ""),
         pesoReal: searchParams.get('pesoReal')?.replace(/\D/g, ""),
         totalVolumes: searchParams.get('totalVolumes')?.replace(/\D/g, ""),
-        valorNfe: searchParams.get('valorNfe')?.replace(/\D/g, "")
+        valorNfe: searchParams.get('valorNfe')?.replace(/[^0-9.]/g, "")
     }
 
     //Faz a validação usando o zod (princio de verdade unica)
     const validacao = await CotacaoSchema.safeParseAsync(dados)
+
+    console.log(dados.valorNfe);
+    console.log(validacao.data?.valorNfe)
 
     //Caso a validacao não tenha sido um sucesso
     if (!validacao.success) {
