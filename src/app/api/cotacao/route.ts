@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     const dados = {
         cepOrigem: searchParams.get('cepOrigem')?.replace(/\D/g, ""),
         cepDestino: searchParams.get('cepDestino')?.replace(/\D/g, ""),
-        pesoReal: searchParams.get('pesoReal')?.replace(/\D/g, ""),
+        pesoReal: searchParams.get('pesoReal')?.replace(/[^0-9.]/g, ""),
         totalVolumes: searchParams.get('totalVolumes')?.replace(/\D/g, ""),
         valorNfe: searchParams.get('valorNfe')?.replace(/[^0-9.]/g, "")
     }
