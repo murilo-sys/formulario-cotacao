@@ -36,21 +36,21 @@ async function simularValores(modal: "rodo" | "air", dados: CotacaoDados, token:
     })
 }
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
 
-    //Search params para pegar os parametros recebidos
-    const searchParams = await request.nextUrl.searchParams;
+    const body = await request.json()
 
     //Pega as variaveis da URL e guarda em dados
     const dados = {
-        cepOrigem: searchParams.get('cepOrigem')?.replace(/\D/g, ""),
-        cepDestino: searchParams.get('cepDestino')?.replace(/\D/g, ""),
-        pesoReal: searchParams.get('pesoReal')?.replace(/[^0-9.]/g, ""),
-        totalVolumes: searchParams.get('totalVolumes')?.replace(/\D/g, ""),
-        valorNfe: searchParams.get('valorNfe')?.replace(/[^0-9.]/g, "")
+        cepOrigem: body.cepOrigem.replace(/\D/g, ""),
+        cepDestino: body.cepDestino.replace(/\D/g, ""),
+        pesoReal: body.pesoReal.replace(/[^0-9.]/g, ""),
+        totalVolumes: body.totalVolumes.replace(/\D/g, ""),
+        valorNfe: body.valorNfe.replace(/[^0-9.]/g, ""),
+        cubagens: body.cubagens
     }
 
-    //Faz a validação usando o zod (princio de verdade unica)
+    //Faz a validação usando o zod (princio da verdade unica)
     const validacao = await CotacaoSchema.safeParseAsync(dados)
 
     //Caso a validacao não tenha sido um sucesso

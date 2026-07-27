@@ -1,11 +1,21 @@
 import { z } from "zod"
 
+export const ItemCubagemSchema = z.object({
+    altura: z.string().min(1, "Altura inválida").regex(/^[0-9.]+$/, "Altura inválida"),
+    largura: z.string().min(1, "Largura inválida").regex(/^[0-9.]+$/, "largura inválida"),
+    comprimento: z.string().min(1, "Comprimento inválido").regex(/^[0-9.]+$/, "Comprimento inválido"),
+    quantidade: z.string().min(1, "Quantidade inválida").regex(/^[0-9.]+$/, "Quantidade inválida")
+})
+
 export const CotacaoSchema = z.object({
     cepOrigem: z.string().length(8, "O CEP de origem está incompleto"),
     cepDestino: z.string().length(8, "O CEP de destino está incompleto"),
     pesoReal: z.string().min(1, "Informe o peso da carga").refine((valor) => { return Number(valor) > 0 }),
     valorNfe: z.string().min(1, "Informe o valor da NF-e").refine((valor) => { return Number(valor) > 0 }),
-    totalVolumes: z.string().min(1, "Informe o total de volumes").refine((valor) => { return Number(valor) > 0 })
+    totalVolumes: z.string().min(1, "Informe o total de volumes").refine((valor) => { return Number(valor) > 0 }),
+
+    //Array dinâmico de cubagens
+    cubagens: z.array(ItemCubagemSchema)
 })
 
 export type CotacaoDados = z.infer<typeof CotacaoSchema>
@@ -15,13 +25,11 @@ export interface CotacaoCardType {
         total: string
         subtotal: string
         icms: string
-        difal: string
     }
     air?: {
         total: string
         subtotal: string
         icms: string
-        difal: string
     }
 }
 

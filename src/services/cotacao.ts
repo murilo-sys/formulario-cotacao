@@ -4,14 +4,22 @@ import { CotacaoDados, CotacaoResponse } from "@/schemas/cotacaoSchema";
 export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoResponse> {
 
     //Transforme os dados recebidos em parametros para o fetch
-    const params = new URLSearchParams(dados).toString()
+    const params = ({
+        cepOrigem: dados.cepOrigem,
+        cepDestino: dados.cepDestino,
+        pesoReal: dados.pesoReal,
+        valorNfe: dados.valorNfe,
+        totalVolumes: dados.totalVolumes,
+        cubagens: dados.cubagens
+    })
 
     // Fetch das cotações
     const resposta = await fetch(`/api/cotacao?${params}`, {
-        method: "GET",
+        method: "POST",
         headers: {
             "Content-Type": "application/json"
-        }
+        },
+        body: JSON.stringify(params)
     })
 
     // Caso tenha sido diferente de 200-299
@@ -37,13 +45,12 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
     const respostaDados = await resposta.json()
 
     const resultado: {
-        rodo: { total: string, icms: string, difal: string, subtotal: string },
-        air?: { total: string, icms: string, difal: string, subtotal: string }
+        rodo: { total: string, icms: string, subtotal: string },
+        air?: { total: string, icms: string, subtotal: string }
     } = {
         rodo: {
             total: respostaDados.rodo.data[0].summary.total,
             subtotal: respostaDados.rodo.data[0].details.subtotal,
-            difal: respostaDados.rodo.data[0].details.fiscal_detail.difal_tax_value_destination,
             icms: respostaDados.rodo.data[0].details.fiscal_detail.tax_value
         }
     }
@@ -52,7 +59,6 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
         resultado.air = {
             total: respostaDados.air.data[0].summary.total,
             subtotal: respostaDados.air.data[0].details.subtotal,
-            difal: respostaDados.air.data[0].details.fiscal_detail.difal_tax_value_destination,
             icms: respostaDados.air.data[0].details.fiscal_detail.tax_value
         }
     }

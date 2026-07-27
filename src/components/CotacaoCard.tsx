@@ -71,41 +71,23 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                 <div className="flex flex-col gap-2">
 
-                                    <p className="text-2xl font-bold pb-1 border-b border-blue-500">R$ {Number(Number(resultado.dados.rodo.total) - Number(resultado.dados.rodo.difal)).toFixed(2)}</p>
+                                    <p className="text-2xl font-bold pb-1 border-b border-dotted border-blue-500">R$ {resultado.dados.rodo.total}</p>
 
                                     <div className="flex flex-col gap-3">
 
 
-                                        {resultado.dados.rodo.difal != "0.0" &&
-                                            <div className="flex flex-col gap-2 px-3 py-2 justify-center border border-blue-800 bg-gradient-to-b from-blue-900 to-blue-700 px-1 rounded-md shadow-md/40">
+                                        <div className="flex flex-row gap-2 bg-blue-300 text-blue-900 text-sm/4 rounded-md px-2 py-1">
 
-                                                <div className="flex flex-row gap-1 items-center" >
-                                                    <Image
-                                                        src={"/icons/attention.svg"}
-                                                        alt="Icone de correto"
-                                                        width={18}
-                                                        height={18}
-                                                        className="w-[24px] h-auto"
-                                                    />
-                                                    <div className="flex flex-row w-full justify-between border-b border-dotted border-blue-500">
-                                                        <span>Difal</span>
-                                                        <span>R$ {resultado.dados.rodo.difal}</span>
-                                                    </div>
-                                                </div>
+                                            <Image
+                                                src={"/icons/attention-black.svg"}
+                                                alt="Icone de correto"
+                                                width={18}
+                                                height={18}
+                                                className="w-[24px] h-auto"
+                                            />
 
-                                                <div className="flex flex-row gap-2 bg-blue-300 text-blue-900 text-sm/4 rounded-md px-2 py-1">
-                                                    <Image
-                                                        src={"/icons/attention-black.svg"}
-                                                        alt="Icone de correto"
-                                                        width={18}
-                                                        height={18}
-                                                        className="w-[24px] h-auto"
-                                                    />
-                                                    <span className="text-xs/3 font-medium">Aplicável quando - Tomador destinatário não contribuinte de ICMS</span>
-                                                </div>
-
-                                            </div>
-                                        }
+                                            <span className="text-xs/3 font-medium"><span className="font-bold">Difal</span> aplicável quando - Tomador destinatário não contribuinte de ICMS</span>
+                                        </div>
 
                                     </div>
 
@@ -150,43 +132,19 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                 <div className="flex flex-col gap-2">
 
-                                    <p className="text-2xl font-bold pb-1 border-b border-red-500">{resultado.dados.air ? `R$ ${Number((Number(resultado.dados.air?.total) - Number(resultado.dados.air?.difal))).toFixed(2)}` : "Não disponível"}</p>
+                                    <p className="text-2xl font-bold pb-1 border-b border-dotted border-red-500">{resultado.dados.air ? `R$ ${resultado.dados.air?.total}` : "Não disponível"}</p>
 
-                                    <div className="flex flex-col gap-3">
+                                    <div className="flex flex-row gap-2 bg-red-300 text-red-900 text-sm/4 rounded-md px-2 py-1">
 
-                                        {resultado.dados.air?.difal && resultado.dados.air?.difal != "0.0" &&
-                                            <div className="flex flex-col gap-2 px-3 py-2 justify-center border border-red-800 bg-gradient-to-b from-red-900 to-red-700 px-1 rounded-md shadow-md/40">
+                                        <Image
+                                            src={"/icons/attention-black.svg"}
+                                            alt="Icone de correto"
+                                            width={18}
+                                            height={18}
+                                            className="w-[24px] h-auto"
+                                        />
 
-
-
-                                                <div className="flex flex-row gap-1 items-center" >
-                                                    <Image
-                                                        src={"/icons/attention.svg"}
-                                                        alt="Icone de correto"
-                                                        width={18}
-                                                        height={18}
-                                                        className="w-[24px] h-auto"
-                                                    />
-                                                    <div className="flex flex-row w-full justify-between border-b border-dotted border-red-500">
-                                                        <span>Difal</span>
-                                                        <span>R${resultado.dados.air?.difal}</span>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex flex-row gap-2 bg-red-300 text-red-900 text-sm/4 rounded-md px-2 py-1">
-                                                    <Image
-                                                        src={"/icons/attention-black.svg"}
-                                                        alt="Icone de correto"
-                                                        width={18}
-                                                        height={18}
-                                                        className="w-[24px] h-auto"
-                                                    />
-                                                    <span className="text-xs/3 font-medium">Aplicável quando - Tomador destinatário não contribuinte de ICMS</span>
-                                                </div>
-
-                                            </div>
-                                        }
-
+                                        <span className="text-xs/3 font-medium"><span className="font-bold">Difal</span> aplicável quando - Tomador destinatário não contribuinte de ICMS</span>
                                     </div>
 
                                 </div>
