@@ -68,17 +68,17 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
                 return
             }
 
-            //Caso a ultima linha se fosse tirada, ela seria menor que o valor total
-            if ((Number(totalVolumesSomados) - Number(cubagens[fields.length - 1].quantidade)) < Number(totalVolumesDigitado)) {
+            // //Caso a ultima linha se fosse tirada, ela seria menor que o valor total
+            // if ((Number(totalVolumesSomados) - Number(cubagens[fields.length - 1].quantidade)) < Number(totalVolumesDigitado)) {
 
-                //Faz essa formula que nem eu entendi como eu fiz, mas retorna o valor 
-                const valorUltimaLinha = Math.abs((Number(totalVolumesSomados) - Number(cubagens[fields.length - 1].quantidade)) - Number(totalVolumesDigitado))
+            //     //Faz essa formula que nem eu entendi como eu fiz, mas retorna o valor 
+            //     const valorUltimaLinha = Math.abs((Number(totalVolumesSomados) - Number(cubagens[fields.length - 1].quantidade)) - Number(totalVolumesDigitado))
 
-                //Seta o valor na cubagem
-                setValue(`cubagens.${fields.length - 1}.quantidade`, String(valorUltimaLinha))
+            //     //Seta o valor na cubagem
+            //     setValue(`cubagens.${fields.length - 1}.quantidade`, String(valorUltimaLinha))
 
-                return
-            }
+            //     return
+            // }
 
             remove(fields.length - 1)
 
