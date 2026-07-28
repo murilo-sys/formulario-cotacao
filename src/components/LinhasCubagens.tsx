@@ -40,27 +40,36 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
 
         if (totalVolumesDigitado == "" || totalVolumesDigitado == "0") return
 
-        //Caso o total de volumes seja maior que as linhas de cubagens
-        if (Number(totalVolumesDigitado) > fields.length && Number(totalVolumesDigitado) > totalVolumesSomados) {
+        //Para criar uma nova linha, o TOTAL VOLUMES SOMADOS precisar ser diferente de TOTAL VOLUMES DIGITADOS
+        if (Number(totalVolumesDigitado) > totalVolumesSomados) {
 
-            // Laço de repetição para adicionar 1+ após os campos validos
-            for (let index = fields.length; index <= camposValidos; index++) {
-                append({ quantidade: "", comprimento: "", largura: "", altura: "" }, { shouldFocus: false })
-            }
+            //Se os campos validos não forem iguais a quantidade de linhas. RETURN
+            if (camposValidos !== fields.length) return
 
+            append({ quantidade: "", comprimento: "", largura: "", altura: "" }, { shouldFocus: false })
         }
 
-        if (Number(totalVolumesSomados) > Number(totalVolumesDigitado) || (Number(totalVolumesSomados) === Number(totalVolumesDigitado) && camposValidos === 1)) {
+
+        //Para remover a ultima linhas caso as cubagens estejam todas preenchidas
+        if (Number(totalVolumesDigitado) === totalVolumesSomados && (camposValidos + 1 === fields.length)) {
+            console.log(camposValidos + 1);
+            console.log(fields.length);
             remove(fields.length - 1)
         }
 
+        //Para apagar as linhas caso o total de volumes seja maior que os somados
+        if (Number(totalVolumesDigitado) < totalVolumesSomados) {
+            for (let index = 0; index < fields.length; index++) {
+
+            }
+        }
 
     }, [totalVolumesDigitado, totalVolumesSomados])
 
     return (
         <div className="flex flex-col gap-1">
             {fields.map((field, index) => (
-                <div key={index}>
+                <div key={field.id}>
 
                     <div className="flex flex-col border-b pb-3 border-blue-500 border-dotted lg:border-none lg:grid lg:grid-cols-4 lg:grid-rows-1 gap-3">
 
@@ -92,6 +101,7 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
 
                                             if (valorDigitado > maxPermitido) {
                                                 field.onChange(String(maxPermitido))
+                                                return
                                             }
 
                                             field.onChange(e.target.value);
