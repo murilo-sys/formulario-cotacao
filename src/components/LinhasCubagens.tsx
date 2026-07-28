@@ -1,9 +1,10 @@
+"use client"
+
 import { CotacaoDados } from "@/schemas/cotacaoSchema"
 import { Controller, useFormContext, useFieldArray } from "react-hook-form"
 import { Input } from "./ui/inputs/Input"
 import { Label } from "./ui/Label"
-import { InputNumber } from "./ui/inputs/InputNumber"
-import { useEffect, useRef, useState } from "react"
+import { useEffect } from "react"
 
 type LinhasCubagensType = {
     totalVolumes: string
@@ -22,28 +23,39 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
     //Array de cubagens
     const cubagens = watch('cubagens') || []
 
-    // Exemplo: Se o último campo da lista tiver valor digitado, criamos +1 linha automaticamente
-    const ultimaLinhaPreenchida = fields.length > 0 && Boolean(watch(`cubagens.${fields.length - 1}.quantidade`))
-
-    const totalVolumesSomados = fields.reduce((acumulador, item) => {
+    //Soma a quantidade total de volumes de todas as linhas
+    const totalVolumesSomados = cubagens.reduce((acumulador, item) => {
         return acumulador + (Number(item?.quantidade) || 0)
     }, 0)
 
-    console.log("fields tamanho", fields.length)
-
-    console.log("digitado", Number(totalVolumesDigitado))
+    //Campos validos são aqueles que tem a quantidade/volumes preenchidos
+    const camposValidos = cubagens.reduce((validos, atual) => {
+        if (Number(atual.quantidade) >= 1) {
+            return validos + 1
+        }
+        return validos
+    }, 0)
 
     useEffect(() => {
-        if (Number(totalVolumesDigitado) <= fields.length) {
-            // while (fields.length > Number(totalVolumesDigitado)) {
-            //     remove(fields.length - 1)
-            // }
+
+        if (totalVolumesDigitado == "" || totalVolumesDigitado == "0") return
+
+        //Caso o total de volumes seja maior que as linhas de cubagens
+        if (Number(totalVolumesDigitado) > fields.length && Number(totalVolumesDigitado) > totalVolumesSomados) {
+
+            // Laço de repetição para adicionar 1+ após os campos validos
+            for (let index = fields.length; index <= camposValidos; index++) {
+                append({ quantidade: "", comprimento: "", largura: "", altura: "" }, { shouldFocus: false })
+            }
+
         }
 
-        if (Number(totalVolumesDigitado) > 0) {
-            return append({ quantidade: "", comprimento: "", largura: "", altura: "" })
+        if (Number(totalVolumesSomados) > Number(totalVolumesDigitado) || (Number(totalVolumesSomados) === Number(totalVolumesDigitado) && camposValidos === 1)) {
+            remove(fields.length - 1)
         }
-    }, [totalVolumesDigitado])
+
+
+    }, [totalVolumesDigitado, totalVolumesSomados])
 
     return (
         <div className="flex flex-col gap-1">
@@ -68,7 +80,21 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
                                         onChange={(e) => {
                                             clearErrors(`cubagens.${index}.quantidade`)
 
-                                            field.onChange(e.target.value)
+                                            // soma os volumes das outras linhas exceto a atual.
+                                            const volumesOutrasLinhas = cubagens.reduce((acumulador, item, i) => {
+                                                if (i === index) return acumulador; // Ignora a própria linha!
+                                                return acumulador + (Number(item?.quantidade) || 0);
+                                            }, 0);
+
+                                            // O máximo que esta linha pode ter é o total MENOS as outras linhas
+                                            const maxPermitido = Number(totalVolumesDigitado) - volumesOutrasLinhas
+                                            const valorDigitado = Number(e.target.value) || 0
+
+                                            if (valorDigitado > maxPermitido) {
+                                                field.onChange(String(maxPermitido))
+                                            }
+
+                                            field.onChange(e.target.value);
                                         }}
                                     />
                                 }}
