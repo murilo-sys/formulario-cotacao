@@ -13,7 +13,7 @@ type LinhasCubagensType = {
 export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: LinhasCubagensType) {
 
     //useFormContext para importar o useForm do formulário principal "integrando" eles
-    const { control, clearErrors, watch, formState: { errors } } = useFormContext<CotacaoDados>()
+    const { control, clearErrors, setValue, watch, formState: { errors } } = useFormContext<CotacaoDados>()
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -36,6 +36,7 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
         return validos
     }, 0)
 
+
     useEffect(() => {
 
         if (totalVolumesDigitado == "" || totalVolumesDigitado == "0") return
@@ -52,16 +53,29 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
 
         //Para remover a ultima linhas caso as cubagens estejam todas preenchidas
         if (Number(totalVolumesDigitado) === totalVolumesSomados && (camposValidos + 1 === fields.length)) {
-            console.log(camposValidos + 1);
-            console.log(fields.length);
             remove(fields.length - 1)
         }
 
         //Para apagar as linhas caso o total de volumes seja maior que os somados
         if (Number(totalVolumesDigitado) < totalVolumesSomados) {
-            for (let index = 0; index < fields.length; index++) {
 
+
+            if (fields.length === 1) {
+                setValue("cubagens.0.quantidade", totalVolumesDigitado)
+                return
             }
+
+            if ((Number(totalVolumesSomados) - Number(cubagens[fields.length - 1].quantidade)) < Number(totalVolumesDigitado)) {
+
+                const valorUltimaLinha = Math.abs((Number(totalVolumesSomados) - Number(cubagens[fields.length - 1].quantidade)) - Number(totalVolumesDigitado))
+
+                setValue(`cubagens.${fields.length - 1}.quantidade`, String(valorUltimaLinha))
+
+                return
+            }
+
+            remove(fields.length - 1)
+
         }
 
     }, [totalVolumesDigitado, totalVolumesSomados])
