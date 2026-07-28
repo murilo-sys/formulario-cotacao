@@ -1,5 +1,5 @@
 import { CotacaoDados } from "@/schemas/cotacaoSchema"
-import { Controller, useFormContext } from "react-hook-form"
+import { Controller, useFormContext, useFieldArray } from "react-hook-form"
 import { Input } from "./ui/inputs/Input"
 import { Label } from "./ui/Label"
 import { InputNumber } from "./ui/inputs/InputNumber"
@@ -12,47 +12,42 @@ type LinhasCubagensType = {
 export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: LinhasCubagensType) {
 
     //useFormContext para importar o useForm do formulário principal "integrando" eles
-    const { control, clearErrors, watch, setValue, formState: { errors }, getValues } = useFormContext<CotacaoDados>()
+    const { control, clearErrors, watch, formState: { errors } } = useFormContext<CotacaoDados>()
 
-    //Quantidade de volumes total digitada
-    const quantidadeVolumesDigitado = Number(totalVolumesDigitado) || 0
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "cubagens"
+    })
 
     //Array de cubagens
     const cubagens = watch('cubagens') || []
 
-    //Auto explicativo
-    // eslint-disable-next-line prefer-const
-    let numeroDeLinhas = 1
+    // Exemplo: Se o último campo da lista tiver valor digitado, criamos +1 linha automaticamente
+    const ultimaLinhaPreenchida = fields.length > 0 && Boolean(watch(`cubagens.${fields.length - 1}.quantidade`))
 
-    //Percorre cada item da lista de cubagens e soma quantidade
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const volumesTotais = cubagens.reduce((acumulador, item) => {
-        const qtd = Number(item?.quantidade) || 0
-        return acumulador + qtd
+    const totalVolumesSomados = fields.reduce((acumulador, item) => {
+        return acumulador + (Number(item?.quantidade) || 0)
     }, 0)
 
+    console.log("fields tamanho", fields.length)
 
-    if (Number(totalVolumesDigitado) > 0) {
-        numeroDeLinhas = cubagens.filter(item => Number(item.quantidade)).length + 1
-    }
+    console.log("digitado", Number(totalVolumesDigitado))
 
-    //Use Effect para cortar da memória o que sobra dos valores das linhas de cubagens.
     useEffect(() => {
-        const cubagensAtuais = getValues("cubagens")
-
-        if (cubagensAtuais && cubagensAtuais.length > quantidadeVolumesDigitado) {
-            if (quantidadeVolumesDigitado === 0) return
-            setValue("cubagens", cubagensAtuais.slice(0, quantidadeVolumesDigitado))
+        if (Number(totalVolumesDigitado) <= fields.length) {
+            // while (fields.length > Number(totalVolumesDigitado)) {
+            //     remove(fields.length - 1)
+            // }
         }
-    }, [quantidadeVolumesDigitado, getValues, setValue])
 
-
-    console.log(cubagens.length);
-
+        if (Number(totalVolumesDigitado) > 0) {
+            return append({ quantidade: "", comprimento: "", largura: "", altura: "" })
+        }
+    }, [totalVolumesDigitado])
 
     return (
         <div className="flex flex-col gap-1">
-            {Array.from({ length: numeroDeLinhas }).map((_, index) => (
+            {fields.map((field, index) => (
                 <div key={index}>
 
                     <div className="flex flex-col border-b pb-3 border-blue-500 border-dotted lg:border-none lg:grid lg:grid-cols-4 lg:grid-rows-1 gap-3">
@@ -72,11 +67,6 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
                                         value={field.value || ""}
                                         onChange={(e) => {
                                             clearErrors(`cubagens.${index}.quantidade`)
-
-                                            if (Number(e.target.value) > volumesTotais) {
-                                                field.onChange(Number(e.target.value) - volumesTotais)
-                                                return
-                                            }
 
                                             field.onChange(e.target.value)
                                         }}

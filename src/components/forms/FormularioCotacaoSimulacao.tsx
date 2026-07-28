@@ -42,6 +42,7 @@ export default function FormularioCotacaoSimulacao() {
     const rhf = useForm<CotacaoDados>({
         resolver: zodResolver(CotacaoSchema),
         mode: "onSubmit",
+        shouldUnregister: true,
         reValidateMode: "onSubmit",
         defaultValues: {
             cepOrigem: "",
@@ -49,6 +50,7 @@ export default function FormularioCotacaoSimulacao() {
             pesoReal: "",
             valorNfe: "",
             totalVolumes: "",
+            cubagens: [{ quantidade: "", comprimento: "", largura: "", altura: "" }]
         }
     })
 
