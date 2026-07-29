@@ -7,7 +7,7 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
     const params = ({
         cepOrigem: dados.cepOrigem,
         cepDestino: dados.cepDestino,
-        pesoReal: dados.pesoReal,
+        peso: dados.peso,
         valorNfe: dados.valorNfe,
         totalVolumes: dados.totalVolumes,
         cubagens: dados.cubagens

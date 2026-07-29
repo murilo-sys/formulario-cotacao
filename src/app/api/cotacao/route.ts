@@ -1,40 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import axios from "axios";
-import { CotacaoDados, CotacaoSchema } from "@/schemas/cotacaoSchema";
-
-async function simularValores(modal: "rodo" | "air", dados: CotacaoDados, token: string) {
-
-    //URL do endpoint
-    const url = "https://globalcargo.eslcloud.com.br/api/quote/calculate_freights"
-
-    //Retorna a requisição do axios (basicamente um fetch)
-    return await axios.get(url, {
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-            "Accept": "*/*"
-        },
-
-        //Data substituiu o body
-        data:
-        {
-            "data": {
-                "attributes": {
-                    "origin_postal_code": dados.cepOrigem,
-                    "destination_postal_code": dados.cepDestino,
-                    "customer_price_table_code": `${modal === "rodo" ? "REXP 2026" : "ACON"}`,
-
-                    // CNPJ USADO PARA CALCULO DE DIFAL
-                    //"recipient_document": "65971717000126",
-                    "real_weight": dados.pesoReal,
-                    "invoices_value": dados.valorNfe,
-                    "invoices_volumes": dados.totalVolumes,
-                    "modal": modal
-                }
-            }
-        }
-    })
-}
+import { CotacaoSchema } from "@/schemas/cotacaoSchema";
+import { apiSimularValor } from "@/services/back-end/apiSimularValor";
+import { calcularFator } from "@/services/back-end/calcularFator";
+import { calcularPesoCubado } from "@/services/back-end/calcularPesoCubado";
 
 export async function POST(request: NextRequest) {
 
@@ -44,7 +13,7 @@ export async function POST(request: NextRequest) {
     const dados = {
         cepOrigem: body.cepOrigem.replace(/\D/g, ""),
         cepDestino: body.cepDestino.replace(/\D/g, ""),
-        pesoReal: body.pesoReal.replace(/[^0-9.]/g, ""),
+        peso: body.peso.replace(/[^0-9.]/g, ""),
         totalVolumes: body.totalVolumes.replace(/\D/g, ""),
         valorNfe: body.valorNfe.replace(/[^0-9.]/g, ""),
         cubagens: body.cubagens
@@ -66,6 +35,18 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: "Dados inválidos", errors }, { status: 400 })
     }
 
+    //Caso o cepDestino ou cepOrigem for fator 300, então é fator 300 geral
+    const fator = await calcularFator(validacao.data.cepDestino) == 300 || await calcularFator(validacao.data.cepOrigem) == 300 ? 300 : 167
+
+    //Calcula o peso cubado
+    const pesoCubado = calcularPesoCubado(dados.cubagens, fator)
+
+    const pesoTaxado = Number(validacao.data.peso) > pesoCubado ? validacao.data.peso : String(pesoCubado)
+
+    console.log("peso taxado", pesoTaxado);
+
+    validacao.data.peso = pesoTaxado
+
     // Começa requisição das simulações
     const token = process.env.TOKEN_API
 
@@ -82,7 +63,7 @@ export async function POST(request: NextRequest) {
     try {
 
         //Faz a requisição
-        const cotacaoRodo = await simularValores("rodo", validacao.data, token)
+        const cotacaoRodo = await apiSimularValor("rodo", validacao.data, token)
 
         //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
         resultado.rodo = cotacaoRodo.data
@@ -109,7 +90,7 @@ export async function POST(request: NextRequest) {
     try {
 
         //Faz a requisição
-        const cotacaoAereo = await simularValores("air", validacao.data, token)
+        const cotacaoAereo = await apiSimularValor("air", validacao.data, token)
 
         //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
         resultado.air = cotacaoAereo.data

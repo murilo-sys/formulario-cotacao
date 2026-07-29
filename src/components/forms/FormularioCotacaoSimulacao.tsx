@@ -10,7 +10,7 @@ import { InputNumber } from "@/components/ui/inputs/InputNumber"
 import { CotacaoSchema, CotacaoDados, CotacaoResponse } from "@/schemas/cotacaoSchema"
 import validarCep from "@/utils/validarCep";
 import { AnimatePresence, motion } from "framer-motion";
-import { simularCotacao } from "@/services/cotacao";
+import { simularCotacao } from "@/services/frond-end/cotacao";
 import CotacaoCard from "../CotacaoCard";
 import FormularioCotacaoCompleto from "./FormularioCotacaoCompleto";
 import LinhasCubagens from "../LinhasCubagens";
@@ -48,7 +48,7 @@ export default function FormularioCotacaoSimulacao() {
         defaultValues: {
             cepOrigem: "",
             cepDestino: "",
-            pesoReal: "",
+            peso: "",
             valorNfe: "",
             totalVolumes: "",
             cubagens: [{ quantidade: "", comprimento: "", largura: "", altura: "" }]
@@ -90,6 +90,8 @@ export default function FormularioCotacaoSimulacao() {
 
         // Seta opção de cotação completa como false
         setCotacaoCompleta(false)
+
+        console.log(dadosFormulario)
 
         try {
             const { cepValido: cepValidoDestino } = await validarCep(dadosFormulario.cepDestino)
@@ -287,19 +289,19 @@ export default function FormularioCotacaoSimulacao() {
                                             <Label obrigatorio={true} htmlFor="pesoReal">Peso Real</Label>
 
                                             <Controller
-                                                name="pesoReal"
+                                                name="peso"
                                                 control={control}
                                                 render={({ field }) => (
                                                     <InputNumber
                                                         ref={field.ref}
                                                         className="w-full pl-11"
                                                         prefixo="KG"
-                                                        erro={errors.pesoReal?.message}
+                                                        erro={errors.peso?.message}
                                                         id="pesoReal"
                                                         type="text"
                                                         value={field.value}
                                                         onAccept={(valor) => {
-                                                            clearErrors("pesoReal")
+                                                            clearErrors("peso")
                                                             field.onChange(valor)
                                                         }} />
                                                 )}
