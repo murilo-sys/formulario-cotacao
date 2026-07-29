@@ -64,7 +64,7 @@ export default function Home() {
 
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 w-full max-w-md lg:max-w-2xl">
           <FormularioCotacaoSimulacao />
         </div>
       </div>

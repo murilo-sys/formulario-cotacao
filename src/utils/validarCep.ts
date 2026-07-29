@@ -24,9 +24,10 @@ export default async function validarCep(cep: string) {
             throw new Error(`Erro de rede: ${cepConsulta.status}`);
         }
 
+        //Lê a resposta
         const cepDados = await cepConsulta.json()
 
-        //Caso contenha erro
+        //Caso contenha erro ou não encontrou (Api retorna 200 mesmo tendo erro)
         if (cepDados.erro == "true" || cepDados.erro == true) {
             return {
                 cepValido: false

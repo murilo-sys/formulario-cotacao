@@ -5,11 +5,15 @@ import { Controller, useFormContext, useFieldArray } from "react-hook-form"
 import { Input } from "./ui/inputs/Input"
 import { Label } from "./ui/Label"
 import { useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
+import { InputMedida } from "./ui/inputs/InputMedida"
 
 type LinhasCubagensType = {
     totalVolumes: string
 }
+
+//Usado para o ESLINT não ficar acusando erro de criar um novo array a cada render.
+const ARRAY_VAZIO: never[] = []
 
 export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: LinhasCubagensType) {
 
@@ -23,7 +27,7 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
     })
 
     //Array de cubagens
-    const cubagens = watch('cubagens') || []
+    const cubagens = watch('cubagens') || ARRAY_VAZIO
 
     //Soma a quantidade total de volumes de todas as linhas
     const totalVolumesSomados = cubagens.reduce((acumulador, item) => {
@@ -42,7 +46,7 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
     useEffect(() => {
 
         //Se zerado ou nulo
-        if (totalVolumesDigitado.trim() == "" || totalVolumesDigitado == "0") return
+        if (!totalVolumesDigitado || totalVolumesDigitado.trim() == "" || totalVolumesDigitado == "0") return
 
         //Para criar uma nova linha, o TOTAL VOLUMES SOMADOS precisar ser diferente de TOTAL VOLUMES DIGITADOS
         if (Number(totalVolumesDigitado) > totalVolumesSomados) {
@@ -80,17 +84,20 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
                 return
             }
 
+            //Remove a ultima linha
             remove(fields.length - 1)
 
         }
 
-    }, [totalVolumesDigitado, totalVolumesSomados])
+    }, [append, camposValidos, cubagens, fields.length, remove, setValue, totalVolumesDigitado, totalVolumesSomados])
 
     return (
         <div className="flex flex-col gap-1">
             {fields.map((field, index) => (
                 <motion.div
-                    initial={{ opacity: 0, height: 0 }}
+
+                    // Verifica se é a primeira linha e não coloca a animação
+                    initial={index === 0 ? false : { opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     transition={{ duration: 0.1, ease: "easeOut" }}
                     exit={{ opacity: 0, height: 0 }}
@@ -142,7 +149,7 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
                                 name={`cubagens.${index}.comprimento`}
                                 control={control}
                                 render={({ field }) => {
-                                    return <Input
+                                    return <InputMedida
                                         className="pl-10"
                                         ref={field.ref}
                                         prefixo="M"
@@ -151,7 +158,9 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
                                         value={field.value || ""}
                                         onChange={(e) => {
                                             clearErrors(`cubagens.${index}.comprimento`)
-                                            field.onChange(e.target.value)
+                                            field.onChange(e)
+
+
                                         }}
                                     />
                                 }}
@@ -164,7 +173,7 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
                                 name={`cubagens.${index}.largura`}
                                 control={control}
                                 render={({ field }) => {
-                                    return <Input
+                                    return <InputMedida
                                         className="pl-10"
                                         ref={field.ref}
                                         prefixo="M"
@@ -173,7 +182,7 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
                                         value={field.value || ""}
                                         onChange={(e) => {
                                             clearErrors(`cubagens.${index}.largura`)
-                                            field.onChange(e.target.value)
+                                            field.onChange(e)
                                         }}
                                     />
                                 }}
@@ -186,7 +195,7 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
                                 name={`cubagens.${index}.altura`}
                                 control={control}
                                 render={({ field }) => {
-                                    return <Input
+                                    return <InputMedida
                                         className="pl-10"
                                         ref={field.ref}
                                         prefixo="M"
@@ -195,7 +204,7 @@ export default function LinhasCubagens({ totalVolumes: totalVolumesDigitado }: L
                                         value={field.value || ""}
                                         onChange={(e) => {
                                             clearErrors(`cubagens.${index}.altura`)
-                                            field.onChange(e.target.value)
+                                            field.onChange(e)
                                         }}
                                     />
                                 }}

@@ -1,10 +1,10 @@
 import { z } from "zod"
 
 export const ItemCubagemSchema = z.object({
-    altura: z.string().min(1, "Altura inválida").regex(/^[0-9.]+$/, "Altura inválida"),
-    largura: z.string().min(1, "Largura inválida").regex(/^[0-9.]+$/, "largura inválida"),
-    comprimento: z.string().min(1, "Comprimento inválido").regex(/^[0-9.]+$/, "Comprimento inválido"),
-    quantidade: z.string().min(1, "Quantidade inválida").regex(/^[0-9.]+$/, "Quantidade inválida")
+    altura: z.string().min(1, "Altura inválida").regex(/^[0-9,]+$/, "Altura com caracteres inválidos"),
+    largura: z.string().min(1, "Largura inválida").regex(/^[0-9,]+$/, "largura com caracteres inválidos"),
+    comprimento: z.string().min(1, "Comprimento inválido").regex(/^[0-9,]+$/, "Comprimento com caracteres inválidos"),
+    quantidade: z.string().min(1, "Quantidade inválida").regex(/^[0-9,]+$/, "Quantidade com caracteres inválidos")
 })
 
 export const CotacaoSchema = z.object({
