@@ -286,7 +286,7 @@ export default function FormularioCotacaoSimulacao() {
                                     <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:gap-6 w-full">
 
                                         <div className="flex flex-col">
-                                            <Label obrigatorio={true} htmlFor="pesoReal">Peso Real</Label>
+                                            <Label obrigatorio={true} htmlFor="peso">Peso Real</Label>
 
                                             <Controller
                                                 name="peso"
@@ -297,7 +297,7 @@ export default function FormularioCotacaoSimulacao() {
                                                         className="w-full pl-11"
                                                         prefixo="KG"
                                                         erro={errors.peso?.message}
-                                                        id="pesoReal"
+                                                        id="peso"
                                                         type="text"
                                                         value={field.value}
                                                         onAccept={(valor) => {
