@@ -61,17 +61,15 @@ export default function FormularioCotacaoSimulacao() {
     useEffect(() => {
         async function checarApi() {
             try {
-                setTimeout(async () => {
-                    const resposta = await validarCep("01001-000")
+                const resposta = await validarCep("01001-000")
 
-                    if (resposta.cepValido === true || resposta.cepValido === false) {
-                        setApiCep("online")
-                        return
-                    }
+                if (resposta.cepValido === true || resposta.cepValido === false) {
+                    setApiCep("online")
+                    return
+                }
 
-                    setApiCep("offline")
+                setApiCep("offline")
 
-                }, 500);
             } catch {
 
                 setApiCep("offline")
@@ -93,53 +91,49 @@ export default function FormularioCotacaoSimulacao() {
         // Seta opção de cotação completa como false
         setCotacaoCompleta(false)
 
-        setTimeout(() => {
+        try {
+            const { cepValido: cepValidoDestino } = await validarCep(dadosFormulario.cepDestino)
+
+            //Valida se o CEP destino é valido
+            if (cepValidoDestino === false) {
+                setError("cepDestino", { type: "manual", message: "Cep Inválido" })
+                setCarregando(false)
+                return
+            }
+
+            const { cepValido: cepValidoOrigem } = await validarCep(dadosFormulario.cepOrigem)
+
+            //Valida se o CEP origem é valido
+            if (cepValidoOrigem === false) {
+                setError("cepOrigem", { type: "manual", message: "Cep Inválido" })
+                setCarregando(false)
+                return
+            }
+
+        } catch {
+            console.error("Não foi possivel validar o CEP. Continuando...")
+        }
+
+        try {
+
+            const resultado = await simularCotacao(dadosFormulario)
+
+            setCotacaoDados(resultado)
+
+        } catch (erro) {
+
+            // Verificamos se a variável erro foi criada por um throw new Error
+            if (erro instanceof Error) {
+                setError("root", { type: "server", message: erro.message })
+            } else {
+                setError("root", { type: "server", message: "Ocorreu um erro inesperado." })
+            }
+
             setCarregando(false)
-        }, 2000);
+        }
 
-        // try {
-        //     const { cepValido: cepValidoDestino } = await validarCep(dadosFormulario.cepDestino)
+        setCarregando(false)
 
-        //     //Valida se o CEP destino é valido
-        //     if (cepValidoDestino === false) {
-        //         setError("cepDestino", { type: "manual", message: "Cep Inválido" })
-        //         setCarregando(false)
-        //         return
-        //     }
-
-        //     const { cepValido: cepValidoOrigem } = await validarCep(dadosFormulario.cepOrigem)
-
-        //     //Valida se o CEP origem é valido
-        //     if (cepValidoOrigem === false) {
-        //         setError("cepOrigem", { type: "manual", message: "Cep Inválido" })
-        //         setCarregando(false)
-        //         return
-        //     }
-
-        // } catch {
-        //     console.error("Não foi possivel validar o CEP. Continuando...")
-        // }
-
-        // try {
-
-        //     const resultado = await simularCotacao(dadosFormulario)
-
-        //     setCotacaoDados(resultado)
-
-        // } catch (erro) {
-
-        //     // Verificamos se a variável erro foi criada por um throw new Error
-        //     if (erro instanceof Error) {
-        //         setError("root", { type: "server", message: erro.message })
-        //     } else {
-        //         setError("root", { type: "server", message: "Ocorreu um erro inesperado." })
-        //     }
-
-        //     setCarregando(false)
-        // }
-
-
-        // setCarregando(false)
     }
 
     if (ApiCep === "online") {
