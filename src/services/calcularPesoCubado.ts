@@ -10,7 +10,8 @@ export function calcularPesoCubado(cubagens: CubagemArrayType, fator: number): n
             return pesoCubado
         }
 
-        return pesoCubado + (Number(item.comprimento.replace(",", ".")) * Number(item.largura.replace(",", ".")) * Number(item.altura.replace(",", ".")) * fator) * Number(item.quantidade)
+        //Return limpando com regex para transformar em Number
+        return pesoCubado + (Number(item.comprimento.replace(",", ".").replace(/\.(?=\d+\.)/g, '')) * Number(item.largura.replace(",", ".").replace(/\.(?=\d+\.)/g, '')) * Number(item.altura.replace(",", ".").replace(/\.(?=\d+\.)/g, '')) * fator) * Number(item.quantidade)
     }, 0)
 
     return totalPesoCubado

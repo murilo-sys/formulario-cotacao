@@ -45,7 +45,7 @@ export default function FormularioCotacaoSimulacao() {
     const [fatorCubagem, setFatorCubagem] = useState<167 | 300 | 0>(0)
 
     //useState para verificar se VIACEP está ativo ou não
-    const [ApiCep, setApiCep] = useState<"carregando" | "online" | "offline">("carregando")
+    const [apiCepCheck, setApiCepCheck] = useState<"carregando" | "online" | "offline">("carregando")
 
     // Botão carregando animação
     const [carregando, setCarregando] = useState(false)
@@ -70,15 +70,15 @@ export default function FormularioCotacaoSimulacao() {
                 const resposta = await validarCep("01001-000")
 
                 if (resposta.cepValido === true || resposta.cepValido === false) {
-                    setApiCep("online")
+                    setApiCepCheck("online")
                     return
                 }
 
-                setApiCep("offline")
+                setApiCepCheck("offline")
 
             } catch {
 
-                setApiCep("offline")
+                setApiCepCheck("offline")
 
             }
         }
@@ -164,7 +164,7 @@ export default function FormularioCotacaoSimulacao() {
 
     }
 
-    if (ApiCep === "online") {
+    if (apiCepCheck === "online") {
         return (<>
             <FormProvider {...rhf}>
                 <motion.div className="bg-white w-full  py-5 px-7 rounded-xl shadow-lg overflow-hidden"
@@ -442,11 +442,11 @@ export default function FormularioCotacaoSimulacao() {
             </FormProvider>
         </>
         )
-    } else if (ApiCep === "offline") {
+    } else if (apiCepCheck === "offline") {
         return (
-            <span>Deu ruim na API papai</span>
+            <span>Site em manutenção, tente novamente mais tarde...</span>
         )
-    } else if (ApiCep === "carregando") {
+    } else if (apiCepCheck === "carregando") {
         return (
             <div className="flex flex-col bg-white justify-center items-center w-full py-5 px-10 rounded-xl shadow-lg">
                 <div className="border border-b-transparent border-6 rounded-full w-[50px] h-[50px] animate-spin"></div>
