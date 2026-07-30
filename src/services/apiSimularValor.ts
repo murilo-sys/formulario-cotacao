@@ -3,10 +3,15 @@ import 'server-only'
 import { CotacaoDados } from "@/schemas/cotacaoSchema"
 import axios from "axios"
 
-export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDados, token: string) {
+export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDados, token: string, fator: 167 | 300) {
 
     //URL do endpoint
     const url = "https://globalcargo.eslcloud.com.br/api/quote/calculate_freights"
+
+    //AIR é sempre 167 o fator. Caso tenha vindo fator 300 no modal AIR, transforma para 167
+    if (modal === "air" && fator === 300) {
+        dados.peso = String((Number(dados.peso) / 300) * 167)
+    }
 
     //Retorna a requisição do axios (basicamente um fetch)
     return await axios.get(url, {

@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     try {
 
         //Faz a requisição
-        const cotacaoRodo = await apiSimularValor("rodo", validacao.data, token)
+        const cotacaoRodo = await apiSimularValor("rodo", validacao.data, token, fator)
 
         //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
         resultado.rodo = cotacaoRodo.data
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     try {
 
         //Faz a requisição
-        const cotacaoAereo = await apiSimularValor("air", validacao.data, token)
+        const cotacaoAereo = await apiSimularValor("air", validacao.data, token, fator)
 
         //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
         resultado.air = cotacaoAereo.data
