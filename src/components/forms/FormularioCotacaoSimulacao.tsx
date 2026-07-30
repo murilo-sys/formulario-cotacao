@@ -16,7 +16,6 @@ import FormularioCotacaoCompleto from "./FormularioCotacaoCompleto";
 import LinhasCubagens from "../LinhasCubagens";
 import PesoCubadoCard from "../PesoCubadoCard";
 import { CIDADES_FATOR_300 } from "@/data/cidadesFator300";
-import { calcularFator } from "@/services/calcularFator";
 
 export default function FormularioCotacaoSimulacao() {
 
@@ -37,13 +36,13 @@ export default function FormularioCotacaoSimulacao() {
     })
 
     // Extrai os metodos do RHF
-    const { control, handleSubmit, clearErrors, setError, getValues, watch, formState: { errors } } = rhf
+    const { control, handleSubmit, clearErrors, setError, getValues, formState: { errors } } = rhf
 
     //Dados da cotação
     const [cotacaoDados, setCotacaoDados] = useState<CotacaoResponse | null>(null)
 
     //Fator da cubagem 300 ou 167
-    const [fatorCubagem, setFatorCubagem] = useState<167 | 300>(167)
+    const [fatorCubagem, setFatorCubagem] = useState<167 | 300 | 0>(0)
 
     //useState para verificar se VIACEP está ativo ou não
     const [ApiCep, setApiCep] = useState<"carregando" | "online" | "offline">("carregando")
@@ -314,11 +313,6 @@ export default function FormularioCotacaoSimulacao() {
 
                                     <div className="flex flex-col gap-4 lg:grid lg:grid-cols-4 lg:gap-3 w-full">
 
-                                        {/* Peso cubado */}
-                                        <PesoCubadoCard
-                                            fator={fatorCubagem}
-                                        />
-
                                         {/* Input Peso Real */}
                                         <div className="flex flex-col">
                                             <Label obrigatorio={true} htmlFor="peso">Peso Real</Label>
@@ -395,6 +389,11 @@ export default function FormularioCotacaoSimulacao() {
                                             />
 
                                         </div>
+
+                                        {/* Peso cubado */}
+                                        <PesoCubadoCard
+                                            fator={fatorCubagem}
+                                        />
 
                                     </div>
 

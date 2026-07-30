@@ -41,10 +41,12 @@ export async function POST(request: NextRequest) {
     //Calcula o peso cubado
     const pesoCubado = calcularPesoCubado(dados.cubagens, fator)
 
+    //Verifica qual é o maior
     const pesoTaxado = Number(validacao.data.peso) > pesoCubado ? validacao.data.peso : String(pesoCubado)
 
     console.log("peso taxado", pesoTaxado);
 
+    //Define o peso da validacao o pesoTaxado (Não é boa prática, porém para tamanho do projeto. É o suficiente)
     validacao.data.peso = pesoTaxado
 
     // Começa requisição das simulações
