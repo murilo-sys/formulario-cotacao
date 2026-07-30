@@ -10,15 +10,40 @@ import { InputNumber } from "@/components/ui/inputs/InputNumber"
 import { CotacaoSchema, CotacaoDados, CotacaoResponse } from "@/schemas/cotacaoSchema"
 import validarCep from "@/utils/validarCep";
 import { AnimatePresence, motion } from "framer-motion";
-import { simularCotacao } from "@/services/frond-end/cotacao";
+import { simularCotacao } from "@/services/cotacao";
 import CotacaoCard from "../CotacaoCard";
 import FormularioCotacaoCompleto from "./FormularioCotacaoCompleto";
 import LinhasCubagens from "../LinhasCubagens";
+import PesoCubadoCard from "../PesoCubadoCard";
+import { CIDADES_FATOR_300 } from "@/data/cidadesFator300";
+import { calcularFator } from "@/services/calcularFator";
 
 export default function FormularioCotacaoSimulacao() {
 
+    // React-hook-form
+    const rhf = useForm<CotacaoDados>({
+        resolver: zodResolver(CotacaoSchema),
+        mode: "onSubmit",
+        shouldUnregister: true,
+        reValidateMode: "onSubmit",
+        defaultValues: {
+            cepOrigem: "",
+            cepDestino: "",
+            peso: "",
+            valorNfe: "",
+            totalVolumes: "",
+            cubagens: [{ quantidade: "", comprimento: "", largura: "", altura: "" }]
+        }
+    })
+
+    // Extrai os metodos do RHF
+    const { control, handleSubmit, clearErrors, setError, getValues, watch, formState: { errors } } = rhf
+
     //Dados da cotação
     const [cotacaoDados, setCotacaoDados] = useState<CotacaoResponse | null>(null)
+
+    //Fator da cubagem 300 ou 167
+    const [fatorCubagem, setFatorCubagem] = useState<167 | 300>(167)
 
     //useState para verificar se VIACEP está ativo ou não
     const [ApiCep, setApiCep] = useState<"carregando" | "online" | "offline">("carregando")
@@ -39,25 +64,7 @@ export default function FormularioCotacaoSimulacao() {
     // Botão de estado - Se o usuario clicou em realizar cotação completa ou não
     const [cotacaoCompleta, setCotacaoCompleta] = useState<boolean>(false)
 
-    // React-hook-form
-    const rhf = useForm<CotacaoDados>({
-        resolver: zodResolver(CotacaoSchema),
-        mode: "onSubmit",
-        shouldUnregister: true,
-        reValidateMode: "onSubmit",
-        defaultValues: {
-            cepOrigem: "",
-            cepDestino: "",
-            peso: "",
-            valorNfe: "",
-            totalVolumes: "",
-            cubagens: [{ quantidade: "", comprimento: "", largura: "", altura: "" }]
-        }
-    })
-
-    // Extrai os metodos do RHF
-    const { control, handleSubmit, clearErrors, setError, getValues, formState: { errors } } = rhf
-
+    //Health check da API VIACEP
     useEffect(() => {
         async function checarApi() {
             try {
@@ -79,6 +86,26 @@ export default function FormularioCotacaoSimulacao() {
 
         checarApi()
     }, [])
+
+    //Check do fator de cubagem
+    useEffect(() => {
+        async function calcularFatorCubagem() {
+
+            if (!enderecoDestino || !enderecoOrigem) return
+
+            const enderecoDestinoEstado = enderecoDestino.split("-")[1].trim()
+            const enderecoDestinoCidade = enderecoDestino.split("-")[0].trim()
+            const enderecoDestinoFormatado = `${enderecoDestinoEstado.trim()} ${enderecoDestinoCidade.trim()}`
+
+            const enderecoOrigemEstado = enderecoOrigem.split("-")[1].trim()
+            const enderecoOrigemCidade = enderecoOrigem.split("-")[0].trim()
+            const enderecoOrigemFormatado = `${enderecoOrigemEstado.trim()} ${enderecoOrigemCidade.trim()}`
+
+            //Caso o cepDestino ou cepOrigem for fator 300, então é fator 300 geral
+            setFatorCubagem(CIDADES_FATOR_300.has(enderecoDestinoFormatado) || CIDADES_FATOR_300.has(enderecoOrigemFormatado) ? 300 : 167)
+        }
+        calcularFatorCubagem()
+    }, [enderecoDestino, enderecoOrigem])
 
     async function handlerSubmeterCotacao(dadosFormulario: CotacaoDados) {
 
@@ -141,7 +168,7 @@ export default function FormularioCotacaoSimulacao() {
     if (ApiCep === "online") {
         return (<>
             <FormProvider {...rhf}>
-                <motion.div className="bg-white w-full  py-5 px-10 rounded-xl shadow-lg overflow-hidden"
+                <motion.div className="bg-white w-full  py-5 px-7 rounded-xl shadow-lg overflow-hidden"
                     initial={{ height: 50 }}
                     animate={{ height: "auto" }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
@@ -274,8 +301,10 @@ export default function FormularioCotacaoSimulacao() {
 
                             </div>
 
+                            {/* Dados da mercadoria */}
                             <div className="flex flex-col gap-2">
 
+                                {/* Cabeçalho dados da mercadoria */}
                                 <div>
                                     <h2 className="font-bold text-xl ">Dados da mercadoria</h2>
                                     <p className="text-gray-500 text-md font-light">Informações das cargas que serão despachadas</p>
@@ -283,8 +312,14 @@ export default function FormularioCotacaoSimulacao() {
 
                                 <div className="flex flex-col gap-5">
 
-                                    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:gap-6 w-full">
+                                    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-4 lg:gap-3 w-full">
 
+                                        {/* Peso cubado */}
+                                        <PesoCubadoCard
+                                            fator={fatorCubagem}
+                                        />
+
+                                        {/* Input Peso Real */}
                                         <div className="flex flex-col">
                                             <Label obrigatorio={true} htmlFor="peso">Peso Real</Label>
 
@@ -309,6 +344,7 @@ export default function FormularioCotacaoSimulacao() {
 
                                         </div>
 
+                                        {/* Input valor Nfe */}
                                         <div className="flex flex-col">
                                             <Label obrigatorio={true} htmlFor="valorNfe">Valor total NF-e</Label>
 
@@ -333,6 +369,7 @@ export default function FormularioCotacaoSimulacao() {
 
                                         </div>
 
+                                        {/* Input total de volumes */}
                                         <div className="flex flex-col">
                                             <Label obrigatorio={true} htmlFor="totalVolumes">Total de Volumes</Label>
 

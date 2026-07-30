@@ -1,5 +1,3 @@
-import 'server-only'
-
 export const CIDADES_FATOR_300 = new Set([
     "AC Acrelândia",
     "AC Assis Brasil",

@@ -1,9 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import axios from "axios";
 import { CotacaoSchema } from "@/schemas/cotacaoSchema";
-import { apiSimularValor } from "@/services/back-end/apiSimularValor";
-import { calcularFator } from "@/services/back-end/calcularFator";
-import { calcularPesoCubado } from "@/services/back-end/calcularPesoCubado";
+import { apiSimularValor } from "@/services/apiSimularValor";
+import { calcularFator } from "@/services/calcularFator";
+import { calcularPesoCubado } from "@/services/calcularPesoCubado";
 
 export async function POST(request: NextRequest) {
 
