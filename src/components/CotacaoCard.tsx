@@ -71,7 +71,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                 <div className="flex flex-col gap-2">
 
-                                    <p className="text-2xl font-bold pb-1 border-b border-dotted border-blue-500">R$ {resultado.dados.rodo.total}</p>
+                                    <p className="text-2xl font-bold pb-1 border-b border-dotted border-blue-500">R$ {Number(resultado.dados.rodo.total).toLocaleString('pt-BR')}</p>
 
                                     <div className="flex flex-col gap-3">
 
@@ -132,7 +132,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                 <div className="flex flex-col gap-2">
 
-                                    <p className="text-2xl font-bold pb-1 border-b border-dotted border-red-500">{resultado.dados.air ? `R$ ${resultado.dados.air?.total}` : "Não disponível"}</p>
+                                    <p className="text-2xl font-bold pb-1 border-b border-dotted border-red-500">{resultado.dados.air ? `R$ ${Number(resultado.dados.air?.total).toLocaleString('pt-BR')}` : "Não disponível"}</p>
 
                                     <div className="flex flex-row gap-2 bg-red-300 text-red-900 text-sm/4 rounded-md px-2 py-1">
 
