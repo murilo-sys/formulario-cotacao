@@ -22,17 +22,16 @@ export type CotacaoDados = z.infer<typeof CotacaoSchema>
 
 export type CubagemType = z.infer<typeof ItemCubagemSchema>
 
+export interface CotacaoDadosCard {
+    total: string
+    peso: number
+    difal?: number
+    prazo: string
+}
+
 export interface CotacaoCardType {
-    rodo: {
-        total: string
-        peso: number,
-        difal?: number
-    }
-    air?: {
-        total: string
-        peso: number,
-        difal?: number
-    }
+    rodo: CotacaoDadosCard
+    air?: CotacaoDadosCard
 }
 
 export type CotacaoResponse =

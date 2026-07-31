@@ -14,7 +14,6 @@ import { simularCotacao } from "@/services/cotacao";
 import CotacaoCard from "../CotacaoCard";
 import FormularioCotacaoCompleto from "./FormularioCotacaoCompleto";
 import LinhasCubagens from "../LinhasCubagens";
-import { CIDADES_FATOR_300 } from "@/data/cidadesFator300";
 
 export default function FormularioCotacaoSimulacao() {
 

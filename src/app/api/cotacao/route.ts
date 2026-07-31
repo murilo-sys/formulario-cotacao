@@ -44,8 +44,6 @@ export async function POST(request: NextRequest) {
     //Verifica qual é o maior
     const pesoTaxado = Number(validacao.data.pesoReal) > pesoCubado ? Number(validacao.data.pesoReal) : pesoCubado
 
-    console.log(`peso taxado agora ${pesoTaxado}`);
-
     //Cria uma constante com todos os dados validados, incluindo o pesoCubado e o pesoTaxado
     const dadosValidados = {
         ...validacao.data,
@@ -63,7 +61,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Cria a variavel resultado
-    const resultado = {} as { rodo: { dados: unknown, pesoTaxado: number }, air?: { dados: unknown, pesoTaxado: number } }
+    const resultado = {} as { rodo: { dados: { total: string, difal?: string, prazo: string }, pesoTaxado: number }, air?: { dados: { total: string, difal?: string, prazo: string }, pesoTaxado: number } }
 
     // REQUISIÇÃO MODAL RODOVIÁRIO
     try {
@@ -73,7 +71,11 @@ export async function POST(request: NextRequest) {
 
         //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
         resultado.rodo = {
-            dados: cotacaoRodo.data,
+            dados: {
+                total: cotacaoRodo.data.data[0].summary.total,
+                //difal: cotacaoRodo.data.data[0].summary.total,
+                prazo: cotacaoRodo.data.data[0].details.delivery_time
+            },
             pesoTaxado: dadosValidados.pesoTaxado
         }
 
@@ -98,9 +100,6 @@ export async function POST(request: NextRequest) {
     // REQUISIÇÃO MODAL AÉREO
     try {
 
-        //Faz a requisição no modal aéreo
-        const cotacaoAereo = await apiSimularValor("air", dadosValidados, token)
-
         //AIR é sempre 167 o fator. Caso tenha vindo fator 300 no modal AIR, transforma para 167
         if (fator === 300) {
             dadosValidados.pesoCubado = (Number(dadosValidados.pesoCubado) / 300) * 167
@@ -108,13 +107,18 @@ export async function POST(request: NextRequest) {
             dadosValidados.pesoTaxado = Number(validacao.data.pesoReal) > dadosValidados.pesoCubado ? Number(validacao.data.pesoReal) : dadosValidados.pesoCubado
         }
 
-
+        //Faz a requisição no modal aéreo
+        const cotacaoAereo = await apiSimularValor("air", dadosValidados, token)
 
         //Valida se existe .air para typescript não acusar erro
         if (!resultado.air) {
 
             resultado.air = {
-                dados: cotacaoAereo.data,
+                dados: {
+                    total: cotacaoAereo.data.data[0].summary.total,
+                    //difal: cotacaoRodo.data.data[0].summary.total,
+                    prazo: cotacaoAereo.data.data[0].details.delivery_time
+                },
                 pesoTaxado: dadosValidados.pesoTaxado
             }
         }

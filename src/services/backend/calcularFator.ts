@@ -8,6 +8,9 @@ export async function calcularFator(cep: string): Promise<number> {
     //Pega a cidade desse cep
     const { cidade, estado } = await validarCep(cep)
 
+    if (!cidade || !estado) throw new Error("Erro na simulação do frete. Tente novamente mais tarde.");
+
+
     //Formata cidade e estado para a pesquisa na lista
     const cidadeEstado = `${estado.toUpperCase()} ${cidade}`
 
