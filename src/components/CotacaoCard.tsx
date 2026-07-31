@@ -51,7 +51,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                     </div>
 
                     <div className="flex flex-col justify-center items-center gap-3">
-                        <p className="text-sm text-gray-500 font-sm text-center">Valores apresentados sujeitos a alteração mediante conferência de carga e documentação</p>
+                        <p className="text-sm text-gray-500 text-[12px] lg:text-nowrap text-center">Valores e prazos apresentados sujeitos a alteração mediante feriados locais/nacionais e conferência de documentação.</p>
 
                         <AnimatePresence>
                             {!clicado && <ButtonCriar key={"botao-criar"} clicarFuncao={clicadoFuncao} />}
