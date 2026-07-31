@@ -14,7 +14,6 @@ import { simularCotacao } from "@/services/cotacao";
 import CotacaoCard from "../CotacaoCard";
 import FormularioCotacaoCompleto from "./FormularioCotacaoCompleto";
 import LinhasCubagens from "../LinhasCubagens";
-import PesoCubadoCard from "../PesoCubadoCard";
 import { CIDADES_FATOR_300 } from "@/data/cidadesFator300";
 
 export default function FormularioCotacaoSimulacao() {
@@ -40,9 +39,6 @@ export default function FormularioCotacaoSimulacao() {
 
     //Dados da cotação
     const [cotacaoDados, setCotacaoDados] = useState<CotacaoResponse | null>(null)
-
-    //Fator da cubagem 300 ou 167
-    const [fatorCubagem, setFatorCubagem] = useState<167 | 300 | 0>(0)
 
     //useState para verificar se VIACEP está ativo ou não
     const [apiCepCheck, setApiCepCheck] = useState<"carregando" | "online" | "offline">("carregando")
@@ -85,26 +81,6 @@ export default function FormularioCotacaoSimulacao() {
 
         checarApi()
     }, [])
-
-    //Check do fator de cubagem
-    useEffect(() => {
-        async function calcularFatorCubagem() {
-
-            if (!enderecoDestino || !enderecoOrigem) return
-
-            const enderecoDestinoEstado = enderecoDestino.split("-")[1].trim()
-            const enderecoDestinoCidade = enderecoDestino.split("-")[0].trim()
-            const enderecoDestinoFormatado = `${enderecoDestinoEstado.trim()} ${enderecoDestinoCidade.trim()}`
-
-            const enderecoOrigemEstado = enderecoOrigem.split("-")[1].trim()
-            const enderecoOrigemCidade = enderecoOrigem.split("-")[0].trim()
-            const enderecoOrigemFormatado = `${enderecoOrigemEstado.trim()} ${enderecoOrigemCidade.trim()}`
-
-            //Caso o cepDestino ou cepOrigem for fator 300, então é fator 300 geral
-            setFatorCubagem(CIDADES_FATOR_300.has(enderecoDestinoFormatado) || CIDADES_FATOR_300.has(enderecoOrigemFormatado) ? 300 : 167)
-        }
-        calcularFatorCubagem()
-    }, [enderecoDestino, enderecoOrigem])
 
     async function handlerSubmeterCotacao(dadosFormulario: CotacaoDados) {
 
@@ -311,7 +287,7 @@ export default function FormularioCotacaoSimulacao() {
 
                                 <div className="flex flex-col gap-5">
 
-                                    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-4 lg:gap-3 w-full">
+                                    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:gap-3 w-full">
 
                                         {/* Input Peso Real */}
                                         <div className="flex flex-col">
@@ -389,11 +365,6 @@ export default function FormularioCotacaoSimulacao() {
                                             />
 
                                         </div>
-
-                                        {/* Peso cubado */}
-                                        <PesoCubadoCard
-                                            fator={fatorCubagem}
-                                        />
 
                                     </div>
 

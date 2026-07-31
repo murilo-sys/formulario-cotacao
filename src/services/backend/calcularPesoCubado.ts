@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { CubagemType } from '@/schemas/cotacaoSchema';
 
 type CubagemArrayType = CubagemType[]

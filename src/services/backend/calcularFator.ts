@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { CIDADES_FATOR_300 } from "@/data/cidadesFator300"
 import validarCep from "@/utils/validarCep"
 
