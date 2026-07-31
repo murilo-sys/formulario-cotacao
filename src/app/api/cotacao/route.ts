@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Cria a variavel resultado
-    const resultado = {} as { rodo: { dados: unknown, peso: number }, air?: { dados: unknown, peso: number } }
+    const resultado = {} as { rodo: { dados: unknown, pesoTaxado: number }, air?: { dados: unknown, pesoTaxado: number } }
 
     // REQUISIÇÃO MODAL RODOVIÁRIO
     try {
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
         //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
         resultado.rodo = {
             dados: cotacaoRodo.data,
-            peso: dadosValidados.pesoTaxado
+            pesoTaxado: dadosValidados.pesoTaxado
         }
 
     } catch (error) {
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
 
             resultado.air = {
                 dados: cotacaoAereo.data,
-                peso: dadosValidados.pesoTaxado
+                pesoTaxado: dadosValidados.pesoTaxado
             }
         }
 

@@ -33,11 +33,11 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                 <div className="flex flex-col gap-2">
 
-                    <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-1 lg:gap-10">
+                    <div className={`flex flex-col gap-6 lg:flex-row ${resultado.dados.air ? "lg:justify-between" : "lg:justify-center"} lg:gap-10`}>
 
 
                         {/* Card Rodoviario */}
-                        <div className="bg-radial-[at_30%_0%] from-blue-600 to-blue-950 flex flex-col px-5 py-3 w-full border border-blue-600 rounded-xl shadow-lg/40">
+                        <div className="bg-radial-[at_30%_0%] from-blue-600 to-blue-950 flex flex-col px-5 py-3 w-full lg:w-fit border border-blue-600 rounded-xl shadow-lg/40">
 
                             <div className="flex flex-col gap-3 text-white">
 
@@ -71,7 +71,10 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                 <div className="flex flex-col gap-2">
 
-                                    <p className="text-2xl font-bold pb-1 border-b border-dotted border-blue-500">R$ {Number(resultado.dados.rodo.total).toLocaleString('pt-BR')}</p>
+                                    <div className="pb-1 border-b border-dotted border-blue-500">
+                                        <p className="text-2xl font-bold border-blue-500">R$ {Number(resultado.dados.rodo.total).toLocaleString('pt-BR')}</p>
+                                        <p className="text-sm">Peso taxado: <strong>{resultado.dados.rodo.peso} KG</strong></p>
+                                    </div>
 
                                     <div className="flex flex-col gap-3">
 
@@ -99,7 +102,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
 
                         {/* Card Aéreo */}
-                        <div className="bg-radial-[at_70%_100%] from-red-600 to-red-950 flex flex-col h-fit px-5 py-3 w-full border border-red-600 rounded-xl shadow-lg/40">
+                        <div className="bg-radial-[at_70%_100%] from-red-600 to-red-950 flex flex-col h-fit px-5 py-3 w-full lg:w-fit border border-red-600 rounded-xl shadow-lg/40">
 
                             <div className="flex flex-col gap-3 text-white">
 
@@ -132,7 +135,11 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
                                 <div className="flex flex-col gap-2">
 
-                                    <p className="text-2xl font-bold pb-1 border-b border-dotted border-red-500">{resultado.dados.air ? `R$ ${Number(resultado.dados.air?.total).toLocaleString('pt-BR')}` : "Não disponível"}</p>
+
+                                    <div className="pb-1 border-b border-dotted border-red-500">
+                                        <p className="text-2xl font-bold">{resultado.dados.air ? `R$ ${Number(resultado.dados.air?.total).toLocaleString('pt-BR')}` : "Não disponível"}</p>
+                                        {resultado.dados.air?.peso ? <p className="text-sm">Peso taxado: <strong>{resultado.dados.air.peso} KG</strong></p> : resultado.dados.air?.peso}
+                                    </div>
 
                                     <div className="flex flex-row gap-2 bg-red-300 text-red-900 text-sm/4 rounded-md px-2 py-1">
 

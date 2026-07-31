@@ -25,13 +25,13 @@ export type CubagemType = z.infer<typeof ItemCubagemSchema>
 export interface CotacaoCardType {
     rodo: {
         total: string
-        subtotal: string
-        icms: string
+        peso: number,
+        difal?: number
     }
     air?: {
         total: string
-        subtotal: string
-        icms: string
+        peso: number,
+        difal?: number
     }
 }
 
