@@ -3,15 +3,15 @@ import 'server-only'
 import { CotacaoDados } from "@/schemas/cotacaoSchema"
 import axios from "axios"
 
-export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDados, token: string, fator: 167 | 300) {
+interface CotacaoDadosCompleto extends CotacaoDados {
+    pesoTaxado: number,
+    pesoCubado: number
+}
+
+export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDadosCompleto, token: string) {
 
     //URL do endpoint
     const url = "https://globalcargo.eslcloud.com.br/api/quote/calculate_freights"
-
-    //AIR é sempre 167 o fator. Caso tenha vindo fator 300 no modal AIR, transforma para 167
-    if (modal === "air" && fator === 300) {
-        dados.peso = String((Number(dados.peso) / 300) * 167)
-    }
 
     //Retorna a requisição do axios (basicamente um fetch)
     return await axios.get(url, {
@@ -32,7 +32,7 @@ export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDados
 
                     // CNPJ USADO PARA CALCULO DE DIFAL
                     //"recipient_document": "65971717000126",
-                    "real_weight": dados.peso,
+                    "real_weight": dados.pesoTaxado,
                     "invoices_value": dados.valorNfe,
                     "invoices_volumes": dados.totalVolumes,
                     "modal": modal

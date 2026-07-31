@@ -28,7 +28,7 @@ export default function FormularioCotacaoSimulacao() {
         defaultValues: {
             cepOrigem: "",
             cepDestino: "",
-            peso: "",
+            pesoReal: "",
             valorNfe: "",
             totalVolumes: "",
             cubagens: [{ quantidade: "", comprimento: "", largura: "", altura: "" }]
@@ -117,9 +117,9 @@ export default function FormularioCotacaoSimulacao() {
         // Seta opção de cotação completa como false
         setCotacaoCompleta(false)
 
-        console.log(dadosFormulario)
-
         try {
+
+            //Chama função para verificar CEP
             const { cepValido: cepValidoDestino } = await validarCep(dadosFormulario.cepDestino)
 
             //Valida se o CEP destino é valido
@@ -315,22 +315,22 @@ export default function FormularioCotacaoSimulacao() {
 
                                         {/* Input Peso Real */}
                                         <div className="flex flex-col">
-                                            <Label obrigatorio={true} htmlFor="peso">Peso Real</Label>
+                                            <Label obrigatorio={true} htmlFor="pesoReal">Peso Real</Label>
 
                                             <Controller
-                                                name="peso"
+                                                name="pesoReal"
                                                 control={control}
                                                 render={({ field }) => (
                                                     <InputNumber
                                                         ref={field.ref}
                                                         className="w-full pl-11"
                                                         prefixo="KG"
-                                                        erro={errors.peso?.message}
-                                                        id="peso"
+                                                        erro={errors.pesoReal?.message}
+                                                        id="pesoReal"
                                                         type="text"
                                                         value={field.value}
                                                         onAccept={(valor) => {
-                                                            clearErrors("peso")
+                                                            clearErrors("pesoReal")
                                                             field.onChange(valor)
                                                         }} />
                                                 )}

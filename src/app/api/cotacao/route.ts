@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import axios from "axios";
 import { CotacaoSchema } from "@/schemas/cotacaoSchema";
-import { apiSimularValor } from "@/services/apiSimularValor";
+import { apiSimularValor } from "@/services/backend/apiSimularValor";
 import { calcularFator } from "@/services/calcularFator";
 import { calcularPesoCubado } from "@/services/calcularPesoCubado";
 
@@ -13,10 +13,10 @@ export async function POST(request: NextRequest) {
     const dados = {
         cepOrigem: body.cepOrigem.replace(/\D/g, ""),
         cepDestino: body.cepDestino.replace(/\D/g, ""),
-        peso: body.peso.replace(/[^0-9.]/g, ""),
+        pesoReal: body.pesoReal.replace(/[^0-9.]/g, ""),
         totalVolumes: body.totalVolumes.replace(/\D/g, ""),
         valorNfe: body.valorNfe.replace(/[^0-9.]/g, ""),
-        cubagens: body.cubagens
+        cubagens: body.cubagens,
     }
 
     //Faz a validação usando o zod (princio da verdade unica)
@@ -42,12 +42,16 @@ export async function POST(request: NextRequest) {
     const pesoCubado = calcularPesoCubado(dados.cubagens, fator)
 
     //Verifica qual é o maior
-    const pesoTaxado = Number(validacao.data.peso) > pesoCubado ? validacao.data.peso : String(pesoCubado)
+    const pesoTaxado = Number(validacao.data.pesoReal) > pesoCubado ? Number(validacao.data.pesoReal) : pesoCubado
 
-    console.log("peso taxado", pesoTaxado);
+    console.log(`peso taxado agora ${pesoTaxado}`);
 
-    //Define o peso da validacao o pesoTaxado (Não é boa prática, porém para tamanho do projeto. É o suficiente)
-    validacao.data.peso = pesoTaxado
+    //Cria uma constante com todos os dados validados, incluindo o pesoCubado e o pesoTaxado
+    const dadosValidados = {
+        ...validacao.data,
+        pesoCubado,
+        pesoTaxado
+    }
 
     // Começa requisição das simulações
     const token = process.env.TOKEN_API
@@ -59,16 +63,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Cria a variavel resultado
-    const resultado: { rodo?: unknown; air?: unknown } = {}
+    const resultado = {} as { rodo: { dados: unknown, peso: number }, air?: { dados: unknown, peso: number } }
 
     // REQUISIÇÃO MODAL RODOVIÁRIO
     try {
 
         //Faz a requisição
-        const cotacaoRodo = await apiSimularValor("rodo", validacao.data, token, fator)
+        const cotacaoRodo = await apiSimularValor("rodo", dadosValidados, token)
 
         //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
-        resultado.rodo = cotacaoRodo.data
+        resultado.rodo = {
+            dados: cotacaoRodo.data,
+            peso: dadosValidados.pesoTaxado
+        }
 
     } catch (error) {
 
@@ -91,11 +98,26 @@ export async function POST(request: NextRequest) {
     // REQUISIÇÃO MODAL AÉREO
     try {
 
-        //Faz a requisição
-        const cotacaoAereo = await apiSimularValor("air", validacao.data, token, fator)
+        //Faz a requisição no modal aéreo
+        const cotacaoAereo = await apiSimularValor("air", dadosValidados, token)
 
-        //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
-        resultado.air = cotacaoAereo.data
+        //AIR é sempre 167 o fator. Caso tenha vindo fator 300 no modal AIR, transforma para 167
+        if (fator === 300) {
+            dadosValidados.pesoCubado = (Number(dadosValidados.pesoCubado) / 300) * 167
+
+            dadosValidados.pesoTaxado = Number(validacao.data.pesoReal) > dadosValidados.pesoCubado ? Number(validacao.data.pesoReal) : dadosValidados.pesoCubado
+        }
+
+
+
+        //Valida se existe .air para typescript não acusar erro
+        if (!resultado.air) {
+
+            resultado.air = {
+                dados: cotacaoAereo.data,
+                peso: dadosValidados.pesoTaxado
+            }
+        }
 
     } catch (error) {
 
@@ -104,7 +126,6 @@ export async function POST(request: NextRequest) {
 
             // Caso seja erro 404, não faz nada
             if (error.response && error.response.status === 404) {
-
             } else {
 
                 //Printa o erro caso não seja 404

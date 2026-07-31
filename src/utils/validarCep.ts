@@ -17,9 +17,7 @@ export default async function validarCep(cep: string) {
 
     try {
         // Faz a consulta do cep
-        const cepConsulta = await fetch(url, {
-            next: { revalidate: 86400 }
-        })
+        const cepConsulta = await fetch(url)
 
         //Caso não retorne 200-299
         if (!cepConsulta.ok) {

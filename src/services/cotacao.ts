@@ -7,7 +7,7 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
     const params = ({
         cepOrigem: dados.cepOrigem,
         cepDestino: dados.cepDestino,
-        peso: dados.peso,
+        pesoReal: dados.pesoReal,
         valorNfe: dados.valorNfe,
         totalVolumes: dados.totalVolumes,
         cubagens: dados.cubagens
@@ -49,17 +49,17 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
         air?: { total: string, icms: string, subtotal: string }
     } = {
         rodo: {
-            total: respostaDados.rodo.data[0].summary.total,
-            subtotal: respostaDados.rodo.data[0].details.subtotal,
-            icms: respostaDados.rodo.data[0].details.fiscal_detail.tax_value
+            total: respostaDados.rodo.dados.data[0].summary.total,
+            subtotal: respostaDados.rodo.dados.data[0].details.subtotal,
+            icms: respostaDados.rodo.dados.data[0].details.fiscal_detail.tax_value
         }
     }
 
     if (respostaDados.air) {
         resultado.air = {
-            total: respostaDados.air.data[0].summary.total,
-            subtotal: respostaDados.air.data[0].details.subtotal,
-            icms: respostaDados.air.data[0].details.fiscal_detail.tax_value
+            total: respostaDados.air.dados.data[0].summary.total,
+            subtotal: respostaDados.air.dados.data[0].details.subtotal,
+            icms: respostaDados.air.dados.data[0].details.fiscal_detail.tax_value
         }
     }
 
