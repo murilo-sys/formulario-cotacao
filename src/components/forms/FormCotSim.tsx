@@ -12,7 +12,7 @@ import validarCep from "@/utils/validarCep";
 import { AnimatePresence, motion } from "framer-motion";
 import { simularCotacao } from "@/services/cotacao";
 import CotacaoCard from "../CotacaoCard";
-import FormularioCotacaoCompleto from "./FormularioCotacaoCompleto";
+import FormularioCotacaoCompleto from "./FormCotCompleto";
 import LinhasCubagens from "../LinhasCubagens";
 import { ToggleSwitch } from "../ui/ToggleSwitch";
 

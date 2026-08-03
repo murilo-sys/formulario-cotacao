@@ -1,4 +1,4 @@
-import FormularioCotacaoSimulacao from "@/components/forms/FormularioCotacaoSimulacao"
+import FormularioCotacaoSimulacao from "@/components/forms/FormCotSim"
 import Image from "next/image"
 
 
