@@ -71,8 +71,6 @@ export async function POST(request: NextRequest) {
         //Faz a requisição
         const cotacaoRodo = await apiSimularValor("rodo", dadosValidados, token, dadosValidados.difalOpcao)
 
-        console.log(cotacaoRodo.data.data[0].details.fiscal_detail.difal_tax_value_destination);
-
         //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
         resultado.rodo = {
             dados: {
