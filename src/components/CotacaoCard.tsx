@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { CotacaoResponse } from "@/schemas/cotacaoSchema"
 import ButtonCriar from "./ui/buttons/ButtonCriar"
-import Card from "./Card"
+import Card from "./ui/Card"
 
 interface CotacaoCardProps {
     resultado: CotacaoResponse
@@ -12,6 +12,8 @@ interface CotacaoCardProps {
 }
 
 export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: CotacaoCardProps) {
+
+    const airModal = process.env.NEXT_PUBLIC_AIR_MODAL
 
     const classNameBase = `flex flex-col overflow-hidden bg-white w-full max-w-md p-5 ${!resultado.notFound && "pb-2"} rounded-xl shadow-lg lg:max-w-2xl`
 
@@ -42,10 +44,10 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                         />
 
 
-                        <Card
+                        {airModal === "true" && <Card
                             dados={resultado.dados.air}
                             modal={"air"}
-                        />
+                        />}
 
                     </div>
 

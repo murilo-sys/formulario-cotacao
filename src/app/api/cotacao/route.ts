@@ -7,6 +7,7 @@ import { calcularPesoCubado } from "@/services/backend/calcularPesoCubado";
 
 export async function POST(request: NextRequest) {
 
+    //Lê o body da requisição
     const body = await request.json()
 
     //Pega as variaveis da URL e guarda em dados
@@ -101,44 +102,51 @@ export async function POST(request: NextRequest) {
     }
 
     // REQUISIÇÃO MODAL AÉREO
-    try {
 
-        //AIR é sempre 167 o fator. Caso tenha vindo fator 300 no modal AIR, transforma para 167
-        if (fator === 300) {
-            dadosValidados.pesoCubado = (Number(dadosValidados.pesoCubado) / 300) * 167
+    //Lê a variavel AIR_MODAL
+    const modalAereo = process.env.NEXT_PUBLIC_AIR_MODAL
 
-            dadosValidados.pesoTaxado = Number(validacao.data.pesoReal) > dadosValidados.pesoCubado ? Number(validacao.data.pesoReal) : dadosValidados.pesoCubado
-        }
+    //Se o modalAereo estiver permitido, faz a consulta
+    if (modalAereo === "true") {
+        try {
 
-        //Faz a requisição no modal aéreo
-        const cotacaoAereo = await apiSimularValor("air", dadosValidados, token, dadosValidados.difalOpcao)
+            //AIR é sempre 167 o fator. Caso tenha vindo fator 300 no modal AIR, transforma para 167
+            if (fator === 300) {
+                dadosValidados.pesoCubado = (Number(dadosValidados.pesoCubado) / 300) * 167
 
-        //Valida se existe .air para typescript não acusar erro
-        if (!resultado.air) {
-            resultado.air = {
-                dados: {
-                    total: cotacaoAereo.data.data[0].summary.total,
-                    difal: dadosValidados.difalOpcao ? cotacaoAereo.data.data[0].details.fiscal_detail.difal_tax_value_destination : null,
-                    prazo: cotacaoAereo.data.data[0].details.delivery_time
-                },
-                pesoTaxado: dadosValidados.pesoTaxado
+                dadosValidados.pesoTaxado = Number(validacao.data.pesoReal) > dadosValidados.pesoCubado ? Number(validacao.data.pesoReal) : dadosValidados.pesoCubado
             }
-        }
 
-    } catch (error) {
+            //Faz a requisição no modal aéreo
+            const cotacaoAereo = await apiSimularValor("air", dadosValidados, token, dadosValidados.difalOpcao)
 
-        //Verifica se o error é do "tipo" Axios
-        if (axios.isAxiosError(error)) {
-
-            // Caso seja erro 404, não faz nada
-            if (error.response && error.response.status === 404) {
-            } else {
-
-                //Printa o erro caso não seja 404
-                console.error(error.message);
+            //Valida se existe .air para typescript não acusar erro
+            if (!resultado.air) {
+                resultado.air = {
+                    dados: {
+                        total: cotacaoAereo.data.data[0].summary.total,
+                        difal: dadosValidados.difalOpcao ? cotacaoAereo.data.data[0].details.fiscal_detail.difal_tax_value_destination : null,
+                        prazo: cotacaoAereo.data.data[0].details.delivery_time
+                    },
+                    pesoTaxado: dadosValidados.pesoTaxado
+                }
             }
-        }
 
+        } catch (error) {
+
+            //Verifica se o error é do "tipo" Axios
+            if (axios.isAxiosError(error)) {
+
+                // Caso seja erro 404, não faz nada
+                if (error.response && error.response.status === 404) {
+                } else {
+
+                    //Printa o erro caso não seja 404
+                    console.error(error.message);
+                }
+            }
+
+        }
     }
 
     //Verifica o tamanho do objeto/array
