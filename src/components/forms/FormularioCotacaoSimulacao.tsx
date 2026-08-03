@@ -14,6 +14,7 @@ import { simularCotacao } from "@/services/cotacao";
 import CotacaoCard from "../CotacaoCard";
 import FormularioCotacaoCompleto from "./FormularioCotacaoCompleto";
 import LinhasCubagens from "../LinhasCubagens";
+import { ToggleSwitch } from "../ui/ToggleSwitch";
 
 export default function FormularioCotacaoSimulacao() {
 
@@ -29,6 +30,7 @@ export default function FormularioCotacaoSimulacao() {
             pesoReal: "",
             valorNfe: "",
             totalVolumes: "",
+            difalOpcao: false,
             cubagens: [{ quantidade: "", comprimento: "", largura: "", altura: "" }]
         }
     })
@@ -386,12 +388,27 @@ export default function FormularioCotacaoSimulacao() {
                             </div>
 
                             <div className="flex flex-col items-end gap-1">
-                                <Button type="submit" carregando={carregando}>
-                                    Simular Cotação
-                                </Button>
+
+                                <div className="flex flex-row justify-end items-center gap-3">
+                                    {/* Botão de Difal */}
+                                    <ToggleSwitch
+                                        name="difalOpcao"
+                                        control={control}
+                                        label="Incluir difal?"
+                                    />
+
+                                    {/* Botao de submit */}
+                                    <div className="flex flex-col gap-1">
+                                        <Button type="submit" carregando={carregando}>
+                                            Simular Cotação
+                                        </Button>
+                                    </div>
+                                </div>
+
                                 {errors.root && (
                                     <div className="text-red-500 text-md"><p>{errors.root.message}</p></div>
                                 )}
+
                             </div>
 
                         </div>

@@ -10,7 +10,8 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
         pesoReal: dados.pesoReal,
         valorNfe: dados.valorNfe,
         totalVolumes: dados.totalVolumes,
-        cubagens: dados.cubagens
+        cubagens: dados.cubagens,
+        difalOpcao: dados.difalOpcao
     })
 
     // Fetch das cotações
@@ -45,13 +46,14 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
     const respostaDados = await resposta.json()
 
     const resultado: {
-        rodo: { total: string, peso: number, difal?: number, prazo: string },
-        air?: { total: string, peso: number, difal?: number, prazo: string }
+        rodo: { total: string, peso: number, difal?: string, prazo: string },
+        air?: { total: string, peso: number, difal?: string, prazo: string }
     } = {
         rodo: {
             total: respostaDados.rodo.dados.total,
             prazo: respostaDados.rodo.dados.prazo,
-            peso: respostaDados.rodo.pesoTaxado
+            peso: respostaDados.rodo.pesoTaxado,
+            difal: respostaDados.rodo.dados.difal
         }
     }
 
@@ -59,7 +61,8 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
         resultado.air = {
             total: respostaDados.air.dados.total,
             prazo: respostaDados.air.dados.prazo,
-            peso: respostaDados.air.pesoTaxado
+            peso: respostaDados.air.pesoTaxado,
+            difal: respostaDados.air.dados.difal
         }
     }
 

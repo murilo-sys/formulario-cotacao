@@ -8,7 +8,7 @@ interface CotacaoDadosCompleto extends CotacaoDados {
     pesoCubado: number
 }
 
-export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDadosCompleto, token: string) {
+export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDadosCompleto, token: string, difalOpcao: boolean) {
 
     //URL do endpoint
     const url = "https://globalcargo.eslcloud.com.br/api/quote/calculate_freights"
@@ -21,7 +21,7 @@ export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDados
             "Accept": "*/*"
         },
 
-        //Data substituiu o body no axios
+        //Data substituiu o body do fetch
         data:
         {
             "data": {
@@ -31,7 +31,8 @@ export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDados
                     "customer_price_table_code": `${modal === "rodo" ? "REXP 2026" : "ACON"}`,
 
                     // CNPJ USADO PARA CALCULO DE DIFAL
-                    //"recipient_document": "65971717000126",
+                    "recipient_document": `${difalOpcao ? "65971717000126" : ""}`,
+                    
                     "real_weight": dados.pesoTaxado,
                     "invoices_value": dados.valorNfe,
                     "invoices_volumes": dados.totalVolumes,

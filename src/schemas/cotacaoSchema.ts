@@ -13,6 +13,7 @@ export const CotacaoSchema = z.object({
     pesoReal: z.string().min(1, "Informe o peso da carga").refine((valor) => { return Number(valor) > 0 }),
     valorNfe: z.string().min(1, "Informe o valor da NF-e").refine((valor) => { return Number(valor) > 0 }),
     totalVolumes: z.string().min(1, "Informe o total de volumes").refine((valor) => { return Number(valor) > 0 }),
+    difalOpcao: z.boolean(),
 
     //Array dinâmico de cubagens
     cubagens: z.array(ItemCubagemSchema)
@@ -25,7 +26,7 @@ export type CubagemType = z.infer<typeof ItemCubagemSchema>
 export interface CotacaoDadosCard {
     total: string
     peso: number
-    difal?: number
+    difal?: string
     prazo: string
 }
 

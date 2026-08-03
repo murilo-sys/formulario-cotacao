@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
         totalVolumes: body.totalVolumes.replace(/\D/g, ""),
         valorNfe: body.valorNfe.replace(/[^0-9.]/g, ""),
         cubagens: body.cubagens,
+        difalOpcao: body.difalOpcao
     }
 
     //Faz a validação usando o zod (princio da verdade unica)
@@ -67,13 +68,15 @@ export async function POST(request: NextRequest) {
     try {
 
         //Faz a requisição
-        const cotacaoRodo = await apiSimularValor("rodo", dadosValidados, token)
+        const cotacaoRodo = await apiSimularValor("rodo", dadosValidados, token, dadosValidados.difalOpcao)
+
+        console.log(cotacaoRodo.data.data[0].details.fiscal_detail.difal_tax_value_destination);
 
         //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
         resultado.rodo = {
             dados: {
                 total: cotacaoRodo.data.data[0].summary.total,
-                //difal: cotacaoRodo.data.data[0].summary.total,
+                difal: dadosValidados.difalOpcao ? cotacaoRodo.data.data[0].details.fiscal_detail.difal_tax_value_destination : null,
                 prazo: cotacaoRodo.data.data[0].details.delivery_time
             },
             pesoTaxado: dadosValidados.pesoTaxado
@@ -108,15 +111,14 @@ export async function POST(request: NextRequest) {
         }
 
         //Faz a requisição no modal aéreo
-        const cotacaoAereo = await apiSimularValor("air", dadosValidados, token)
+        const cotacaoAereo = await apiSimularValor("air", dadosValidados, token, dadosValidados.difalOpcao)
 
         //Valida se existe .air para typescript não acusar erro
         if (!resultado.air) {
-
             resultado.air = {
                 dados: {
                     total: cotacaoAereo.data.data[0].summary.total,
-                    //difal: cotacaoRodo.data.data[0].summary.total,
+                    difal: dadosValidados.difalOpcao ? cotacaoAereo.data.data[0].details.fiscal_detail.difal_tax_value_destination : null,
                     prazo: cotacaoAereo.data.data[0].details.delivery_time
                 },
                 pesoTaxado: dadosValidados.pesoTaxado

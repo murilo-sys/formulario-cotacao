@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
 import { CotacaoResponse } from "@/schemas/cotacaoSchema"
 import ButtonCriar from "./ui/buttons/ButtonCriar"
