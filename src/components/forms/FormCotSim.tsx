@@ -186,7 +186,7 @@ export default function FormularioCotacaoSimulacao() {
                         {solicitanteVerificado ?
 
                             <motion.div
-                                initial={{ height: 70 }}
+                                initial={{ height: 0 }}
                                 animate={{ height: "auto" }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                                 className="flex flex-col gap-5 ">

@@ -64,7 +64,7 @@ export default function Card({ dados, modal }: CardProps) {
                             />
 
                             {typeof dados?.difal === "string" ?
-                                <div className="flex flex-row w-full justify-between font-medium">
+                                <div className="flex flex-row w-full justify-between font-medium border-b border-dotted">
                                     <span>Difal</span>
                                     <span>R$ {dados?.difal}</span>
                                 </div> :

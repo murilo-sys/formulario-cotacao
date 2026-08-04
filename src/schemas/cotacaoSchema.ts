@@ -28,7 +28,6 @@ export type CubagemType = z.infer<typeof ItemCubagemSchema>
 
 export interface CotacaoDadosCard {
     total: string
-    peso: number
     difal?: string
     prazo: string
 }
