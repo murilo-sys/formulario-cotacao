@@ -64,8 +64,8 @@ export default function Card({ dados, modal }: CardProps) {
                             />
 
                             {typeof dados?.difal === "string" ?
-                                <div className="flex flex-row w-full justify-between">
-                                    <span className="font-medium">Difal</span>
+                                <div className="flex flex-row w-full justify-between font-medium">
+                                    <span>Difal</span>
                                     <span>R$ {dados?.difal}</span>
                                 </div> :
                                 <span className="text-xs/3 font-medium"><span className="font-bold">Difal</span> não aplicado - Somente  quando tomador destinatário não contribuinte de ICMS</span>

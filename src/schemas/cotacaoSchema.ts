@@ -1,3 +1,4 @@
+import { cnpj, cpf } from "cpf-cnpj-validator"
 import { z } from "zod"
 
 export const ItemCubagemSchema = z.object({
@@ -8,6 +9,8 @@ export const ItemCubagemSchema = z.object({
 })
 
 export const CotacaoSchema = z.object({
+    solicitanteNome: z.string().min(4, "Informe seu nome"),
+    solicitanteDoc: z.string().min(11, "CPF ou CNPJ inválido").refine((valor) => { return valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor) }, { message: "Documento inválido" }),
     cepOrigem: z.string().length(8, "O CEP de origem está incompleto"),
     cepDestino: z.string().length(8, "O CEP de destino está incompleto"),
     pesoReal: z.string().min(1, "Informe o peso da carga").refine((valor) => { return Number(valor) > 0 }),

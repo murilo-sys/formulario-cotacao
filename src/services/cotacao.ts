@@ -5,6 +5,8 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
 
     //Transforme os dados recebidos em parametros para o fetch
     const params = ({
+        solicitanteDoc: dados.solicitanteDoc,
+        solicitanteNome: dados.solicitanteNome,
         cepOrigem: dados.cepOrigem,
         cepDestino: dados.cepDestino,
         pesoReal: dados.pesoReal,
@@ -15,7 +17,7 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
     })
 
     // Fetch das cotações
-    const resposta = await fetch(`/api/cotacao?${params}`, {
+    const resposta = await fetch(`/api/cotacao`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

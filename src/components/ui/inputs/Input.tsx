@@ -3,12 +3,13 @@
 import { motion } from "framer-motion"
 import { IMaskInput } from "react-imask";
 import Image from "next/image";
+import { ComponentProps } from "react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     prefixo?: string
     erro?: string
     rua?: string
-    mask?: string
+    mask?: ComponentProps<typeof IMaskInput>["mask"]
     onAccept?: (value: string) => void;
     ref?: React.Ref<HTMLInputElement>;
 }

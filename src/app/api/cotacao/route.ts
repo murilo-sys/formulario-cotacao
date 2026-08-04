@@ -4,6 +4,7 @@ import { CotacaoSchema } from "@/schemas/cotacaoSchema";
 import { apiSimularValor } from "@/services/backend/apiSimularValor";
 import { calcularFator } from "@/services/backend/calcularFator";
 import { calcularPesoCubado } from "@/services/backend/calcularPesoCubado";
+import { cnpj } from "cpf-cnpj-validator";
 
 export async function POST(request: NextRequest) {
 
@@ -12,6 +13,8 @@ export async function POST(request: NextRequest) {
 
     //Pega as variaveis da URL e guarda em dados
     const dados = {
+        solicitanteDoc: cnpj.strip(body.solicitanteDoc),
+        solicitanteNome: body.solicitanteNome.replace(/[^a-zA-Z]/g, ''),
         cepOrigem: body.cepOrigem.replace(/\D/g, ""),
         cepDestino: body.cepDestino.replace(/\D/g, ""),
         pesoReal: body.pesoReal.replace(/[^0-9.]/g, ""),
