@@ -9,11 +9,16 @@ import validarCep from "@/utils/validarCep";
 import { AnimatePresence, motion } from "framer-motion";
 import { simularCotacao } from "@/services/cotacao";
 import CotacaoCard from "../cards/CotacaoCard";
-import FormularioCotacaoCompleto from "./FormCotCompleto";
+import dynamic from "next/dynamic"
+
+//Carregamento dinamico, apenas quando chamado
+const FormularioCotacaoCompleto = dynamic(() => import("./FormCotCompleto"))
+
 import { ToggleSwitch } from "../ui/ToggleSwitch";
 import FormSolicitante from "./sections/FormSolicitante";
 import FormEndereco from "./sections/FormEndereco";
 import FormMercadoria from "./sections/FormMercadoria";
+
 
 export default function FormularioCotacaoSimulacao() {
 
@@ -46,6 +51,9 @@ export default function FormularioCotacaoSimulacao() {
 
     //useState para verificar se VIACEP está ativo ou não
     const [apiCepCheck, setApiCepCheck] = useState<"carregando" | "online" | "offline">("carregando")
+
+    //Lê variavel de ambiente
+    const COT_COMPLETO = process.env.NEXT_PUBLIC_COT_COMPLETO === "true"
 
     // Botão carregando animação
     const [carregando, setCarregando] = useState(false)
@@ -233,9 +241,14 @@ export default function FormularioCotacaoSimulacao() {
 
                     {cotacaoDados && <CotacaoCard key={"cotacao-card"} resultado={cotacaoDados} clicadoFuncao={() => { setCotacaoCompleta(true) }} clicado={cotacaoCompleta} />}
 
-                    {cotacaoCompleta && <FormularioCotacaoCompleto key={"formulario-completo"} />}
+                    {/* Verifique a variavel de ambiente */}
+                    {COT_COMPLETO && cotacaoCompleta &&
+                        <FormularioCotacaoCompleto key={"formulario-completo"} />
+                    }
 
                 </AnimatePresence>
+
+
 
 
             </FormProvider >

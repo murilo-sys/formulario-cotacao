@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Cria a variavel resultado
-    const resultado = {} as { rodo: { dados: { total: string, difal?: string, prazo: string }, pesoTaxado: number }, air?: { dados: { total: string, difal?: string, prazo: string }, pesoTaxado: number } }
+    const resultado = {} as { rodo: { dados: { total: string, difal?: string, prazo: string } }, air?: { dados: { total: string, difal?: string, prazo: string } } }
 
     // REQUISIÇÃO MODAL RODOVIÁRIO
     try {
@@ -80,8 +80,7 @@ export async function POST(request: NextRequest) {
                 total: cotacaoRodo.data.data[0].summary.total,
                 difal: dadosValidados.difalOpcao ? cotacaoRodo.data.data[0].details.fiscal_detail.difal_tax_value_destination : null,
                 prazo: cotacaoRodo.data.data[0].details.delivery_time
-            },
-            pesoTaxado: dadosValidados.pesoTaxado
+            }
         }
 
     } catch (error) {
@@ -128,8 +127,7 @@ export async function POST(request: NextRequest) {
                         total: cotacaoAereo.data.data[0].summary.total,
                         difal: dadosValidados.difalOpcao ? cotacaoAereo.data.data[0].details.fiscal_detail.difal_tax_value_destination : null,
                         prazo: cotacaoAereo.data.data[0].details.delivery_time
-                    },
-                    pesoTaxado: dadosValidados.pesoTaxado
+                    }
                 }
             }
 

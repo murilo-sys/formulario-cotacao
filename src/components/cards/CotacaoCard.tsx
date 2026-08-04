@@ -19,6 +19,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
 
     //Lê a variavel de ambiente
     const airModal = process.env.NEXT_PUBLIC_AIR_MODAL
+    const COT_COMPLETO = process.env.NEXT_PUBLIC_COT_COMPLETO
 
     //className base
     const classNameBase = `flex flex-col overflow-hidden bg-white w-full max-w-md p-5 ${!resultado.notFound && "pb-2"} rounded-xl shadow-lg lg:max-w-2xl`
@@ -67,11 +68,15 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
                     </div>
 
                     <div className="flex flex-col justify-center items-center gap-3">
-                        <p className="text-sm text-gray-500 text-[12px] lg:text-nowrap text-center">Valores e prazos apresentados sujeitos a alteração mediante feriados locais/nacionais e conferência de documentação.</p>
+                        <p className="text-sm text-gray-500 text-md text-center">Valores apresentados sujeitos a alteração mediante conferência de documentação.</p>
 
-                        <AnimatePresence>
-                            {!clicado && <ButtonCriar key={"botao-criar"} clicarFuncao={clicadoFuncao} />}
-                        </AnimatePresence>
+
+
+                        {COT_COMPLETO === "true" &&
+                            <AnimatePresence>
+                                {!clicado && <ButtonCriar key={"botao-criar"} clicarFuncao={clicadoFuncao} />}
+                            </AnimatePresence>
+                        }
 
                     </div>
 
