@@ -63,7 +63,7 @@ export default function Card({ dados, modal }: CardProps) {
                                 className="w-[24px] h-auto"
                             />
 
-                            {typeof dados?.difal === "string" ?
+                            {dados?.difal ?
                                 <div className="flex flex-row w-full justify-between font-medium border-b border-dotted">
                                     <span>Difal</span>
                                     <span>R$ {dados?.difal}</span>
