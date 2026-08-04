@@ -5,7 +5,7 @@ import Image from "next/image"
 export default function Home() {
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-4 text-[#0c3d7c]">
+    <div className="relative min-h-screen flex justify-center py-10 px-4 text-[#0c3d7c]">
 
       {/* Imagem de fundo */}
       <div className="absolute inset-0 -z-10">
@@ -18,9 +18,9 @@ export default function Home() {
         />
       </div>
 
-      <div className="flex flex-col lg:items-start items-center lg:flex-row lg:justify-center gap-8 w-full px-4">
+      <div className="flex flex-col items-center lg:items-start lg:flex-row lg:justify-center gap-8 w-full px-4">
 
-        <div className="bg-white w-full max-w-md lg:max-w-[345px] rounded-3xl shadow-lg pb-1 pt-4 pl-7 pr-7">
+        <div className="bg-white w-full max-w-md lg:max-w-[345px] rounded-3xl shadow-lg pb-1 pt-4 px-7">
 
           <h1 className="font-bold text-center text-2xl mb-3 ">Faça sua cotação</h1>
 
