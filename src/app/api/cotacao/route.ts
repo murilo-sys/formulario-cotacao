@@ -13,15 +13,15 @@ export async function POST(request: NextRequest) {
 
     //Pega as variaveis da URL e guarda em dados
     const dados = {
-        solicitanteDoc: cnpj.strip(body.solicitanteDoc),
-        solicitanteNome: body.solicitanteNome.replace(/[^a-zA-Z]/g, ''),
-        cepOrigem: body.cepOrigem.replace(/\D/g, ""),
-        cepDestino: body.cepDestino.replace(/\D/g, ""),
-        pesoReal: body.pesoReal.replace(/[^0-9.]/g, ""),
-        totalVolumes: body.totalVolumes.replace(/\D/g, ""),
-        valorNfe: body.valorNfe.replace(/[^0-9.]/g, ""),
-        cubagens: body.cubagens,
-        difalOpcao: body.difalOpcao
+        solicitanteDoc: cnpj.strip(body.solicitanteDoc) || null,
+        solicitanteNome: body.solicitanteNome?.replace(/[^a-zA-Z]/g, '') || null,
+        cepOrigem: body.cepOrigem?.replace(/\D/g, "") || null,
+        cepDestino: body.cepDestino?.replace(/\D/g, "") || null,
+        pesoReal: body.pesoReal?.replace(/[^0-9.]/g, "") || null,
+        totalVolumes: body.totalVolumes?.replace(/\D/g, "") || null,
+        valorNfe: body.valorNfe?.replace(/[^0-9.]/g, "") || null,
+        cubagens: body.cubagens || null,
+        difalOpcao: body.difalOpcao || null
     }
 
     //Faz a validação usando o zod (princio da verdade unica)

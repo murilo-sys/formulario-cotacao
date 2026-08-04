@@ -65,6 +65,35 @@ export default function FormularioCotacaoSimulacao() {
     // Botão de estado - Se o usuario clicou em realizar cotação completa ou não
     const [cotacaoCompleta, setCotacaoCompleta] = useState<boolean>(false)
 
+    //use Effect para abandono de pagina
+    useEffect(() => {
+        function aoFecharAba() {
+
+            // Pega os valores atuais
+            const valores = [
+                getValues(),
+                cotacaoDados || null
+            ]
+
+            // Se o usuário preencheu o solicitante (Doc e Nome) E NÃO concluiu a cotação
+            if (solicitanteVerificado && !cotacaoCompleta) {
+
+                // Empacota o JSON como Blob para o sendBeacon enviar via POST:
+                const payload = new Blob([JSON.stringify(valores)], { type: "application/json" })
+
+                // O navegador envia para o backend mesmo com a aba FECHADA!
+                navigator.sendBeacon("/api/registrar-abandono", payload)
+            }
+        }
+
+        // Escuta o evento nativo do navegador para quando a pessoa fecha a aba ou troca de site:
+        window.addEventListener("pagehide", aoFecharAba)
+
+        return () => {
+            window.removeEventListener("pagehide", aoFecharAba)
+        }
+    }, [cotacaoCompleta, cotacaoDados, getValues, solicitanteVerificado])
+
     //Health check da API VIACEP
     useEffect(() => {
         async function checarApi() {
