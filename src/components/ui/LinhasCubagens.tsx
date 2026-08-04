@@ -2,11 +2,11 @@
 
 import { CotacaoDados } from "@/schemas/cotacaoSchema"
 import { Controller, useFormContext, useFieldArray } from "react-hook-form"
-import { Input } from "./ui/inputs/Input"
-import { Label } from "./ui/Label"
+import { Input } from "./inputs/Input"
+import { Label } from "./Label"
 import { useEffect } from "react"
 import { motion } from "framer-motion"
-import { InputMedida } from "./ui/inputs/InputMedida"
+import { InputMedida } from "./inputs/InputMedida"
 
 type LinhasCubagensType = {
     totalVolumes: string

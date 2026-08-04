@@ -1,9 +1,11 @@
+"use client"
+
 import { Controller, useFormContext } from "react-hook-form"
-import { Label } from "../ui/Label"
-import { Input } from "../ui/inputs/Input"
 import { CotacaoDados } from "@/schemas/cotacaoSchema"
 import { mascaraCpfCnpj } from "@/utils/mascaras"
 import { motion } from "framer-motion"
+import { Input } from "@/components/ui/inputs/Input"
+import { Label } from "@/components/ui/Label"
 
 type FormSolicitanteProps = {
     solicitanteVerificado: (valor: boolean) => void

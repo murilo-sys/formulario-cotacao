@@ -2,9 +2,9 @@
 
 import { AnimatePresence, motion } from "framer-motion"
 import { CotacaoResponse } from "@/schemas/cotacaoSchema"
-import ButtonCriar from "./ui/buttons/ButtonCriar"
-import Card from "./ui/Card"
+import ButtonCriar from "../ui/buttons/ButtonCriar"
 import { useRef } from "react"
+import Card from "./Card"
 
 interface CotacaoCardProps {
     resultado: CotacaoResponse
