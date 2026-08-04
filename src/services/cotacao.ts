@@ -16,6 +16,8 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
         difalOpcao: dados.difalOpcao
     })
 
+    console.log(dados.difalOpcao);
+
     // Fetch das cotações
     const resposta = await fetch(`/api/cotacao`, {
         method: "POST",

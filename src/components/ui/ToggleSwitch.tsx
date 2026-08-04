@@ -24,11 +24,13 @@ export function ToggleSwitch({ name, control, label }: ToggleSwitchProps) {
                     <input
                         type="checkbox"
                         checked={Boolean(field.value)}
-                        onChange={(e) => field.onChange(e.target.checked)}
+                        onChange={(e) => {
+                            field.onChange(e.target.checked)
+                        }}
                         className="sr-only" // Esconde o checkbox quadrado padrão
                     />
 
-                    {/* Trilho da chave (Fundo) */}
+                    {/*Fundo*/}
                     <div className={`relative w-11 h-6 rounded-full transition-colors duration-200 ease-in-out ${field.value ? "bg-blue-600" : "bg-gray-300"}`}>
 
                         {/* Bolinha branca que desliza pro lado */}

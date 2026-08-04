@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
         totalVolumes: body.totalVolumes?.replace(/\D/g, "") || null,
         valorNfe: body.valorNfe?.replace(/[^0-9.]/g, "") || null,
         cubagens: body.cubagens || null,
-        difalOpcao: body.difalOpcao || null
+        difalOpcao: Boolean(body.difalOpcao)
     }
 
     //Faz a validação usando o zod (princio da verdade unica)

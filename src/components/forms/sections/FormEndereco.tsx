@@ -2,25 +2,16 @@
 
 import { Input } from "@/components/ui/inputs/Input"
 import { Label } from "@/components/ui/Label"
+import { useEndereco } from "@/hooks/useEndereco"
 import { CotacaoDados } from "@/schemas/cotacaoSchema"
-import validarCep from "@/utils/validarCep"
-import { useRef, useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 
 export default function FormEndereco() {
 
-    // Nome Rua Origem - Nome Rua Destino
-    const [enderecoOrigem, setEnderecoOrigem] = useState<string>("")
-    const [enderecoDestino, setEnderecoDestino] = useState<string>("")
-
-    // Cep origem - Cep destino /-/-/ 
-    // Usado para quando o usuario clicar no campo, guardar o valor, 
-    // e se quando ele sair, verificar se ambos são iguais, se for igual, não verifica novamente na API
-    const cepOrigem = useRef<string>("")
-    const cepDestino = useRef<string>("")
+    const { enderecoOrigem, enderecoDestino, cepOrigemRef, cepDestinoRef, consultarCepBlur } = useEndereco()
 
     //useFormContext para importar o useForm do formulário principal "integrando" eles
-    const { control, clearErrors, setError, formState: { errors } } = useFormContext<CotacaoDados>()
+    const { control, clearErrors, formState: { errors } } = useFormContext<CotacaoDados>()
 
     return (
         <div className="flex flex-col gap-2">
@@ -44,7 +35,7 @@ export default function FormEndereco() {
                                 <Input
                                     ref={field.ref}
                                     onFocus={() => {
-                                        cepOrigem.current = field.value
+                                        cepOrigemRef.current = field.value
                                     }}
                                     rua={enderecoOrigem}
                                     placeholder="00000-000"
@@ -53,30 +44,8 @@ export default function FormEndereco() {
                                     type="text"
                                     mask="00000-000"
                                     onBlur={async () => {
-
-                                        if (cepOrigem.current === field.value) return
-
-                                        if (field.value.trim() === "") {
-                                            setEnderecoOrigem("")
-                                            return
-                                        }
-
-                                        const { cepValido, cidade, estado } = await validarCep(field.value)
-
-                                        setEnderecoOrigem("")
-
-                                        if (cepValido === false) {
-                                            setError("cepOrigem", { type: "manual", message: "Cep Inválido" })
-
-
-                                            field.onBlur()
-                                            return cepValido
-                                        }
-
-                                        if (cidade) setEnderecoOrigem(`${cidade} - ${estado}`)
-
+                                        consultarCepBlur(field.value, "cepOrigem")
                                         field.onBlur()
-                                        return cepValido
                                     }}
                                     value={field.value}
                                     onAccept={(valor) => {
@@ -97,7 +66,7 @@ export default function FormEndereco() {
                             render={({ field }) => (
                                 <Input
                                     onFocus={() => {
-                                        cepDestino.current = field.value
+                                        cepDestinoRef.current = field.value
                                     }}
                                     ref={field.ref}
                                     placeholder="00000-000"
@@ -108,28 +77,8 @@ export default function FormEndereco() {
                                     mask="00000-000"
                                     value={field.value}
                                     onBlur={async () => {
-
-                                        if (cepDestino.current === field.value) return
-
-                                        if (field.value.trim() === "") {
-                                            setEnderecoDestino("")
-                                            return
-                                        }
-
-                                        const { cepValido, cidade, estado } = await validarCep(field.value)
-
-                                        if (cepValido === false) {
-                                            setError("cepDestino", { type: "manual", message: "Cep Inválido" })
-
-
-                                            field.onBlur()
-                                            return cepValido
-                                        }
-
-                                        if (cidade) setEnderecoDestino(`${cidade} - ${estado}`)
-
+                                        consultarCepBlur(field.value, "cepDestino")
                                         field.onBlur()
-                                        return cepValido
                                     }}
                                     onAccept={(valor) => {
                                         clearErrors("cepDestino")
