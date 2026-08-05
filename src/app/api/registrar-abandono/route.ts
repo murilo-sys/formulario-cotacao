@@ -1,4 +1,6 @@
 import { CotacaoSchema } from "@/schemas/cotacaoSchema";
+import { apiSimularValor } from "@/services/backend/apiSimularValor";
+import { calcularPesoCubado } from "@/services/backend/calcularPesoCubado";
 import { NextRequest, NextResponse } from "next/server";
 
 const solicitanteSchema = CotacaoSchema.pick({
@@ -15,6 +17,9 @@ export async function POST(request: NextRequest) {
         const referer = request.headers.get("referer")
         const host = request.headers.get("host")
 
+        //Lê variavel de ambiente
+        const modalAereo = process.env.NEXT_PUBLIC_AIR_MODAL
+
         // Guarda em uma constante valor booleano se é valido ou não
         const ehValido = (origin && origin.includes(host || "")) || (referer && referer.includes(host || ""))
 
@@ -27,7 +32,7 @@ export async function POST(request: NextRequest) {
         //Pega as variaveis da URL e guarda em dados
         const dados = {
             solicitanteDoc: body[0].solicitanteDoc || null,
-            solicitanteNome: body[0].solicitanteNome?.replace(/[^a-zA-Z]/g, '') || null,
+            solicitanteNome: body[0].solicitanteNome?.replace(/[^a-zA-ZÀ-ÿ\s]/g, '').trim() || null,
             cepOrigem: body[0].cepOrigem?.replace(/\D/g, "") || null,
             cepDestino: body[0].cepDestino?.replace(/\D/g, "") || null,
             pesoReal: body[0].pesoReal?.replace(/[^0-9.]/g, "") || null,
@@ -40,7 +45,7 @@ export async function POST(request: NextRequest) {
             difalRodo: body[1]?.dados.rodo?.difal || null,
             totalAir: body[1]?.dados.air?.total || null,
             prazoAir: body[1]?.dados.air?.prazo || null,
-            difalAir: body[1]?.dados.rodo?.difal || null
+            difalAir: body[1]?.dados.air?.difal || null
         }
 
         //Verifica que o nome e doc do solicitante existe
@@ -51,6 +56,22 @@ export async function POST(request: NextRequest) {
 
         //Verifica se o nome e o doc são validos
         if (!validacao.success) return NextResponse.json({ erro: "Nome ou Documento inválido do solicitante" }, { status: 400 })
+
+        if (modalAereo === "false") {
+            if (dados.cepOrigem && dados.cepDestino && dados.pesoReal) {
+                try {
+                    const pesoCubado = calcularPesoCubado(dados.cubagens, 167)
+                    const pesoTaxado = Number(dados.pesoReal) > pesoCubado ? Number(dados.pesoReal) : pesoCubado
+
+                    // Chama a sua função apiSimularValor existente:
+                    const cotAereo = await apiSimularValor("air", { ...dados, pesoTaxado }, process.env.TOKEN_API!, dados.difalOpcao)
+                    dados.totalAir = cotAereo.data.data[0].summary.total
+                    dados.prazoAir = cotAereo.data.data[0].details.delivery_time
+                    dados.difalAir = dados.difalOpcao ? cotAereo.data.data[0].details.fiscal_detail.difal_tax_value_destination : null
+                } catch {
+                }
+            }
+        }
 
         //Hook do google sheets
         const webhookurl = process.env.GOOGLE_SHEETS_WEBHOOK_URL

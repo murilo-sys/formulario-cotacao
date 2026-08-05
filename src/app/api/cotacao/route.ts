@@ -106,8 +106,8 @@ export async function POST(request: NextRequest) {
     //Lê a variavel AIR_MODAL
     const modalAereo = process.env.NEXT_PUBLIC_AIR_MODAL
 
-    //Se o modalAereo estiver permitido, faz a consulta
     if (modalAereo === "true") {
+        //Se o modalAereo estiver permitido, faz a consulta
         try {
 
             //AIR é sempre 167 o fator. Caso tenha vindo fator 300 no modal AIR, transforma para 167
@@ -130,6 +130,7 @@ export async function POST(request: NextRequest) {
                     }
                 }
             }
+
 
         } catch (error) {
 

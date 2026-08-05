@@ -5,7 +5,6 @@ import axios from "axios"
 
 interface CotacaoDadosCompleto extends CotacaoDados {
     pesoTaxado: number,
-    pesoCubado: number
 }
 
 export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDadosCompleto, token: string, difalOpcao: boolean) {
