@@ -28,11 +28,10 @@ export async function apiSimularValor(modal: "rodo" | "air", dados: CotacaoDados
                 "attributes": {
                     "origin_postal_code": dados.cepOrigem,
                     "destination_postal_code": dados.cepDestino,
-                    "customer_price_table_code": `${modal === "rodo" ? "REXP 2026" : "ACON"}`,
 
                     // CNPJ USADO PARA CALCULO DE DIFAL
                     "recipient_document": `${difalOpcao ? "65971717000126" : ""}`,
-                    
+
                     "real_weight": dados.pesoTaxado,
                     "invoices_value": dados.valorNfe,
                     "invoices_volumes": dados.totalVolumes,
