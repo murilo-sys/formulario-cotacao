@@ -1,8 +1,34 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CotacaoCompletaDados, CotacaoCompletaSchema, CotacaoDados } from "@/schemas/cotacaoSchema";
+import { motion } from "framer-motion";
 
-export default function FormularioCotacaoCompleto() {
+interface FormCompletoProps {
+    dadosSimulacao: CotacaoDados
+}
+
+export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
+
+    // React-hook-form
+    const rhf = useForm<CotacaoCompletaDados>({
+        resolver: zodResolver(CotacaoCompletaSchema),
+        mode: "onSubmit",
+        reValidateMode: "onSubmit",
+        defaultValues: {
+            solicitanteNome: dadosSimulacao.solicitanteNome,
+            solicitanteDoc: dadosSimulacao.solicitanteDoc,
+            destinatarioDoc: "",
+            remetenteDoc: "",
+            pagadorFrete: "rem",
+            cepOrigem: dadosSimulacao.cepOrigem,
+            cepDestino: dadosSimulacao.cepDestino,
+            valorNfe: dadosSimulacao.valorNfe,
+            cubagens: [{ quantidade: "", comprimento: "", largura: "", altura: "" }]
+        }
+    })
+
 
     return (
         <motion.div

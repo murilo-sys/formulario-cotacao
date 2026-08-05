@@ -7,6 +7,7 @@ export const ItemCubagemSchema = z.object({
     comprimento: z.string().min(1, "Comprimento inválido").regex(/^[0-9,]+$/, "Comprimento com caracteres inválidos"),
     quantidade: z.string().min(1, "Quantidade inválida").regex(/^[0-9,]+$/, "Quantidade com caracteres inválidos")
 })
+export type CubagemType = z.infer<typeof ItemCubagemSchema>
 
 export const CotacaoSchema = z.object({
     solicitanteNome: z.string().min(4, "Informe seu nome"),
@@ -21,10 +22,22 @@ export const CotacaoSchema = z.object({
     //Array dinâmico de cubagens
     cubagens: z.array(ItemCubagemSchema)
 })
-
 export type CotacaoDados = z.infer<typeof CotacaoSchema>
 
-export type CubagemType = z.infer<typeof ItemCubagemSchema>
+export const CotacaoCompletaSchema = z.object({
+    solicitanteNome: z.string().min(4, "Informe seu nome"),
+    solicitanteDoc: z.string().min(11, "CPF ou CNPJ inválido").refine((valor) => { return valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor) }, { message: "Documento inválido" }),
+    destinatarioDoc: z.string().min(11, "CPF ou CNPJ inválido").refine((valor) => { return valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor) }, { message: "Documento inválido" }),
+    remetenteDoc: z.string().min(11, "CPF ou CNPJ inválido").refine((valor) => { return valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor) }, { message: "Documento inválido" }),
+    pagadorFrete: z.enum(["dest", "rem"], { message: "Selecione um pagador válido" }),
+    cepOrigem: z.string().length(8, "O CEP de origem está incompleto"),
+    cepDestino: z.string().length(8, "O CEP de destino está incompleto"),
+    valorNfe: z.string().min(1, "Informe o valor da NF-e").refine((valor) => { return Number(valor) <= 200 }, {message: "Valor deve ser maior que R$200,00"}),
+
+    //Array dinâmico de cubagens
+    cubagens: z.array(ItemCubagemSchema)
+})
+export type CotacaoCompletaDados = z.infer<typeof CotacaoCompletaSchema>
 
 export interface CotacaoDadosCard {
     total: string

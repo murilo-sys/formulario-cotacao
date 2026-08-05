@@ -242,8 +242,8 @@ export default function FormularioCotacaoSimulacao() {
                     {cotacaoDados && <CotacaoCard key={"cotacao-card"} resultado={cotacaoDados} clicadoFuncao={() => { setCotacaoCompleta(true) }} clicado={cotacaoCompleta} />}
 
                     {/* Verifique a variavel de ambiente */}
-                    {COT_COMPLETO && cotacaoCompleta &&
-                        <FormularioCotacaoCompleto key={"formulario-completo"} />
+                    {COT_COMPLETO && !cotacaoCompleta &&
+                        <FormularioCotacaoCompleto dadosSimulacao={getValues()} key={"formulario-completo"} />
                     }
 
                 </AnimatePresence>
