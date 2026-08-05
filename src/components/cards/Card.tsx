@@ -25,7 +25,7 @@ export default function Card({ dados, modal }: CardProps) {
                     />
 
                     <div className="flex flex-col">
-                        <span className="font-bold">{modal === "rodo" ? "Rodoviário" : "Aéreo"}</span>
+                        <span className="font-bold">{modal === "rodo" ? "Rodoexpress" : "Aéreo"}</span>
 
                         <div className="mt-1 px-1 flex flex-row gap-1 justify-center items-center rounded-md shadow-md/30 bg-gray-200 ">
                             <Image

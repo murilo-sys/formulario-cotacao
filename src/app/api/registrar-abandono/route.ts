@@ -37,8 +37,10 @@ export async function POST(request: NextRequest) {
             difalOpcao: body[0].difalOpcao || null,
             totalRodo: body[1]?.dados.rodo?.total || null,
             prazoRodo: body[1]?.dados.rodo?.prazo || null,
+            difalRodo: body[1]?.dados.rodo?.difal || null,
             totalAir: body[1]?.dados.air?.total || null,
-            prazoAir: body[1]?.dados.air?.prazo || null
+            prazoAir: body[1]?.dados.air?.prazo || null,
+            difalAir: body[1]?.dados.rodo?.difal || null
         }
 
         //Verifica que o nome e doc do solicitante existe
