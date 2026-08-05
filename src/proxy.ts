@@ -15,8 +15,11 @@ const ratelimit = new Ratelimit({
 export async function proxy(request: NextRequest) {
 
     const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1"
+    const path = request.nextUrl.pathname
 
-    const { success } = await ratelimit.limit(ip)
+    const identifier = `${ip}:${path}`
+
+    const { success } = await ratelimit.limit(identifier)
 
     if (!success) {
         return NextResponse.json({ erro: "Você fez muitas requisições. Aguarde alguns segundos." }, { status: 429 })
