@@ -28,8 +28,8 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
       valorNfe: dadosSimulacao.valorNfe,
       cubagens: [...dadosSimulacao.cubagens],
       totalVolumes: dadosSimulacao.totalVolumes,
-      pesoReal: dadosSimulacao.pesoReal,
-    },
+      pesoReal: dadosSimulacao.pesoReal
+    }
   });
 
   // Extrai os metodos do RHF

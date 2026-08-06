@@ -15,7 +15,7 @@ export default function FormParticipantes() {
     formState: { errors }
   } = useFormContext<CotacaoCompletaDados>();
 
-  const classNameBase = "p-1 active:scale-95 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer w-full flex justify-center border border-blue-400 rounded-md ";
+  const classNameBase = "p-1 active:scale-95 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer w-full flex justify-center border border-blue-200 rounded-md ";
 
   return (
     <div className="flex flex-col gap-4">
@@ -102,13 +102,13 @@ export default function FormParticipantes() {
           render={({ field }) => (
             <div className="flex flex-row gap-3 w-full">
               {/*input remetente*/}
-              <label className={`${classNameBase} ${field.value === "rem" ? "bg-blue-800 text-white" : "bg-blue-300 text-black"}`}>
+              <label className={`${classNameBase} ${field.value === "rem" ? "bg-blue-800 text-white" : "bg-blue-100 text-black"}`}>
                 <input type="radio" name={field.name} value="rem" checked={field.value === "rem"} onChange={() => field.onChange("rem")} className="appearance-none" />
                 <span className="font-medium">Remetente</span>
               </label>
 
               {/*Input destinatario*/}
-              <label className={`${classNameBase} ${field.value === "dest" ? "bg-blue-800 text-white" : "bg-blue-300 text-black"}`}>
+              <label className={`${classNameBase} ${field.value === "dest" ? "bg-blue-800 text-white" : "bg-blue-100 text-black"}`}>
                 <input type="radio" name={field.name} value="dest" checked={field.value === "dest"} onChange={() => field.onChange("dest")} className="appearance-none" />
                 <span className="font-medium">Destinatário</span>
               </label>
