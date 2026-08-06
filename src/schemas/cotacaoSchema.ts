@@ -24,19 +24,13 @@ export const CotacaoSchema = z.object({
 })
 export type CotacaoDados = z.infer<typeof CotacaoSchema>
 
-export const CotacaoCompletaSchema = z.object({
-    solicitanteNome: z.string().min(4, "Informe seu nome"),
-    solicitanteDoc: z.string().min(11, "CPF ou CNPJ inválido").refine((valor) => { return valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor) }, { message: "Documento inválido" }),
+export const CotacaoCompletaSchema = CotacaoSchema.extend({
     destinatarioDoc: z.string().min(11, "CPF ou CNPJ inválido").refine((valor) => { return valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor) }, { message: "Documento inválido" }),
     remetenteDoc: z.string().min(11, "CPF ou CNPJ inválido").refine((valor) => { return valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor) }, { message: "Documento inválido" }),
     pagadorFrete: z.enum(["dest", "rem"], { message: "Selecione um pagador válido" }),
-    cepOrigem: z.string().length(8, "O CEP de origem está incompleto"),
-    cepDestino: z.string().length(8, "O CEP de destino está incompleto"),
-    valorNfe: z.string().min(1, "Informe o valor da NF-e").refine((valor) => { return Number(valor) <= 200 }, {message: "Valor deve ser maior que R$200,00"}),
-
-    //Array dinâmico de cubagens
-    cubagens: z.array(ItemCubagemSchema)
+    naturezaMercadoria:z.enum(["dest", "rem"], { message: "Selecione um pagador válido" }),
 })
+
 export type CotacaoCompletaDados = z.infer<typeof CotacaoCompletaSchema>
 
 export interface CotacaoDadosCard {

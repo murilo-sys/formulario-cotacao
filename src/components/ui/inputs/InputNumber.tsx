@@ -1,21 +1,27 @@
-"use client"
+"use client";
 
 import { IMaskInput } from "react-imask";
 
 interface InputNumberProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    prefixo?: string
+    prefixo?: string;
     onAccept: (value: string) => void;
-    erro?: string
+    erro?: string;
     ref?: React.Ref<HTMLInputElement>;
 }
 
-export function InputNumber({ className, erro, prefixo, ref, ...props }: InputNumberProps) {
-
-    const baseClasses = `border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`
+export function InputNumber({
+    className,
+    erro,
+    prefixo,
+    ref,
+    ...props
+}: InputNumberProps) {
+    const baseClasses = `transitio-all duration-300 border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`;
 
     return (
-
-        <div className={`relative w-full ${erro ? "bg-red-100 animate-shake" : ""}`}>
+        <div
+            className={`relative w-full ${erro ? "bg-red-100 animate-shake" : ""}`}
+        >
             {/* @ts-expect-error: Ignorando a tipagem complexa da biblioteca react-imask */}
             <IMaskInput
                 inputRef={ref}
@@ -28,15 +34,18 @@ export function InputNumber({ className, erro, prefixo, ref, ...props }: InputNu
                 radix=","
                 padFractionalZeros={true}
                 normalizeZeros={true}
-                mapToRadix={['.']}
+                mapToRadix={["."]}
             />
 
             {prefixo ? (
-                <span className={`absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none`} >
+                <span
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none`}
+                >
                     {prefixo + " |"}
                 </span>
-            ) : ""}
+            ) : (
+                ""
+            )}
         </div>
-
-    )
+    );
 }
