@@ -17,7 +17,6 @@
 }
 
 @keyframes shake {
-
   0%,
   100% {
     transform: translateX(0);
@@ -34,7 +33,6 @@
   75% {
     transform: translateX(-5px);
   }
-
 }
 
 @media (prefers-color-scheme: dark) {
