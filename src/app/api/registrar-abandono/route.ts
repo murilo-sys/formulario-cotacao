@@ -10,19 +10,8 @@ const solicitanteSchema = CotacaoSchema.pick({
 
 export async function POST(request: NextRequest) {
   try {
-    //Pega os heardes da requisição
-    const origin = request.headers.get("origin");
-    const referer = request.headers.get("referer");
-    const host = request.headers.get("host");
-
     //Lê variavel de ambiente
     const modalAereo = process.env.NEXT_PUBLIC_AIR_MODAL;
-
-    // Guarda em uma constante valor booleano se é valido ou não
-    const ehValido = (origin && origin.includes(host || "")) || (referer && referer.includes(host || ""));
-
-    // Valida se é valido e retorna caso não seja 403
-    if (!ehValido) return NextResponse.json({ message: "" }, { status: 403 });
 
     //Body da requisição
     const body = await request.json();
