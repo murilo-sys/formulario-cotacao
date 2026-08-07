@@ -43,12 +43,38 @@ export const CotacaoCompletaSchema = CotacaoSchema.extend({
     .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), {
       message: "Documento inválido"
     }),
+  pesoReal: CotacaoSchema.shape.pesoReal.refine(
+    (valor) => {
+      return Number(valor) <= 500;
+    },
+    {
+      message: "pesoElevado"
+    }
+  ),
+  valorNfe: CotacaoSchema.shape.valorNfe
+    .refine(
+      (valor) => {
+        return Number(valor) <= 250000;
+      },
+      {
+        message: "valorElevado"
+      }
+    )
+    .refine(
+      (valor) => {
+        return Number(valor) >= 200;
+      },
+      {
+        message: "valorBaixo"
+      }
+    ),
+    totalVolumes: CotacaoSchema.shape.totalVolumes.refine((valor) => Number(valor) <= 200),
   pagadorFrete: z.enum(["dest", "rem"], { message: "Selecione um pagador válido" }),
   naturezaMercadoria: z.enum(chavesNatureza, { message: "Selecione uma natureza de mercadoria válida" }).refine(
     (valor) => {
       return !(NATUREZAS_BLOQUEADAS as readonly string[]).includes(valor);
     },
-    { message: "Esta natureza de mercadoria não é aceita para transporte." }
+    { message: "naturezaBloqueada" }
   )
 });
 

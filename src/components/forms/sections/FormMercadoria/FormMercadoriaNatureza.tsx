@@ -27,6 +27,38 @@ export default function FormMercadoria() {
 
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-4 lg:grid lg:grid-row-1 lg:grid-cols-12  lg:gap-3 w-full">
+          {/* Input total de volumes */}
+          <div className="flex flex-col lg:col-span-3">
+            <Label obrigatorio={true} htmlFor="totalVolumes">
+              Total de Volumes
+            </Label>
+
+            <Controller
+              name="totalVolumes"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  className="w-full pl-12"
+                  prefixo="UN"
+                  erro={errors.totalVolumes?.message}
+                  id="totalVolumes"
+                  type="text"
+                  ref={field.ref}
+                  value={field.value}
+                  onChange={(e) => {
+                    clearErrors("totalVolumes");
+                    if (Number(e.target.value) > 200) {
+                      field.onChange("200");
+                      return;
+                    }
+                    field.onChange(e.target.value);
+                  }}
+                />
+              )}
+            />
+          </div>
+
           {/* Input Peso Real */}
           <div className="flex flex-col lg:col-span-2">
             <Label obrigatorio={true} htmlFor="pesoReal">
@@ -38,6 +70,7 @@ export default function FormMercadoria() {
               control={control}
               render={({ field }) => (
                 <InputNumber
+                  {...field}
                   ref={field.ref}
                   className="w-full pl-11"
                   prefixo="KG"
@@ -65,6 +98,7 @@ export default function FormMercadoria() {
               control={control}
               render={({ field }) => (
                 <InputNumber
+                  {...field}
                   ref={field.ref}
                   erro={errors.valorNfe?.message}
                   className="w-full"
@@ -75,33 +109,6 @@ export default function FormMercadoria() {
                   onAccept={(valor) => {
                     clearErrors("valorNfe");
                     field.onChange(valor);
-                  }}
-                />
-              )}
-            />
-          </div>
-
-          {/* Input total de volumes */}
-          <div className="flex flex-col lg:col-span-3">
-            <Label obrigatorio={true} htmlFor="totalVolumes">
-              Total de Volumes
-            </Label>
-
-            <Controller
-              name="totalVolumes"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  className="w-full pl-12"
-                  prefixo="UN"
-                  erro={errors.totalVolumes?.message}
-                  id="totalVolumes"
-                  type="text"
-                  ref={field.ref}
-                  value={field.value}
-                  onChange={(e) => {
-                    clearErrors("totalVolumes");
-                    field.onChange(e.target.value);
                   }}
                 />
               )}
