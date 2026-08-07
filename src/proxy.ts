@@ -3,32 +3,43 @@ import { NextRequest } from "next/server";
 import { Redis } from "@upstash/redis";
 import { Ratelimit } from "@upstash/ratelimit";
 
-const redis = Redis.fromEnv()
+const redis = Redis.fromEnv();
 
 const ratelimit = new Ratelimit({
-    redis: redis,
-    // Regra: limite de 5 requisições em um intervalo de 10 segundos
-    limiter: Ratelimit.slidingWindow(1, "15 s"),
-    analytics: true
-})
+  redis: redis,
+  // Regra: limite de 5 requisições em um intervalo de 10 segundos
+  limiter: Ratelimit.slidingWindow(1, "15 s"),
+  analytics: true
+});
 
 export async function proxy(request: NextRequest) {
+  //Pega os heardes da requisição
+  const origin = request.headers.get("origin");
+  const referer = request.headers.get("referer");
+  const host = request.headers.get("host");
 
-    const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1"
-    const path = request.nextUrl.pathname
+  console.log(origin);
 
-    const identifier = `${ip}:${path}`
+  // Guarda em uma constante valor booleano se é valido ou não
+  const ehValido = (origin && origin.includes(host || "")) || (referer && referer.includes(host || ""));
 
-    const { success } = await ratelimit.limit(identifier)
+  // Valida se é valido e retorna caso não seja 403
+  if (!ehValido) return NextResponse.json({ message: "" }, { status: 403 });
 
-    if (!success) {
-        return NextResponse.json({ erro: "Você fez muitas requisições. Aguarde alguns segundos." }, { status: 429 })
-    }
+  const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1";
+  const path = request.nextUrl.pathname;
 
-    return NextResponse.next()
+  const identifier = `${ip}:${path}`;
+
+  const { success } = await ratelimit.limit(identifier);
+
+  if (!success) {
+    return NextResponse.json({ erro: "Você fez muitas requisições. Aguarde alguns segundos." }, { status: 429 });
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/api/cotacao/:path*", "/api/registrar-abandono:path*"]
-}
-
+  matcher: ["/api/:path*"]
+};
