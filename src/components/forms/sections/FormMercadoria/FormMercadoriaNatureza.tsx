@@ -26,7 +26,7 @@ export default function FormMercadoria() {
       </div>
 
       <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-7 lg:grid lg:grid-row-1 lg:grid-cols-12  lg:gap-3 w-full">
+        <div className="flex flex-col gap-4 lg:grid lg:grid-row-1 lg:grid-cols-12  lg:gap-3 w-full">
           {/* Input Peso Real */}
           <div className="flex flex-col lg:col-span-2">
             <Label obrigatorio={true} htmlFor="pesoReal">
@@ -132,6 +132,8 @@ export default function FormMercadoria() {
                   <option value="" disabled hidden>
                     Selecione...
                   </option>
+
+                  {/* Faz um map e adiciona dinamicamente as options */}
                   {OPCOES_NATUREZA.map((opcao) => (
                     <option key={opcao.value} value={opcao.value}>
                       {opcao.label}

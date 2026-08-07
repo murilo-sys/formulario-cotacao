@@ -1,4 +1,4 @@
-import { OPCOES_NATUREZA } from "@/constants/naturezas";
+import { NATUREZAS_BLOQUEADAS, OPCOES_NATUREZA } from "@/constants/naturezas";
 import { cnpj, cpf } from "cpf-cnpj-validator";
 import { z } from "zod";
 
@@ -31,10 +31,25 @@ export type CotacaoDados = z.infer<typeof CotacaoSchema>;
 
 // prettier-ignore
 export const CotacaoCompletaSchema = CotacaoSchema.extend({
-  destinatarioDoc: z.string().min(11, "CPF ou CNPJ inválido").refine((valor) => valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor), { message: "Documento inválido" }),
-  remetenteDoc: z.string().min(11, "CPF ou CNPJ inválido").refine((valor) => valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor), { message: "Documento inválido" }),
+  destinatarioDoc: z
+    .string()
+    .min(11, "CPF ou CNPJ inválido")
+    .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), {
+      message: "Documento inválido"
+    }),
+  remetenteDoc: z
+    .string()
+    .min(11, "CPF ou CNPJ inválido")
+    .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), {
+      message: "Documento inválido"
+    }),
   pagadorFrete: z.enum(["dest", "rem"], { message: "Selecione um pagador válido" }),
-  naturezaMercadoria: z.enum(chavesNatureza, { message: "Selecione um pagador válido" })
+  naturezaMercadoria: z.enum(chavesNatureza, { message: "Selecione uma natureza de mercadoria válida" }).refine(
+    (valor) => {
+      return !(NATUREZAS_BLOQUEADAS as readonly string[]).includes(valor);
+    },
+    { message: "Esta natureza de mercadoria não é aceita para transporte." }
+  )
 });
 
 export type CotacaoCompletaDados = z.infer<typeof CotacaoCompletaSchema>;

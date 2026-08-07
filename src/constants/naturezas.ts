@@ -14,8 +14,13 @@ export const OPCOES_NATUREZA = [
   { value: "equip_protecao_epi", label: "Equipamentos de Proteção (EPI)" },
   { value: "propaganda_visual", label: "Material de propaganda e visual" },
   { value: "informatica", label: "Material de informática" },
-  { value: "pecas_geral", label: "Peças em geral" }
+  { value: "pecas_geral", label: "Peças em geral" },
+  { value: "liquido", label: "Liquído" },
+  { value: "quimica_diversos", label: "Prod. Quimicos Diversos" },
+  { value: "artigos_perigosos", label: "Artigos Perigosos" }
 ] as const; //Usado as const para se tornar imutavel
+
+export const NATUREZAS_BLOQUEADAS = ["liquido", "quimica_diversos", "artigos_perigosos", "perecivel"] as const; //Usado as const para se tornar imutavel
 
 //Naturezas mercadoria mapeada para ESL
 export const MAPA_NATUREZAS_ESL: Record<string, number> = {
