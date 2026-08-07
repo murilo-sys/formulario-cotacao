@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/buttons/ButtonSimular";
 import { CotacaoSchema, CotacaoDados, CotacaoResponse } from "@/schemas/cotacaoSchema";
 import validarCep from "@/utils/validarCep";
 import { AnimatePresence, motion } from "framer-motion";
-import { simularCotacao } from "@/services/cotacao";
+import { simularCotacao } from "@/services/simularCotacao";
 import CotacaoCard from "../cards/CotacaoCard";
 import dynamic from "next/dynamic";
 
@@ -17,7 +17,7 @@ const FormularioCotacaoCompleto = dynamic(() => import("./FormCotCompleto"));
 import { ToggleSwitch } from "../ui/ToggleSwitch";
 import FormSolicitante from "./sections/FormSolicitante";
 import FormEndereco from "./sections/FormEndereco";
-import FormMercadoria from "./sections/FormMercadoria";
+import FormMercadoria from "./sections/FormMercadoria/FormMercadoria";
 
 export default function FormularioCotacaoSimulacao() {
   // React-hook-form
@@ -241,7 +241,7 @@ export default function FormularioCotacaoSimulacao() {
             )}
 
             {/* Verifique a variavel de ambiente */}
-            {COT_COMPLETO && cotacaoCompleta && <FormularioCotacaoCompleto dadosSimulacao={getValues()} key={"formulario-completo"} />}
+            {COT_COMPLETO && !cotacaoCompleta && <FormularioCotacaoCompleto dadosSimulacao={getValues()} key={"formulario-completo"} />}
           </AnimatePresence>
         </FormProvider>
       </>
@@ -251,7 +251,7 @@ export default function FormularioCotacaoSimulacao() {
   } else if (apiCepCheck === "carregando") {
     return (
       <div className="flex flex-col bg-white justify-center items-center w-full py-5 rounded-xl shadow-lg">
-        <div className="border border-b-transparent border-6 rounded-full w-[50px] h-[50px] animate-spin"></div>
+        <div className="border-b-transparent border-6 rounded-full w-12.5 h-12.5 animate-spin"></div>
       </div>
     );
   }

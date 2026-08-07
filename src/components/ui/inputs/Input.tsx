@@ -1,76 +1,78 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 import { IMaskInput } from "react-imask";
 import Image from "next/image";
 import { ComponentProps } from "react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    prefixo?: string
-    erro?: string
-    rua?: string
-    mask?: ComponentProps<typeof IMaskInput>["mask"]
-    onAccept?: (value: string) => void;
-    ref?: React.Ref<HTMLInputElement>;
+  prefixo?: string;
+  erro?: string;
+  rua?: string;
+  mask?: ComponentProps<typeof IMaskInput>["mask"];
+  onAccept?: (value: string) => void;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
-export function Input({ className, mask, onAccept, erro, prefixo, rua, ref, ...props }: InputProps) {
+export function Input({
+  className,
+  mask,
+  onAccept,
+  erro,
+  prefixo,
+  rua,
+  ref,
+  ...props
+}: InputProps) {
+  const baseClasses = `transitio-all duration-300 w-full border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`;
 
-    const baseClasses = `transitio-all duration-300 w-full border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`
+  return (
+    <div className="flex flex-col w-full gap-1">
+      <div className={`relative w-full ${erro && "bg-red-100 animate-shake"}`}>
+        {mask && onAccept ? (
+          <>
+            {/*@ts-expect-error: Ignorando a tipagem complexa da biblioteca react-imask */}
+            <IMaskInput
+              {...props}
+              inputRef={ref}
+              mask={mask}
+              unmask={true}
+              onAccept={onAccept}
+              className={baseClasses}
+            />
+          </>
+        ) : (
+          <input {...props} ref={ref} className={`w-full ${baseClasses}`} />
+        )}
 
-    return (
-        <div className="flex flex-col w-full gap-1">
+        {prefixo && (
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+            {prefixo + " |"}
+          </span>
+        )}
+      </div>
 
-            <div className={`relative w-full ${erro ? "bg-red-100 animate-shake" : ""}`}>
+      {!prefixo && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{
+            height: rua ? "auto" : 0,
+            opacity: rua ? 1 : 0
+          }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="flex flex-row border border-blue-200 bg-blue-50 w-fit rounded-xl px-2 gap-1"
+        >
+          <Image
+            src={"/icons/address.svg"}
+            alt="Icone de localização"
+            width={18}
+            height={18}
+            className="w-3.5 h-auto"
+          />
 
-                {mask && onAccept ? <>
-                    {/*@ts-expect-error: Ignorando a tipagem complexa da biblioteca react-imask */}
-                    <IMaskInput
-                        {...(props)}
-                        inputRef={ref}
-                        mask={mask}
-                        unmask={true}
-                        onAccept={onAccept}
-                        className={baseClasses}
-                    />
-                </> :
-                    <input
-                        {...props}
-                        ref={ref}
-                        className={`w-full ${baseClasses}`}
-                    />
-                }
-
-                {prefixo && (
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
-                        {prefixo + " |"}
-                    </span>)}
-            </div>
-
-
-            {!prefixo && (
-                <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{
-                        height: rua ? "auto" : 0,
-                        opacity: rua ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="flex flex-row border border-blue-200 bg-blue-50 w-fit rounded-xl px-2 gap-1">
-                    <Image
-                        src={"/icons/address.svg"}
-                        alt="Icone de localização"
-                        width={18}
-                        height={18}
-                        className="w-[14px] h-auto"
-                    />
-
-                    <span className={"text-sm"}>
-                        {rua}
-                    </span>
-                </motion.div>
-            )}
-
-        </div>
-    )
+          <span className={"text-sm"}>{rua}</span>
+        </motion.div>
+      )}
+    </div>
+  );
 }

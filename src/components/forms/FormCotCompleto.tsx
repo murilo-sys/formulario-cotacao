@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CotacaoCompletaDados, CotacaoCompletaSchema, CotacaoDados } from "@/schemas/cotacaoSchema";
 import { motion } from "framer-motion";
 import FormParticipantes from "./sections/FormParticipantes";
-import FormMercadoria from "./sections/FormMercadoria";
+import FormMercadoriaNatureza from "./sections/FormMercadoria/FormMercadoriaNatureza";
 
 interface FormCompletoProps {
   dadosSimulacao: CotacaoDados;
@@ -56,7 +56,7 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
           <FormParticipantes />
 
           {/*Sections Informações da mercadoria*/}
-          <FormMercadoria />
+          <FormMercadoriaNatureza />
         </motion.div>
       </form>
     </FormProvider>
