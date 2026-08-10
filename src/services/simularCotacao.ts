@@ -14,8 +14,6 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
     difalOpcao: dados.difalOpcao
   };
 
-  console.log(dados);
-
   // Fetch das cotações
   const resposta = await fetch(`/api/cotacao`, {
     method: "POST",
@@ -64,8 +62,6 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
       difal: respostaDados.air.dados.difal
     };
   }
-
-  console.log({ notFound: false, dados: resultado });
 
   return { notFound: false, dados: resultado };
 }
