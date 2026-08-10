@@ -1,4 +1,5 @@
 import { NATUREZAS_BLOQUEADAS, OPCOES_NATUREZA } from "@/constants/naturezas";
+import parseNumberBR from "@/utils/parseNumberBR";
 import { cnpj, cpf } from "cpf-cnpj-validator";
 import { z } from "zod";
 
@@ -16,13 +17,28 @@ export type CubagemType = z.infer<typeof ItemCubagemSchema>;
 
 // prettier-ignore
 export const CotacaoSchema = z.object({
-  solicitanteNome: z.string().min(4, "Informe seu nome").regex(/^[a-zA-ZÀ-ÿ\s]+$/, { message: "Nome inválido" }),
-  solicitanteDoc: z.string().min(11, "CPF ou CNPJ inválido").refine((valor) => valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor), { message: "Documento inválido" }),
+  solicitanteNome: z
+    .string()
+    .min(4, "Informe seu nome")
+    .regex(/^[a-zA-ZÀ-ÿ\s]+$/, { message: "Nome inválido" }),
+  solicitanteDoc: z
+    .string()
+    .min(11, "CPF ou CNPJ inválido")
+    .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), { message: "Documento inválido" }),
   cepOrigem: z.string().length(8, "O CEP de origem está incompleto"),
   cepDestino: z.string().length(8, "O CEP de destino está incompleto"),
-  pesoReal: z.string().min(1, "Informe o peso da carga").refine((valor) => Number(valor) > 0),
-  valorNfe: z.string().min(1, "Informe o valor da NF-e").refine((valor) => Number(valor) > 0),
-  totalVolumes: z.string().min(1, "Informe o total de volumes").refine((valor) => Number(valor) > 0),
+  pesoReal: z
+    .string()
+    .min(1, "Informe o peso da carga")
+    .refine((valor) => parseNumberBR(valor) > 0),
+  valorNfe: z
+    .string()
+    .min(1, "Informe o valor da NF-e")
+    .refine((valor) => parseNumberBR(valor) > 0),
+  totalVolumes: z
+    .string()
+    .min(1, "Informe o total de volumes")
+    .refine((valor) => Number(valor) > 0),
   difalOpcao: z.boolean(),
   cubagens: z.array(ItemCubagemSchema)
 });
@@ -45,7 +61,7 @@ export const CotacaoCompletaSchema = CotacaoSchema.extend({
     }),
   pesoReal: CotacaoSchema.shape.pesoReal.refine(
     (valor) => {
-      return Number(valor) <= 500;
+      return parseNumberBR(valor) < 500;
     },
     {
       message: "pesoElevado"
@@ -54,7 +70,7 @@ export const CotacaoCompletaSchema = CotacaoSchema.extend({
   valorNfe: CotacaoSchema.shape.valorNfe
     .refine(
       (valor) => {
-        return Number(valor) <= 250000;
+        return parseNumberBR(valor) < 250000;
       },
       {
         message: "valorElevado"
@@ -62,7 +78,7 @@ export const CotacaoCompletaSchema = CotacaoSchema.extend({
     )
     .refine(
       (valor) => {
-        return Number(valor) >= 200;
+        return parseNumberBR(valor) >= 200;
       },
       {
         message: "valorBaixo"
