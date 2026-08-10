@@ -13,12 +13,12 @@ export async function POST(request: NextRequest) {
   //Pega as variaveis da URL e guarda em dados
   const dados = {
     solicitanteDoc: cnpj.strip(body.solicitanteDoc) || null,
-    solicitanteNome: body.solicitanteNome?.replace(/[^a-zA-Z]/g, "") || null,
+    solicitanteNome: body.solicitanteNome?.replace(/[^a-zA-ZÀ-ÿ\s]/g, "") || null,
     cepOrigem: body.cepOrigem?.replace(/\D/g, "") || null,
     cepDestino: body.cepDestino?.replace(/\D/g, "") || null,
-    pesoReal: body.pesoReal?.replace(/[^0-9.]/g, "") || null,
+    pesoReal: body.pesoReal?.replace(/[^0-9,]/g, "").replace(",", ".") || null,
     totalVolumes: body.totalVolumes?.replace(/\D/g, "") || null,
-    valorNfe: body.valorNfe?.replace(/[^0-9.]/g, "") || null,
+    valorNfe: body.valorNfe?.replace(/[^0-9,]/g, "").replace(",", ".") || null,
     cubagens: body.cubagens || null,
     difalOpcao: Boolean(body.difalOpcao)
   };

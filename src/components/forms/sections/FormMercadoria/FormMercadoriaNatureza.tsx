@@ -26,9 +26,45 @@ export default function FormMercadoria() {
       </div>
 
       <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-4 lg:grid lg:grid-row-1 lg:grid-cols-12  lg:gap-3 w-full">
+        <div className="flex flex-col gap-4 lg:grid lg:grid-row-2 lg:grid-cols-12  lg:gap-3 w-full">
+          {/* Input Natureza Mercadoria */}
+          <div className="flex flex-col lg:row-span-1 lg:col-span-12">
+            <Label obrigatorio={true} htmlFor="naturezaMercadoria">
+              Natureza da mercadoria
+            </Label>
+
+            <Controller
+              name="naturezaMercadoria"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className={`transition-all duration-300 border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.naturezaMercadoria?.message && "bg-red-100 animate-shake"}`}
+                  id="naturezaMercadoria"
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    field.onChange(e.target.value);
+                    trigger("naturezaMercadoria");
+                  }}
+                >
+                  {/* Opção padrão quando inicia */}
+                  <option value="" disabled hidden>
+                    Selecione...
+                  </option>
+
+                  {/* Faz um map e adiciona dinamicamente as options */}
+                  {OPCOES_NATUREZA.map((opcao) => (
+                    <option key={opcao.value} value={opcao.value}>
+                      {opcao.label}
+                    </option>
+                  ))}
+                </select>
+              )}
+            />
+          </div>
+
           {/* Input total de volumes */}
-          <div className="flex flex-col lg:col-span-3">
+          <div className="flex flex-col lg:col-span-4">
             <Label obrigatorio={true} htmlFor="totalVolumes">
               Total de Volumes
             </Label>
@@ -60,7 +96,7 @@ export default function FormMercadoria() {
           </div>
 
           {/* Input Peso Real */}
-          <div className="flex flex-col lg:col-span-2">
+          <div className="flex flex-col lg:col-span-4">
             <Label obrigatorio={true} htmlFor="pesoReal">
               Peso Real
             </Label>
@@ -88,7 +124,7 @@ export default function FormMercadoria() {
           </div>
 
           {/* Input valor Nfe */}
-          <div className="flex flex-col lg:col-span-3">
+          <div className="flex flex-col lg:col-span-4">
             <Label obrigatorio={true} htmlFor="valorNfe">
               Valor total NF-e
             </Label>
@@ -111,42 +147,6 @@ export default function FormMercadoria() {
                     field.onChange(valor);
                   }}
                 />
-              )}
-            />
-          </div>
-
-          {/* Input Natureza Mercadoria */}
-          <div className="flex flex-col lg:col-span-4">
-            <Label obrigatorio={true} htmlFor="naturezaMercadoria">
-              Natureza da mercadoria
-            </Label>
-
-            <Controller
-              name="naturezaMercadoria"
-              control={control}
-              render={({ field }) => (
-                <select
-                  {...field}
-                  className={`transition-all duration-300 border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.naturezaMercadoria?.message && "bg-red-100 animate-shake"}`}
-                  id="naturezaMercadoria"
-                  value={field.value ?? ""}
-                  onChange={(e) => {
-                    field.onChange(e.target.value);
-                    trigger("naturezaMercadoria");
-                  }}
-                >
-                  {/* Opção padrão quando inicia */}
-                  <option value="" disabled hidden>
-                    Selecione...
-                  </option>
-
-                  {/* Faz um map e adiciona dinamicamente as options */}
-                  {OPCOES_NATUREZA.map((opcao) => (
-                    <option key={opcao.value} value={opcao.value}>
-                      {opcao.label}
-                    </option>
-                  ))}
-                </select>
               )}
             />
           </div>

@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import FormParticipantes from "./sections/FormParticipantes";
 import FormMercadoriaNatureza from "./sections/FormMercadoria/FormMercadoriaNatureza";
 import { useMemo } from "react";
-import { ListaInfosDialog, TipoInfoDialog } from "../modals/ModalMercadoriaBloqueada";
+import { ListaInfosDialog, ModalMercadoriaBloqueada, TipoInfoDialog } from "../modals/ModalMercadoriaBloqueada";
 
 interface FormCompletoProps {
   dadosSimulacao: CotacaoDados;
@@ -38,6 +38,8 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
   const {
     handleSubmit,
     setFocus,
+    setValue,
+    clearErrors,
     formState: { errors }
   } = rhf;
 
@@ -46,28 +48,13 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     console.log("Teste");
   }
 
-  //consulta se existe erros de forma otimizada usando useMemo()
-  const tipoDialog = useMemo(() => {
-    const errorsTipo = Object.values(errors)
-      .map((error) => error?.message)
-      .filter((mensagem): mensagem is TipoInfoDialog => {
-        return ListaInfosDialog.includes(mensagem as TipoInfoDialog);
-      });
+  //consulta se existe erros
+  const entradasErros = Object.entries(errors);
+  const erroEncontrado = entradasErros.find(([_, erro]) => erro?.message && ListaInfosDialog.includes(erro.message as TipoInfoDialog));
 
-    return errorsTipo;
-  }, [errors]);
+  const erroModalAtivo = erroEncontrado ? { campo: erroEncontrado[0] as keyof CotacaoCompletaDados, tipo: erroEncontrado[1]?.message as TipoInfoDialog } : null;
 
-  console.log(tipoDialog);
-
-  function fecharDialog() {
-    const campoAfetado = Object.entries(errors).find(([campo, campoObj]) => {
-      if (campoObj.message && campoObj.message === tipoDialog[0]) {
-        return campo;
-      }
-    });
-
-    return campoAfetado;
-  }
+  console.log(erroModalAtivo);
 
   return (
     <FormProvider {...rhf}>
@@ -90,6 +77,17 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
           <FormMercadoriaNatureza />
         </motion.div>
       </form>
+
+      {/* Modal de alerta */}
+      {erroModalAtivo && (
+        <ModalMercadoriaBloqueada
+          info={erroModalAtivo?.tipo}
+          fechar={() => {
+            setValue(erroModalAtivo?.campo, "");
+            clearErrors(erroModalAtivo?.campo);
+          }}
+        />
+      )}
     </FormProvider>
   );
 }
