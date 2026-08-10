@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       solicitanteNome: body[0].solicitanteNome?.replace(/[^a-zA-ZÀ-ÿ\s]/g, "").trim() || null,
       cepOrigem: body[0].cepOrigem?.replace(/\D/g, "") || null,
       cepDestino: body[0].cepDestino?.replace(/\D/g, "") || null,
-      pesoReal: body[0].pesoReal?.replace(/[^0-9.]/g, "") || null,
+      pesoReal: body[0].pesoReal?.replace(/[^0-9]/g, "") || null,
       totalVolumes: body[0].totalVolumes?.replace(/\D/g, "") || null,
       valorNfe: body[0].valorNfe?.replace(/[^0-9.]/g, "") || null,
       cubagens: body[0].cubagens || null,

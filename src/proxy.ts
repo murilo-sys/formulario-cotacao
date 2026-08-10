@@ -18,6 +18,10 @@ export async function proxy(request: NextRequest) {
   const referer = request.headers.get("referer");
   const host = request.headers.get("host");
 
+  console.log(origin);
+  console.log(referer);
+  console.log(host);
+
   // Guarda em uma constante valor booleano se é valido ou não
   const ehValido = (origin && origin.includes(host || "")) || (referer && referer.includes(host || ""));
 

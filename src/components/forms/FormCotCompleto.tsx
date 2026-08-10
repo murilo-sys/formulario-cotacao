@@ -6,8 +6,8 @@ import { CotacaoCompletaDados, CotacaoCompletaSchema, CotacaoDados } from "@/sch
 import { motion } from "framer-motion";
 import FormParticipantes from "./sections/FormParticipantes";
 import FormMercadoriaNatureza from "./sections/FormMercadoria/FormMercadoriaNatureza";
-import { LISTA_INFOS_MODAL, TYPE_INFO_MODAL } from "@/constants/modalAlertas";
 import { ModalMercadoriaBloqueada } from "../modals/ModalMercadoriaBloqueada";
+import { useFormCompleto } from "@/hooks/useFormCompleto";
 
 interface FormCompletoProps {
   dadosSimulacao: CotacaoDados;
@@ -39,22 +39,18 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     handleSubmit,
     setFocus,
     setValue,
-    clearErrors,
-    formState: { errors }
+    formState: { errors },
+    clearErrors
   } = rhf;
+
+  const { erroModalAtivo } = useFormCompleto(errors);
+
+  console.log(erroModalAtivo);
 
   //handler de enviar cotação
   async function handlerSubmeterCotacaoCompleta() {
     console.log("Teste");
   }
-
-  //consulta se existe erros
-  const entradasErros = Object.entries(errors);
-  const erroEncontrado = entradasErros.find(([, erro]) => erro?.message && LISTA_INFOS_MODAL.includes(erro.message as TYPE_INFO_MODAL));
-
-  const erroModalAtivo = erroEncontrado ? { campo: erroEncontrado[0] as keyof CotacaoCompletaDados, tipo: erroEncontrado[1]?.message as TYPE_INFO_MODAL } : null;
-
-  console.log(erroModalAtivo);
 
   return (
     <FormProvider {...rhf}>
