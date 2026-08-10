@@ -6,8 +6,8 @@ import { CotacaoCompletaDados, CotacaoCompletaSchema, CotacaoDados } from "@/sch
 import { motion } from "framer-motion";
 import FormParticipantes from "./sections/FormParticipantes";
 import FormMercadoriaNatureza from "./sections/FormMercadoria/FormMercadoriaNatureza";
-import { useMemo } from "react";
-import { ListaInfosDialog, ModalMercadoriaBloqueada, TipoInfoDialog } from "../modals/ModalMercadoriaBloqueada";
+import { LISTA_INFOS_MODAL, TYPE_INFO_MODAL } from "@/constants/modalAlertas";
+import { ModalMercadoriaBloqueada } from "../modals/ModalMercadoriaBloqueada";
 
 interface FormCompletoProps {
   dadosSimulacao: CotacaoDados;
@@ -50,9 +50,9 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
 
   //consulta se existe erros
   const entradasErros = Object.entries(errors);
-  const erroEncontrado = entradasErros.find(([_, erro]) => erro?.message && ListaInfosDialog.includes(erro.message as TipoInfoDialog));
+  const erroEncontrado = entradasErros.find(([, erro]) => erro?.message && LISTA_INFOS_MODAL.includes(erro.message as TYPE_INFO_MODAL));
 
-  const erroModalAtivo = erroEncontrado ? { campo: erroEncontrado[0] as keyof CotacaoCompletaDados, tipo: erroEncontrado[1]?.message as TipoInfoDialog } : null;
+  const erroModalAtivo = erroEncontrado ? { campo: erroEncontrado[0] as keyof CotacaoCompletaDados, tipo: erroEncontrado[1]?.message as TYPE_INFO_MODAL } : null;
 
   console.log(erroModalAtivo);
 
@@ -85,6 +85,7 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
           fechar={() => {
             setValue(erroModalAtivo?.campo, "");
             clearErrors(erroModalAtivo?.campo);
+            setFocus(erroModalAtivo?.campo);
           }}
         />
       )}

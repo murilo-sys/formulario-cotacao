@@ -1,14 +1,11 @@
 "use client";
 
+import { TYPE_INFO_MODAL } from "@/constants/modalAlertas";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef } from "react";
 
-export type TipoInfoDialog = "naturezaBloqueada" | "valorBaixo" | "valorElevado" | "pesoElevado" | "medidasElevadas" | "erroConsulta" | "cadastroInexistente";
-
-export const ListaInfosDialog = ["naturezaBloqueada", "valorBaixo", "valorElevado", "pesoElevado", "medidasElevadas", "erroConsulta", "cadastroInexistente"];
-
 interface DivProps extends React.HTMLAttributes<HTMLDivElement> {
-  info?: TipoInfoDialog;
+  info?: TYPE_INFO_MODAL;
   fechar: () => void;
 }
 
@@ -40,7 +37,8 @@ export function ModalMercadoriaBloqueada({ info, fechar, ...props }: DivProps) {
                   </>
                 )}
 
-                {info === "valorElevado" && (
+                {/* Campos de valor Elevado e valorBaixo */}
+                {/* {info === "valorElevado" && (
                   <>
                     <span className="text-2xl font-semibold text-red-500">Valor da NF Excedido</span>
                     <span className="text-center text-gray-400">Notamos que o valor da sua Nota Fiscal é maior que R$ 250.000,00</span>
@@ -52,7 +50,7 @@ export function ModalMercadoriaBloqueada({ info, fechar, ...props }: DivProps) {
                     <span className="text-2xl font-semibold text-red-500">Valor da NF Mínimo</span>
                     <span className="text-center text-gray-400">Notamos que o valor da sua Nota Fiscal é menor que R$ 200,00</span>
                   </>
-                )}
+                )} */}
 
                 {info === "pesoElevado" && (
                   <>
@@ -84,6 +82,7 @@ export function ModalMercadoriaBloqueada({ info, fechar, ...props }: DivProps) {
               </div>
 
               <div className="flex flex-col items-center bg-orange-50 rounded-md border border-orange-200 px-6 py-4 gap-5">
+                {/* Texto que fica no meio */}
                 {/* {info === "natureza" && (<>
                                 <span className="text-orange-700">Natureza de Carga Restrita</span>
                             </>)}

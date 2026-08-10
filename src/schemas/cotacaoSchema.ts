@@ -5,26 +5,40 @@ import { z } from "zod";
 
 const chavesNatureza = OPCOES_NATUREZA.map((opcao) => opcao.value);
 
-// prettier-ignore
 export const ItemCubagemSchema = z.object({
-  altura: z.string().min(1, "Altura inválida").regex(/^[0-9,]+$/, "Altura com caracteres inválidos"),
-  largura: z.string().min(1, "Largura inválida").regex(/^[0-9,]+$/, "largura com caracteres inválidos"),
-  comprimento: z.string().min(1, "Comprimento inválido").regex(/^[0-9,]+$/, "Comprimento com caracteres inválidos"),
-  quantidade: z.string().min(1, "Quantidade inválida").regex(/^[0-9,]+$/, "Quantidade com caracteres inválidos")
+  altura: z
+    .string()
+    .min(1, "Altura inválida")
+    .regex(/^[0-9,]+$/, "Altura com caracteres inválidos"),
+  largura: z
+    .string()
+    .min(1, "Largura inválida")
+    .regex(/^[0-9,]+$/, "largura com caracteres inválidos"),
+  comprimento: z
+    .string()
+    .min(1, "Comprimento inválido")
+    .regex(/^[0-9,]+$/, "Comprimento com caracteres inválidos"),
+  quantidade: z
+    .string()
+    .min(1, "Quantidade inválida")
+    .regex(/^[0-9,]+$/, "Quantidade com caracteres inválidos")
 });
 
 export type CubagemType = z.infer<typeof ItemCubagemSchema>;
 
-// prettier-ignore
 export const CotacaoSchema = z.object({
   solicitanteNome: z
     .string()
     .min(4, "Informe seu nome")
-    .regex(/^[a-zA-ZÀ-ÿ\s]+$/, { message: "Nome inválido" }),
+    .regex(/^[a-zA-ZÀ-ÿ\s]+$/, {
+      message: "Nome inválido"
+    }),
   solicitanteDoc: z
     .string()
     .min(11, "CPF ou CNPJ inválido")
-    .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), { message: "Documento inválido" }),
+    .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), {
+      message: "Documento inválido"
+    }),
   cepOrigem: z.string().length(8, "O CEP de origem está incompleto"),
   cepDestino: z.string().length(8, "O CEP de destino está incompleto"),
   pesoReal: z
@@ -45,7 +59,6 @@ export const CotacaoSchema = z.object({
 
 export type CotacaoDados = z.infer<typeof CotacaoSchema>;
 
-// prettier-ignore
 export const CotacaoCompletaSchema = CotacaoSchema.extend({
   destinatarioDoc: z
     .string()
@@ -67,31 +80,22 @@ export const CotacaoCompletaSchema = CotacaoSchema.extend({
       message: "pesoElevado"
     }
   ),
-  valorNfe: CotacaoSchema.shape.valorNfe
+  totalVolumes: CotacaoSchema.shape.totalVolumes.refine((valor) => Number(valor) <= 200),
+  pagadorFrete: z.enum(["dest", "rem"], {
+    message: "Selecione um pagador válido"
+  }),
+  naturezaMercadoria: z
+    .enum(chavesNatureza, {
+      message: "Selecione uma natureza de mercadoria válida"
+    })
     .refine(
       (valor) => {
-        return parseNumberBR(valor) < 250000;
+        return !(NATUREZAS_BLOQUEADAS as readonly string[]).includes(valor);
       },
       {
-        message: "valorElevado"
+        message: "naturezaBloqueada"
       }
     )
-    .refine(
-      (valor) => {
-        return parseNumberBR(valor) >= 200;
-      },
-      {
-        message: "valorBaixo"
-      }
-    ),
-    totalVolumes: CotacaoSchema.shape.totalVolumes.refine((valor) => Number(valor) <= 200),
-  pagadorFrete: z.enum(["dest", "rem"], { message: "Selecione um pagador válido" }),
-  naturezaMercadoria: z.enum(chavesNatureza, { message: "Selecione uma natureza de mercadoria válida" }).refine(
-    (valor) => {
-      return !(NATUREZAS_BLOQUEADAS as readonly string[]).includes(valor);
-    },
-    { message: "naturezaBloqueada" }
-  )
 });
 
 export type CotacaoCompletaDados = z.infer<typeof CotacaoCompletaSchema>;
@@ -107,4 +111,11 @@ export interface CotacaoCardType {
   air?: CotacaoDadosCard;
 }
 
-export type CotacaoResponse = { notFound: true } | { notFound: false; dados: CotacaoCardType };
+export type CotacaoResponse =
+  | {
+      notFound: true;
+    }
+  | {
+      notFound: false;
+      dados: CotacaoCardType;
+    };
