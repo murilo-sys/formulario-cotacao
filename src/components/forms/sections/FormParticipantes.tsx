@@ -10,7 +10,6 @@ export default function FormParticipantes() {
   //useFormContext para importar o useForm do formulário principal "integrando" eles
   const {
     control,
-    trigger,
     clearErrors,
     formState: { errors }
   } = useFormContext<CotacaoCompletaDados>();
@@ -45,7 +44,6 @@ export default function FormParticipantes() {
                   mask={mascaraCpfCnpj}
                   onBlur={() => {
                     if (field.value.trim() === "") return;
-                    trigger("remetenteDoc");
                     field.onBlur();
                   }}
                   value={field.value}
@@ -77,7 +75,6 @@ export default function FormParticipantes() {
                   mask={mascaraCpfCnpj}
                   onBlur={() => {
                     if (field.value.trim() === "") return;
-                    trigger("destinatarioDoc");
                     field.onBlur();
                   }}
                   value={field.value}
