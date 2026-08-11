@@ -1,7 +1,13 @@
 // Cache em memória dos ceps já consultados
 const cacheCeps = new Map<string, { cepValido: boolean; cidade: string; estado: string }>();
 
-export default async function validarCep(cep: string) {
+interface validarCepType {
+  cepValido: null | true | false;
+  cidade?: string;
+  estado?: string;
+}
+
+export default async function validarCep(cep: string): Promise<validarCepType> {
   // Valida se existe
   if (!cep)
     return {
@@ -19,7 +25,7 @@ export default async function validarCep(cep: string) {
 
   //Verifica se o cep existe no cache e retorna ele caso exista
   if (cacheCeps.has(cepFormatado)) {
-    return cacheCeps.get(cepFormatado);
+    return cacheCeps.get(cepFormatado) as validarCepType;
   }
 
   const url = `https://viacep.com.br/ws/${cepFormatado}/json/`;
