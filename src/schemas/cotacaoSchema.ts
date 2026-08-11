@@ -1,4 +1,5 @@
 import { NATUREZAS_BLOQUEADAS, OPCOES_NATUREZA } from "@/constants/naturezas";
+import consultarDoc from "@/services/consultarDoc";
 import parseNumberBR from "@/utils/parseNumberBR";
 import { cnpj, cpf } from "cpf-cnpj-validator";
 import { z } from "zod";
@@ -65,13 +66,35 @@ export const CotacaoCompletaSchema = CotacaoSchema.extend({
     .min(11, "CPF ou CNPJ inválido")
     .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), {
       message: "Documento inválido"
-    }),
+    })
+    .refine(
+      async (valor) => {
+        if (!cnpj.isValid(valor) && !cpf.isValid(valor)) {
+          return true;
+        }
+        return await consultarDoc(valor);
+      },
+      {
+        message: "cadastroInexistente"
+      }
+    ),
   remetenteDoc: z
     .string()
     .min(11, "CPF ou CNPJ inválido")
     .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), {
       message: "Documento inválido"
-    }),
+    })
+    .refine(
+      async (valor) => {
+        if (!cnpj.isValid(valor) && !cpf.isValid(valor)) {
+          return true;
+        }
+        return await consultarDoc(valor);
+      },
+      {
+        message: "cadastroInexistente"
+      }
+    ),
   pesoReal: CotacaoSchema.shape.pesoReal.refine(
     (valor) => {
       return parseNumberBR(valor) < 500;
