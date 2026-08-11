@@ -1,7 +1,7 @@
 "use client";
 
 import { TYPE_INFO_MODAL } from "@/constants/modalAlertas";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 interface DivProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -17,10 +17,10 @@ export function ModalMercadoriaBloqueada({ info, fechar, ...props }: DivProps) {
   }, []);
 
   return (
-    <AnimatePresence>
+    <div>
       {info && (
         <div {...props} className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 lg:p-0`}>
-          <motion.div className="flex flex-col gap-4 w-full max-w-md lg:max-w-xl bg-white rounded-2xl py-8 pb-6 px-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.1 }}>
+          <motion.div className="flex flex-col gap-4 w-full max-w-md lg:max-w-xl bg-white rounded-2xl py-8 pb-6 px-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
             <>
               <div className="flex flex-col items-center gap-1">
                 {info === "naturezaBloqueada" && <span className="text-5xl">⚠️</span>}
@@ -141,6 +141,6 @@ export function ModalMercadoriaBloqueada({ info, fechar, ...props }: DivProps) {
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </div>
   );
 }
