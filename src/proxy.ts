@@ -36,8 +36,6 @@ export async function proxy(request: NextRequest) {
   //Pega o caminho da REQ
   const path = request.nextUrl.pathname;
 
-  console.log(path);
-
   //Concatena os ip e o caminho
   const identifier = `${ip}:${path}`;
 
