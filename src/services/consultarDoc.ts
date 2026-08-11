@@ -1,12 +1,40 @@
 import axios from "axios";
 
-export default function consultarDoc(doc: string): boolean {
+// Cache em memória dos documentos já consultados
+const cacheDocumentos = new Map<string, boolean>();
+
+export default async function consultarDoc(doc: string): Promise<boolean> {
   if (!doc) return false;
 
-  const ehCpf: boolean = doc.length === 14 ? false : true;
+  //Formata a url com o parametro correto
+  const url = `/api/consultar-doc?documento=${doc}`;
 
-  if (ehCpf) {
+  //Verifica se existe no cache
+  if (cacheDocumentos.has(doc)) {
+    console.log("usando cache");
+
+    //retorna o valor caso exista
+    return cacheDocumentos.get(doc)!;
   }
 
-  return false;
+  try {
+    // Faz o get no endpoint para verificar
+    const response = await axios.get(url);
+
+    if (!response.data.notFound) {
+      //Seta o valor capturado no cache
+      cacheDocumentos.set(doc, true);
+      return true;
+    }
+
+    return true;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.status !== 404) {
+        console.log(error.message);
+      }
+    }
+
+    return false;
+  }
 }

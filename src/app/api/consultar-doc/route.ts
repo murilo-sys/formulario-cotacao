@@ -1,7 +1,8 @@
+import consultarPessoa from "@/services/backend/consultarPessoa";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse<{ message?: unknown; notFound: true | false }>> {
   //Lê os params
   const params = request.nextUrl.searchParams;
 
@@ -9,47 +10,25 @@ export async function GET(request: NextRequest) {
   const doc = params.get("documento");
 
   //Caso não tenha o parametro doc enviado
-  if (!doc) return NextResponse.json({ message: "Parâmetro documento não encontrado" }, { status: 400 });
-
-  //Lê a variavel de ambiente
-  const token = process.env.TOKEN_GRAPHQL_API;
-
-  //Caso não tenha o token
-  if (!token) {
-    console.error("Token API graphql não cadastrada.");
-    return NextResponse.json({ message: "Erro durante a execução, tente novamente mais tarde." }, { status: 500 });
-  }
+  if (!doc) return NextResponse.json({ message: "Parâmetro documento não encontrado", notFound: true }, { status: 400 });
 
   try {
     //Faz a requisição
-    const response = await axios.post(
-      "https://globalcargo.eslcloud.com.br/graphql",
+    const response = await consultarPessoa(doc);
 
-      // 2º Argumento: Corpo do POST (payload JSON)
-      {
-        params: {
-          cnpj: doc
-        }
-      },
+    //Cria uma constante com o resultado da lista
+    const lista = response.data?.data?.company?.edges || response.data?.data?.individual?.edges;
 
-      // 3º Argumento: Configurações e Cabeçalhos HTTP
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "*/*",
-          Authorization: `Bearer ${token}` // 💡 Ou apenas token, caso a ESL não use a palavra "Bearer "
-        }
-      }
-    );
+    //Caso esteja vazio o resultado
+    if (!lista || lista?.length === 0) {
+      return NextResponse.json({ notFound: true }, { status: 404 });
+    }
 
-    console.log("deu certo");
-    console.log(response.data);
-
-    return NextResponse.json({ response });
+    return NextResponse.json({ ...response.data, notFound: false }, { status: 200 });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log(error.response);
     }
-    return NextResponse.json({ message: "Erro durante a execução, tente novamente mais tarde." }, { status: 500 });
+    return NextResponse.json({ message: "Erro durante a execução, tente novamente mais tarde.", notFound: true }, { status: 500 });
   }
 }
