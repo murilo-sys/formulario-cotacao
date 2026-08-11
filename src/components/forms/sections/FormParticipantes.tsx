@@ -5,6 +5,7 @@ import { mascaraCpfCnpj } from "@/utils/mascaras";
 import { Input } from "@/components/ui/inputs/Input";
 import { Label } from "@/components/ui/Label";
 import { CotacaoCompletaDados } from "@/schemas/cotacaoSchema";
+import { useValidarDocumento } from "@/hooks/useValidarDocumento";
 
 export default function FormParticipantes() {
   //useFormContext para importar o useForm do formulário principal "integrando" eles
@@ -13,6 +14,8 @@ export default function FormParticipantes() {
     clearErrors,
     formState: { errors }
   } = useFormContext<CotacaoCompletaDados>();
+
+  const { consultarDocumento } = useValidarDocumento();
 
   const classNameBase = "p-1 active:scale-95 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer w-full flex justify-center border border-blue-200 rounded-md ";
 
@@ -44,6 +47,7 @@ export default function FormParticipantes() {
                   mask={mascaraCpfCnpj}
                   onBlur={() => {
                     if (field.value.trim() === "") return;
+                    consultarDocumento(field.value, "remetenteDoc");
                     field.onBlur();
                   }}
                   value={field.value}
@@ -75,6 +79,7 @@ export default function FormParticipantes() {
                   mask={mascaraCpfCnpj}
                   onBlur={() => {
                     if (field.value.trim() === "") return;
+                    consultarDocumento(field.value, "destinatarioDoc");
                     field.onBlur();
                   }}
                   value={field.value}

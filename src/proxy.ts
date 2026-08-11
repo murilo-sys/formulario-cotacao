@@ -20,6 +20,10 @@ const ratelimitConsultarDoc = new Ratelimit({
 });
 
 export async function proxy(request: NextRequest) {
+  if (process.env.NODE_ENV === "development") {
+    return NextResponse.next();
+  }
+
   //Pega os heardes da requisição
   const origin = request.headers.get("origin");
   const referer = request.headers.get("referer");

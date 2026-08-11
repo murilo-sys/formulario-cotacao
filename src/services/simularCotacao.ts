@@ -15,7 +15,7 @@ export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoRespon
   };
 
   // Fetch das cotações
-  const resposta = await fetch(`/api/cotacao`, {
+  const resposta = await fetch(`/api/simular-cotacao`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

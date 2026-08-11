@@ -70,35 +70,13 @@ export const CotacaoCompletaSchema = CotacaoSchema.omit({
     .min(11, "CPF ou CNPJ inválido")
     .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), {
       message: "Documento inválido"
-    })
-    .refine(
-      async (valor) => {
-        if (!cnpj.isValid(valor) && !cpf.isValid(valor)) {
-          return true;
-        }
-        return await consultarDoc(valor);
-      },
-      {
-        message: "cadastroInexistente"
-      }
-    ),
+    }),
   remetenteDoc: z
     .string()
     .min(11, "CPF ou CNPJ inválido")
     .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), {
       message: "Documento inválido"
-    })
-    .refine(
-      async (valor) => {
-        if (!cnpj.isValid(valor) && !cpf.isValid(valor)) {
-          return true;
-        }
-        return await consultarDoc(valor);
-      },
-      {
-        message: "cadastroInexistente"
-      }
-    ),
+    }),
   pesoReal: CotacaoSchema.shape.pesoReal.refine(
     (valor) => {
       return parseNumberBR(valor) < 500;
@@ -127,6 +105,7 @@ export const CotacaoCompletaSchema = CotacaoSchema.omit({
 
 export type CotacaoCompletaDados = z.infer<typeof CotacaoCompletaSchema>;
 
+// Simulação Cotação
 export interface CotacaoDadosCard {
   total: string;
   difal?: string;
@@ -146,3 +125,10 @@ export type CotacaoResponse =
       notFound: false;
       dados: CotacaoCardType;
     };
+
+// Criar Cotação
+export interface CriarCotacaoResponse {
+  codigo: string;
+  valor: string;
+  dataValidade: string;
+}

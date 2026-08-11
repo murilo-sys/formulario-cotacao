@@ -1,8 +1,5 @@
-import { CotacaoCompletaDados } from "@/schemas/cotacaoSchema";
+import { CotacaoCompletaDados, CriarCotacaoResponse } from "@/schemas/cotacaoSchema";
 
-interface CriarCotacaoResponse {
-  codigo: string;
-  valor: string;
+export default async function criarCotacao(formularioDados: CotacaoCompletaDados): Promise<CriarCotacaoResponse> {
+  console.log(formulario);
 }
-
-export default async function criarCotacao(formularioDados: CotacaoCompletaDados): Promise<CriarCotacaoResponse> {}
