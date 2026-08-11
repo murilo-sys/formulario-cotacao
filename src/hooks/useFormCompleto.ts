@@ -1,8 +1,12 @@
 import { LISTA_INFOS_MODAL, TYPE_INFO_MODAL } from "@/constants/modalAlertas";
 import { CotacaoCompletaDados } from "@/schemas/cotacaoSchema";
+import { useState } from "react";
 import { FieldErrors } from "react-hook-form";
 
 export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>) {
+  //useState da animação botão carregando
+  const [carregando, setCarregando] = useState<true | false>(false);
+
   //consulta se existe erros
   const entradasErros = Object.entries(errors);
   const erroEncontrado = entradasErros.find(([, erro]) => erro?.message && LISTA_INFOS_MODAL.includes(erro.message as TYPE_INFO_MODAL));
@@ -11,6 +15,8 @@ export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>) {
   const erroModalAtivo = erroEncontrado ? { campo: erroEncontrado[0] as keyof CotacaoCompletaDados, tipo: erroEncontrado[1]?.message as TYPE_INFO_MODAL } : null;
 
   return {
-    erroModalAtivo
+    erroModalAtivo,
+    carregando,
+    setCarregando
   };
 }

@@ -3,7 +3,7 @@
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/buttons/ButtonSimular";
+import { ButtonCotacao } from "@/components/ui/buttons/ButtonCotacao";
 import { CotacaoSchema, CotacaoDados, CotacaoResponse } from "@/schemas/cotacaoSchema";
 import validarCep from "@/utils/validarCep";
 import { AnimatePresence, motion } from "framer-motion";
@@ -202,9 +202,9 @@ export default function FormularioCotacaoSimulacao() {
 
                       {/* Botao de submit */}
                       <div className="flex flex-col gap-1">
-                        <Button type="submit" carregando={carregando}>
+                        <ButtonCotacao type="submit" carregando={carregando}>
                           Simular Cotação
-                        </Button>
+                        </ButtonCotacao>
                       </div>
                     </div>
 

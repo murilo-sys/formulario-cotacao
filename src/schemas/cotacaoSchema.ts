@@ -60,7 +60,11 @@ export const CotacaoSchema = z.object({
 
 export type CotacaoDados = z.infer<typeof CotacaoSchema>;
 
-export const CotacaoCompletaSchema = CotacaoSchema.extend({
+export const CotacaoCompletaSchema = CotacaoSchema.omit({
+  difalOpcao: true,
+  cepDestino: true,
+  cepOrigem: true
+}).extend({
   destinatarioDoc: z
     .string()
     .min(11, "CPF ou CNPJ inválido")

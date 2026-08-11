@@ -8,6 +8,7 @@ import FormParticipantes from "./sections/FormParticipantes";
 import FormMercadoriaNatureza from "./sections/FormMercadoria/FormMercadoriaNatureza";
 import { ModalMercadoriaBloqueada } from "../modals/ModalMercadoriaBloqueada";
 import { useFormCompleto } from "@/hooks/useFormCompleto";
+import { ButtonCotacao } from "../ui/buttons/ButtonCotacao";
 
 interface FormCompletoProps {
   dadosSimulacao: CotacaoDados;
@@ -20,13 +21,11 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     mode: "onBlur",
     reValidateMode: "onBlur",
     defaultValues: {
-      solicitanteNome: dadosSimulacao.solicitanteNome ?? "",
-      solicitanteDoc: dadosSimulacao.solicitanteDoc ?? "",
+      solicitanteNome: "Murilo Santiago", //dadosSimulacao.solicitanteNome ??
+      solicitanteDoc: "00945958000155", //dadosSimulacao.solicitanteDoc ??
       destinatarioDoc: "",
       remetenteDoc: "",
       pagadorFrete: "rem",
-      cepOrigem: dadosSimulacao.cepOrigem ?? "",
-      cepDestino: dadosSimulacao.cepDestino ?? "",
       valorNfe: dadosSimulacao.valorNfe ?? "",
       cubagens: [...dadosSimulacao.cubagens],
       totalVolumes: dadosSimulacao.totalVolumes ?? "",
@@ -43,11 +42,17 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     clearErrors
   } = rhf;
 
-  const { erroModalAtivo } = useFormCompleto(errors);
+  //Hook form completo
+  const { erroModalAtivo, carregando, setCarregando } = useFormCompleto(errors);
 
   //handler de enviar cotação
-  async function handlerSubmeterCotacaoCompleta() {
-    console.log("Teste");
+  async function handlerSubmeterCotacaoCompleta(dadosFormulario: CotacaoCompletaDados) {
+    setCarregando(true);
+
+    setTimeout(() => {
+      console.log(dadosFormulario);
+      setCarregando(false);
+    }, 2000);
   }
 
   return (
@@ -69,6 +74,11 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
 
           {/*Sections Informações da mercadoria*/}
           <FormMercadoriaNatureza />
+          <div className="flex flex-row w-full justify-end items-end">
+            <ButtonCotacao carregando={carregando} type="submit">
+              Criar Cotação
+            </ButtonCotacao>
+          </div>
         </motion.div>
       </form>
 
