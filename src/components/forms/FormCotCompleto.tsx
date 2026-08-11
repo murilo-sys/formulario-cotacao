@@ -45,8 +45,6 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
 
   const { erroModalAtivo } = useFormCompleto(errors);
 
-  console.log(erroModalAtivo);
-
   //handler de enviar cotação
   async function handlerSubmeterCotacaoCompleta() {
     console.log("Teste");
