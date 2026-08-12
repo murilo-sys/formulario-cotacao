@@ -10,4 +10,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<CriarCota
   const dados = await CotacaoCompletaSchema.safeParseAsync(body);
 
   console.log(dados.success);
+
+  return NextResponse.json({ codigo: "123", valor: "100", dataValidade: "10/02/2006" });
 }
