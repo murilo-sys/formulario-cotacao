@@ -13,8 +13,11 @@ export async function GET(request: NextRequest): Promise<NextResponse<{ message?
   //Caso não tenha o parametro doc enviado
   if (!doc) return NextResponse.json({ message: "Parâmetro documento não encontrado", notFound: true }, { status: 400 });
 
+  console.log(!cnpj.isValid(doc));
+  console.log(!cpf.isValid(doc));
+
   //Adicionado verificação de documento no endpoint
-  if (!cnpj.isValid(doc) || !cpf.isValid(doc)) NextResponse.json({ message: "Documento inválido", notFound: true }, { status: 400 });
+  if (!cnpj.isValid(doc) && !cpf.isValid(doc)) return NextResponse.json({ message: "Documento inválido", notFound: true }, { status: 400 });
 
   try {
     //Faz a requisição
