@@ -13,9 +13,8 @@ export default async function consultarDoc(doc: string): Promise<boolean> {
   }
 
   try {
-    const baseUrl = typeof window === "undefined" ? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000") : "";
     //Formata a url com o parametro correto
-    const url = `${baseUrl}/api/consultar-doc?documento=${doc}`;
+    const url = `/api/consultar-doc?documento=${doc}`;
 
     // Faz o get no endpoint para verificar
     const response = await axios.get(url);
