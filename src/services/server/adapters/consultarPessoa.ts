@@ -24,6 +24,9 @@ export interface RespostaGraphQLPessoa {
 //Lê a variavel de ambiente
 const token = process.env.TOKEN_GRAPHQL_API;
 
+// Cache em memória dos documentos já consultados
+const cacheDocumentos = new Map<string, RespostaGraphQLPessoa>();
+
 export default async function consultarPessoa(doc: string): Promise<AxiosResponse<RespostaGraphQLPessoa>> {
   //Caso não tenha o token
   if (!token) {
@@ -31,6 +34,13 @@ export default async function consultarPessoa(doc: string): Promise<AxiosRespons
     throw new Error("Token API GraphQL não configurada");
   }
 
+  //Verifica se existe no cache
+  if (cacheDocumentos.has(doc)) {
+    //retorna o valor caso exista
+    return cacheDocumentos.get(doc) as AxiosResponse<RespostaGraphQLPessoa>;
+  }
+
+  //Query dinamica
   const query = `${
     doc.length === 14
       ? `query company($params: CompanyInput!, $after: String, $before: String, $first: Int, $last: Int){
@@ -53,11 +63,13 @@ export default async function consultarPessoa(doc: string): Promise<AxiosRespons
 }`
   }`;
 
+  //Variables dinamica
   const variables = {
     params: doc.length === 14 ? { cnpj: doc } : { cpf: doc }
   };
 
-  return await axios.post(
+  //Faz a consulta
+  const consulta = await axios.post(
     "https://globalcargo.eslcloud.com.br/graphql",
     {
       query: query,
@@ -71,4 +83,10 @@ export default async function consultarPessoa(doc: string): Promise<AxiosRespons
       }
     }
   );
+
+  //Define o cache
+  cacheDocumentos.set(doc, consulta);
+
+  //Retorna consulta
+  return consulta;
 }
