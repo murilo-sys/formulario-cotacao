@@ -1,5 +1,5 @@
 import { CotacaoSchema } from "@/schemas/cotacaoSchema";
-import { apiSimularValor } from "@/services/server/adapters/apiSimularValor";
+import { apiSimularValor } from "@/services/server/adapters/simularValorAdapter";
 import { calcularPesoCubado } from "@/services/server/utils/calcularPesoCubado";
 import { NextRequest, NextResponse } from "next/server";
 

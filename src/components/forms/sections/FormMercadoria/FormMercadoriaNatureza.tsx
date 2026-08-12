@@ -84,11 +84,14 @@ export default function FormMercadoria() {
                   value={field.value}
                   onChange={(e) => {
                     clearErrors("totalVolumes");
-                    if (Number(e.target.value) > 200) {
+
+                    const valorLimpo = e.target.value.replace(/\D/g, "");
+
+                    if (Number(valorLimpo) > 200) {
                       field.onChange("200");
                       return;
                     }
-                    field.onChange(e.target.value);
+                    field.onChange(valorLimpo);
                   }}
                 />
               )}

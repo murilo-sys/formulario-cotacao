@@ -9,40 +9,23 @@ export const ItemCubagemSchema = z.object({
   altura: z
     .string()
     .min(1, "Altura inválida")
-    .regex(/^[0-9,]+$/, "Altura com caracteres inválidos")
-    .refine(
-      (valor) => {
-        //Altura não pode ser maior que 2.4
-        return !(Number(valor.replace(",", ".")) >= 2.4);
-      },
-      { message: "medidasElevadas" }
-    ),
+    .regex(/^[0-9,.]+$/, "Altura com caracteres inválidos")
+    .refine((valor) => parseNumberBR(valor) > 0, { message: "Altura deve ser maior que zero" }),
   largura: z
     .string()
     .min(1, "Largura inválida")
-    .regex(/^[0-9,]+$/, "largura com caracteres inválidos")
-    .refine(
-      (valor) => {
-        //Altura não pode ser maior que 2.4
-        return !(Number(valor.replace(",", ".")) >= 2.3);
-      },
-      { message: "medidasElevadas" }
-    ),
+    .regex(/^[0-9,.]+$/, "largura com caracteres inválidos")
+    .refine((valor) => parseNumberBR(valor) > 0, { message: "Altura deve ser maior que zero" }),
   comprimento: z
     .string()
     .min(1, "Comprimento inválido")
-    .regex(/^[0-9,]+$/, "Comprimento com caracteres inválidos")
-    .refine(
-      (valor) => {
-        //Altura não pode ser maior que 2.4
-        return !(Number(valor.replace(",", ".")) >= 8.0);
-      },
-      { message: "medidasElevadas" }
-    ),
+    .regex(/^[0-9,.]+$/, "Comprimento com caracteres inválidos")
+    .refine((valor) => parseNumberBR(valor) > 0, { message: "Altura deve ser maior que zero" }),
   quantidade: z
     .string()
     .min(1, "Quantidade inválida")
-    .regex(/^[0-9,]+$/, "Quantidade com caracteres inválidos")
+    .regex(/^[0-9]+$/, "Quantidade com caracteres inválidos")
+    .refine((valor) => parseNumberBR(valor) > 0, { message: "Altura deve ser maior que zero" })
 });
 
 export type CubagemType = z.infer<typeof ItemCubagemSchema>;
@@ -73,7 +56,8 @@ export const CotacaoSchema = z.object({
   totalVolumes: z
     .string()
     .min(1, "Informe o total de volumes")
-    .refine((valor) => Number(valor) > 0),
+    .refine((valor) => Number(valor) > 0)
+    .regex(/^[0-9]+$/, "Quantidade com caracteres inválidos"),
   difalOpcao: z.boolean(),
   cubagens: z.array(ItemCubagemSchema)
 });
@@ -99,7 +83,7 @@ export const CotacaoCompletaSchema = CotacaoSchema.omit({
     }),
   pesoReal: CotacaoSchema.shape.pesoReal.refine(
     (valor) => {
-      return parseNumberBR(valor) < 3000;
+      return parseNumberBR(valor) < 500;
     },
     {
       message: "pesoElevado"

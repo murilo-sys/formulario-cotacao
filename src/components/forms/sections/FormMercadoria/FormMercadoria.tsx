@@ -90,6 +90,7 @@ export default function FormMercadoria() {
               control={control}
               render={({ field }) => (
                 <Input
+                  {...field}
                   className="w-full pl-12"
                   prefixo="UN"
                   erro={errors.totalVolumes?.message}
@@ -99,7 +100,8 @@ export default function FormMercadoria() {
                   value={field.value}
                   onChange={(e) => {
                     clearErrors("totalVolumes");
-                    field.onChange(e.target.value);
+                    const valorLimpo = e.target.value.replace(/\D/g, "");
+                    field.onChange(valorLimpo);
                   }}
                 />
               )}

@@ -1,4 +1,4 @@
-import consultarPessoa from "@/services/server/adapters/consultarPessoa";
+import consultarDocBackend from "@/services/server/use-cases/consultarDocUseCase";
 import axios from "axios";
 import { cnpj, cpf } from "cpf-cnpj-validator";
 import { NextRequest, NextResponse } from "next/server";
@@ -13,21 +13,15 @@ export async function GET(request: NextRequest): Promise<NextResponse<{ message?
   //Caso não tenha o parametro doc enviado
   if (!doc) return NextResponse.json({ message: "Parâmetro documento não encontrado", notFound: true }, { status: 400 });
 
-  console.log(!cnpj.isValid(doc));
-  console.log(!cpf.isValid(doc));
-
   //Adicionado verificação de documento no endpoint
   if (!cnpj.isValid(doc) && !cpf.isValid(doc)) return NextResponse.json({ message: "Documento inválido", notFound: true }, { status: 400 });
 
   try {
     //Faz a requisição
-    const response = await consultarPessoa(doc);
-
-    //Cria uma constante com o resultado da lista
-    const lista = response.data?.data?.company?.edges || response.data?.data?.individual?.edges;
+    const response = await consultarDocBackend(doc);
 
     //Caso esteja vazio o resultado
-    if (!lista || lista?.length === 0) {
+    if (!response.valido) {
       return NextResponse.json({ notFound: true }, { status: 404 });
     }
 

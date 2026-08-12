@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import axios from "axios";
 import { CotacaoSchema } from "@/schemas/cotacaoSchema";
-import { apiSimularValor } from "@/services/server/adapters/apiSimularValor";
+import { apiSimularValor } from "@/services/server/adapters/simularValorAdapter";
 import { calcularFator } from "@/services/server/utils/calcularFator";
 import { calcularPesoCubado } from "@/services/server/utils/calcularPesoCubado";
 import { cnpj } from "cpf-cnpj-validator";

@@ -108,6 +108,7 @@ export default function LinhasCubagens() {
                 render={({ field }) => {
                   return (
                     <Input
+                      {...field}
                       className="pl-12"
                       ref={field.ref}
                       prefixo="UN"
@@ -117,6 +118,8 @@ export default function LinhasCubagens() {
                       onChange={(e) => {
                         clearErrors(`cubagens.${index}.quantidade`);
 
+                        const valorLimpo = e.target.value.replace(/\D/g, "");
+
                         // soma os volumes das outras linhas exceto a atual.
                         const volumesOutrasLinhas = cubagens.reduce((acumulador, item, i) => {
                           if (i === index) return acumulador; // Ignora a própria linha!
@@ -125,14 +128,14 @@ export default function LinhasCubagens() {
 
                         // O máximo que esta linha pode ter é o total MENOS as outras linhas
                         const maxPermitido = Number(totalVolumesDigitado) - volumesOutrasLinhas;
-                        const valorDigitado = Number(e.target.value) || 0;
+                        const valorDigitado = Number(valorLimpo) || 0;
 
                         if (valorDigitado > maxPermitido) {
                           field.onChange(String(maxPermitido));
                           return;
                         }
 
-                        field.onChange(e.target.value);
+                        field.onChange(valorLimpo);
                       }}
                     />
                   );

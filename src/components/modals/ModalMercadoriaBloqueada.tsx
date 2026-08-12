@@ -55,7 +55,7 @@ export function ModalMercadoriaBloqueada({ info, fechar, ...props }: DivProps) {
                 {info === "pesoElevado" && (
                   <>
                     <span className="text-2xl font-semibold text-red-500">Peso Elevado</span>
-                    <span className="text-center text-gray-400">Notamos que o peso total da sua carga ultrapassa 3000 KG</span>
+                    <span className="text-center text-gray-400">Notamos que o peso total da sua carga ultrapassa 500 KG</span>
                   </>
                 )}
 

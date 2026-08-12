@@ -5,16 +5,32 @@ import axios, { AxiosResponse } from "axios";
 export interface RespostaGraphQLPessoa {
   data?: {
     company?: {
-      edges?: Array<{
-        node: {
-          cnpj?: string;
+      edges: Array<{
+        node?: {
+          cnpj: string;
+          mainAddress: {
+            city: {
+              name: string;
+              state: {
+                code: string;
+              };
+            };
+          };
         };
       }>;
     };
     individual?: {
-      edges?: Array<{
-        node: {
-          cpf?: string;
+      edges: Array<{
+        node?: {
+          cpf: string;
+          mainAddress: {
+            city: {
+              name: string;
+              state: {
+                code: string;
+              };
+            };
+          };
         };
       }>;
     };
@@ -39,24 +55,39 @@ export default async function consultarPessoa(doc: string): Promise<AxiosRespons
     //retorna o valor caso exista
     return cacheDocumentos.get(doc) as AxiosResponse<RespostaGraphQLPessoa>;
   }
-
   //Query dinamica
   const query = `${
     doc.length === 14
-      ? `query company($params: CompanyInput!, $after: String, $before: String, $first: Int, $last: Int){
-  company(params: $params, after: $after, before: $before, first: $first, last: $last){
-    edges{
-      node{
-        cnpj
-     }
-     }
-   }
-}`
+      ? `query company($params: CompanyInput!, $after: String, $before: String, $first: Int, $last: Int) {
+      company(params: $params, after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            cnpj
+            mainAddress {
+              city {
+                name
+                state {
+                  code
+                }
+              }
+            }
+          }
+        }
+      }
+    }`
       : `query individual($params: IndividualInput!, $after: String, $before: String, $first: Int, $last: Int){
   individual(params: $params, after: $after, before: $before, first: $first, last: $last){
     edges{
       node{
         cpf
+        mainAddress{
+          city{
+            name
+            state{
+              code
+            }
+          }
+        }
       }
     }
   }
