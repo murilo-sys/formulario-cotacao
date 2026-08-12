@@ -1,4 +1,4 @@
-import consultarPessoa from "@/services/backend/consultarPessoa";
+import consultarPessoa from "@/services/server/adapters/consultarPessoa";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 

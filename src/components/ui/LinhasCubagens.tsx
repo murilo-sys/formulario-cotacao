@@ -150,6 +150,7 @@ export default function LinhasCubagens() {
                 render={({ field }) => {
                   return (
                     <InputMedida
+                      {...field}
                       className="pl-10"
                       ref={field.ref}
                       prefixo="M"
@@ -176,6 +177,7 @@ export default function LinhasCubagens() {
                 render={({ field }) => {
                   return (
                     <InputMedida
+                      {...field}
                       className="pl-10"
                       ref={field.ref}
                       prefixo="M"
@@ -202,6 +204,7 @@ export default function LinhasCubagens() {
                 render={({ field }) => {
                   return (
                     <InputMedida
+                      {...field}
                       className="pl-10"
                       ref={field.ref}
                       prefixo="M"

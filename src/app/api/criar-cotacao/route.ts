@@ -2,7 +2,7 @@ import "server-only";
 
 import { NextRequest, NextResponse } from "next/server";
 import { CotacaoCompletaSchema, CriarCotacaoResponse } from "@/schemas/cotacaoSchema";
-import consultarDocBackend from "@/services/backend/consultarDocBackend";
+import consultarDocBackend from "@/services/server/use-cases/consultarDocBackend";
 
 interface CotacaoErroResponseType {
   campo: string;

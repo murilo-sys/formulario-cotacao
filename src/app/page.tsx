@@ -10,7 +10,7 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col items-center lg:items-start lg:flex-row lg:justify-center gap-8 w-full px-4">
-        <div className="bg-white w-full max-w-md lg:max-w-[345px] rounded-3xl shadow-lg pb-1 pt-4 px-7">
+        <div className="bg-white w-full max-w-md lg:max-w-86.25 rounded-3xl shadow-lg pb-1 pt-4 px-7">
           <h1 className="font-bold text-center text-2xl mb-3 ">Faça sua cotação</h1>
 
           <div className="flex flex-col gap-1 border-b border-gray-200 pb-3">

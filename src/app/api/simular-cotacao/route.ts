@@ -1,9 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import axios from "axios";
 import { CotacaoSchema } from "@/schemas/cotacaoSchema";
-import { apiSimularValor } from "@/services/backend/apiSimularValor";
-import { calcularFator } from "@/services/backend/calcularFator";
-import { calcularPesoCubado } from "@/services/backend/calcularPesoCubado";
+import { apiSimularValor } from "@/services/server/adapters/apiSimularValor";
+import { calcularFator } from "@/services/server/utils/calcularFator";
+import { calcularPesoCubado } from "@/services/server/utils/calcularPesoCubado";
 import { cnpj } from "cpf-cnpj-validator";
 
 export async function POST(request: NextRequest) {

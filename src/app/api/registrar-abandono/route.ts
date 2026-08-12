@@ -1,6 +1,6 @@
 import { CotacaoSchema } from "@/schemas/cotacaoSchema";
-import { apiSimularValor } from "@/services/backend/apiSimularValor";
-import { calcularPesoCubado } from "@/services/backend/calcularPesoCubado";
+import { apiSimularValor } from "@/services/server/adapters/apiSimularValor";
+import { calcularPesoCubado } from "@/services/server/utils/calcularPesoCubado";
 import { NextRequest, NextResponse } from "next/server";
 
 const solicitanteSchema = CotacaoSchema.pick({

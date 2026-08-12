@@ -1,5 +1,7 @@
+import "server-only";
+
 import axios from "axios";
-import consultarPessoa from "./consultarPessoa";
+import consultarPessoa from "../adapters/consultarPessoa";
 
 // Cache em memória dos documentos já consultados
 const cacheDocumentos = new Map<string, boolean>();

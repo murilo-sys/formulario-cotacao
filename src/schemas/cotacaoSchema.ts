@@ -1,5 +1,4 @@
 import { NATUREZAS_BLOQUEADAS, OPCOES_NATUREZA } from "@/constants/naturezas";
-import consultarDoc from "@/services/consultarDoc";
 import parseNumberBR from "@/utils/parseNumberBR";
 import { cnpj, cpf } from "cpf-cnpj-validator";
 import { z } from "zod";
@@ -10,15 +9,36 @@ export const ItemCubagemSchema = z.object({
   altura: z
     .string()
     .min(1, "Altura inválida")
-    .regex(/^[0-9,]+$/, "Altura com caracteres inválidos"),
+    .regex(/^[0-9,]+$/, "Altura com caracteres inválidos")
+    .refine(
+      (valor) => {
+        //Altura não pode ser maior que 2.4
+        return !(Number(valor.replace(",", ".")) >= 2.4);
+      },
+      { message: "medidasElevadas" }
+    ),
   largura: z
     .string()
     .min(1, "Largura inválida")
-    .regex(/^[0-9,]+$/, "largura com caracteres inválidos"),
+    .regex(/^[0-9,]+$/, "largura com caracteres inválidos")
+    .refine(
+      (valor) => {
+        //Altura não pode ser maior que 2.4
+        return !(Number(valor.replace(",", ".")) >= 2.3);
+      },
+      { message: "medidasElevadas" }
+    ),
   comprimento: z
     .string()
     .min(1, "Comprimento inválido")
-    .regex(/^[0-9,]+$/, "Comprimento com caracteres inválidos"),
+    .regex(/^[0-9,]+$/, "Comprimento com caracteres inválidos")
+    .refine(
+      (valor) => {
+        //Altura não pode ser maior que 2.4
+        return !(Number(valor.replace(",", ".")) >= 8.0);
+      },
+      { message: "medidasElevadas" }
+    ),
   quantidade: z
     .string()
     .min(1, "Quantidade inválida")
@@ -79,7 +99,7 @@ export const CotacaoCompletaSchema = CotacaoSchema.omit({
     }),
   pesoReal: CotacaoSchema.shape.pesoReal.refine(
     (valor) => {
-      return parseNumberBR(valor) < 500;
+      return parseNumberBR(valor) < 3000;
     },
     {
       message: "pesoElevado"
