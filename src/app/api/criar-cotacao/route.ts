@@ -58,7 +58,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<CriarCota
   try {
     const cotacao = await criarCotacaoAdapter(dadosValidos);
 
-    console.log(cotacao.sequenceCode);
+    if (!cotacao.sequenceCode) {
+      return NextResponse.json([{ erro: "Não foi possivel criar sua cotação, verifique as informações inseridas e tente novamente..." }], { status: 400 });
+    }
 
     return NextResponse.json({ valido: true, sequenceCode: cotacao.sequenceCode });
   } catch (error) {

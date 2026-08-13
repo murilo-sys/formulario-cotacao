@@ -60,8 +60,6 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     }
 
     //Deu certo a partir daqui
-
-    console.log(responseCotacao.sequenceCode);
     setCarregando(false);
   }
 

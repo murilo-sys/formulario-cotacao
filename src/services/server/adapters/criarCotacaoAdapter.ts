@@ -1,4 +1,5 @@
 import { CotacaoCompletaDados } from "@/schemas/cotacaoSchema";
+import parseNumberBR from "@/utils/parseNumberBR";
 import axios from "axios";
 
 interface CriarCotacaoResponseType {
@@ -45,7 +46,7 @@ export default async function criarCotacaoAdapter(dados: CotacaoCompletaDadosCid
       comments: "Cotação Teste",
       corporationId: 107892,
       customer: {
-        document: dados.pagadorFrete === "rem" ? dados.solicitanteDoc : dados.destinatarioDoc
+        document: dados.solicitanteDoc
       },
       requestedAt: dataISO,
       requesterName: dados.solicitanteNome,
@@ -53,7 +54,7 @@ export default async function criarCotacaoAdapter(dados: CotacaoCompletaDadosCid
         {
           customerPriceTableId: 78513,
           payer: {
-            document: dados.pagadorFrete === "rem" ? dados.solicitanteDoc : dados.destinatarioDoc
+            document: dados.pagadorFrete === "rem" ? dados.remetenteDoc : dados.destinatarioDoc
           },
           originCity: {
             name: dados.cidadeOrigem,
@@ -63,8 +64,8 @@ export default async function criarCotacaoAdapter(dados: CotacaoCompletaDadosCid
             name: dados.cidadeDestino,
             stateCode: dados.estadoDestino
           },
-          invoicesValue: Number(dados.valorNfe.replace(",", ".").replace(".", "")),
-          realWeight: Number(dados.pesoReal.replace(",", ".")),
+          invoicesValue: Number(parseNumberBR(dados.valorNfe)),
+          realWeight: Number(parseNumberBR(dados.pesoReal)),
           sender: {
             document: dados.remetenteDoc
           },
@@ -73,10 +74,10 @@ export default async function criarCotacaoAdapter(dados: CotacaoCompletaDadosCid
           },
           modal: "rodo",
           quoteStretchBidCubagesAttributes: dados.cubagens.map((item, index) => ({
-            realWeight: index === 0 ? Number(dados.pesoReal.replace(",", ".")) : 0,
+            realWeight: index === 0 ? Number(parseNumberBR(dados.pesoReal)) : 0,
             height: Number(item.height.replace(",", ".")),
             width: Number(item.width.replace(",", ".")),
-            length: Number(item.length.replace(",", ".")),
+            length: Number(parseNumberBR(item.length)),
             volume: Number(item.volume),
             package: { name: "DIVERSOS" }
           }))
@@ -84,6 +85,8 @@ export default async function criarCotacaoAdapter(dados: CotacaoCompletaDadosCid
       ]
     }
   };
+
+  // console.log(JSON.stringify(variables));
 
   const response = await axios.post(
     "https://globalcargo.eslcloud.com.br/graphql",
@@ -102,8 +105,6 @@ export default async function criarCotacaoAdapter(dados: CotacaoCompletaDadosCid
 
   const quoteCreate = response.data?.data?.quoteCreate;
   const errors = quoteCreate?.errors;
-
-  console.log(quoteCreate?.resource?.sequenceCode);
 
   if (!quoteCreate || errors.length > 0) throw new Error("Não foi possivel criar a cotação.");
 
