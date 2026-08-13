@@ -6,22 +6,22 @@ import { z } from "zod";
 const chavesNatureza = OPCOES_NATUREZA.map((opcao) => opcao.value);
 
 export const ItemCubagemSchema = z.object({
-  altura: z
+  height: z
     .string()
     .min(1, "Altura inválida")
     .regex(/^[0-9,.]+$/, "Altura com caracteres inválidos")
     .refine((valor) => parseNumberBR(valor) > 0, { message: "Altura deve ser maior que zero" }),
-  largura: z
+  width: z
     .string()
     .min(1, "Largura inválida")
     .regex(/^[0-9,.]+$/, "largura com caracteres inválidos")
     .refine((valor) => parseNumberBR(valor) > 0, { message: "Altura deve ser maior que zero" }),
-  comprimento: z
+  length: z
     .string()
     .min(1, "Comprimento inválido")
     .regex(/^[0-9,.]+$/, "Comprimento com caracteres inválidos")
     .refine((valor) => parseNumberBR(valor) > 0, { message: "Altura deve ser maior que zero" }),
-  quantidade: z
+  volume: z
     .string()
     .min(1, "Quantidade inválida")
     .regex(/^[0-9]+$/, "Quantidade com caracteres inválidos")
@@ -132,7 +132,8 @@ export type CotacaoResponse =
 
 // Criar Cotação
 export interface CriarCotacaoResponse {
-  codigo: string;
-  valor: string;
-  dataValidade: string;
+  valido: true;
+  sequenceCode: number;
+  valor?: string;
+  dataValidade?: string;
 }

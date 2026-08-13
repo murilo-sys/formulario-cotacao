@@ -9,6 +9,7 @@ import FormMercadoriaNatureza from "./sections/FormMercadoria/FormMercadoriaNatu
 import { ModalMercadoriaBloqueada } from "../modals/ModalMercadoriaBloqueada";
 import { useFormCompleto } from "@/hooks/useFormCompleto";
 import { ButtonCotacao } from "../ui/buttons/ButtonCotacao";
+import criarCotacao from "@/services/criarCotacao";
 
 interface FormCompletoProps {
   dadosSimulacao: CotacaoDados;
@@ -21,8 +22,8 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     mode: "onBlur",
     reValidateMode: "onBlur",
     defaultValues: {
-      solicitanteNome: "Murilo Santiago", //dadosSimulacao.solicitanteNome ??
-      solicitanteDoc: "00945958000155", //dadosSimulacao.solicitanteDoc ??
+      solicitanteNome: dadosSimulacao.solicitanteNome,
+      solicitanteDoc: dadosSimulacao.solicitanteDoc,
       destinatarioDoc: "",
       remetenteDoc: "",
       pagadorFrete: "rem",
@@ -49,10 +50,19 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
   async function handlerSubmeterCotacaoCompleta(dadosFormulario: CotacaoCompletaDados) {
     setCarregando(true);
 
-    setTimeout(() => {
-      console.log(dadosFormulario);
+    const responseCotacao = await criarCotacao(dadosFormulario);
+
+    //caso não seja valido
+    if (!responseCotacao.valido) {
+      alert(responseCotacao.erro || "Erro desconhecido, tente novamente mais tarde...");
       setCarregando(false);
-    }, 2000);
+      return;
+    }
+
+    //Deu certo a partir daqui
+
+    console.log(responseCotacao.sequenceCode);
+    setCarregando(false);
   }
 
   return (

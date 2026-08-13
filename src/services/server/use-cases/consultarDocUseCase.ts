@@ -3,11 +3,7 @@ import "server-only";
 import axios from "axios";
 import consultarPessoa from "../adapters/consultarPessoaAdapter";
 
-interface ConsultarDocBackendResponseType {
-  valido: boolean;
-  cidade?: string;
-  estado?: string;
-}
+type ConsultarDocBackendResponseType = { valido: true; cidade: string; estado: string } | { valido: false };
 
 export default async function consultarDocBackend(doc: string): Promise<ConsultarDocBackendResponseType> {
   if (!doc)
@@ -36,6 +32,8 @@ export default async function consultarDocBackend(doc: string): Promise<Consulta
     const node = nodeCompany || nodeIndividual;
 
     if (!node) return { valido: false };
+
+    if (!node.mainAddress?.city?.name || !node.mainAddress?.city?.state?.code) return { valido: false };
 
     return {
       valido: true,

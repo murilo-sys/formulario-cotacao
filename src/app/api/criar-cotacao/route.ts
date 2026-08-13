@@ -3,14 +3,11 @@ import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import { CotacaoCompletaSchema, CriarCotacaoResponse } from "@/schemas/cotacaoSchema";
 import consultarDocBackend from "@/services/server/use-cases/consultarDocUseCase";
+import criarCotacaoAdapter from "@/services/server/adapters/criarCotacaoAdapter";
 
 interface CotacaoErroResponseType {
-  campo: string;
+  campo?: string;
   erro: string;
-}
-
-interface  extends{
-
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse<CriarCotacaoResponse | CotacaoErroResponseType[]>> {
@@ -50,8 +47,22 @@ export async function POST(request: NextRequest): Promise<NextResponse<CriarCota
     return NextResponse.json([{ campo: "solicitanteDoc", erro: "Documento não cadastrado no sistema" }], { status: 400 });
   }
 
-  try {
-  } catch (error) {}
+  const dadosValidos = {
+    ...dados.data,
+    cidadeOrigem: consultaRemetente.cidade,
+    estadoOrigem: consultaRemetente.estado,
+    cidadeDestino: consultaDestinatario.cidade,
+    estadoDestino: consultaDestinatario.estado
+  };
 
-  return NextResponse.json({ codigo: "123", valor: "100", dataValidade: "10/02/2006" });
+  try {
+    const cotacao = await criarCotacaoAdapter(dadosValidos);
+
+    console.log(cotacao.sequenceCode);
+
+    return NextResponse.json({ valido: true, sequenceCode: cotacao.sequenceCode });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json([{ erro: "Não foi possivel criar sua cotação, tente novamente mais tarde..." }], { status: 500 });
+  }
 }

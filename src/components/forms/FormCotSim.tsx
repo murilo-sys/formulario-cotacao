@@ -34,7 +34,7 @@ export default function FormularioCotacaoSimulacao() {
       valorNfe: "",
       totalVolumes: "",
       difalOpcao: false,
-      cubagens: [{ quantidade: "", comprimento: "", largura: "", altura: "" }]
+      cubagens: [{ volume: "", length: "", width: "", height: "" }]
     }
   });
 
@@ -241,7 +241,7 @@ export default function FormularioCotacaoSimulacao() {
             )}
 
             {/* Verifique a variavel de ambiente */}
-            {COT_COMPLETO && !cotacaoCompleta && <FormularioCotacaoCompleto dadosSimulacao={getValues()} key={"formulario-completo"} />}
+            {COT_COMPLETO && cotacaoCompleta && <FormularioCotacaoCompleto dadosSimulacao={getValues()} key={"formulario-completo"} />}
           </AnimatePresence>
         </FormProvider>
       </>
