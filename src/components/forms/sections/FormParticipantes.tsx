@@ -47,8 +47,8 @@ export default function FormParticipantes() {
                   mask={mascaraCpfCnpj}
                   onBlur={async () => {
                     if (field.value.trim() === "") return;
-                    await consultarDocumento(field.value, "remetenteDoc");
                     field.onBlur();
+                    await consultarDocumento(field.value, "remetenteDoc");
                   }}
                   value={field.value}
                   onAccept={(valor) => {
@@ -79,8 +79,8 @@ export default function FormParticipantes() {
                   mask={mascaraCpfCnpj}
                   onBlur={async () => {
                     if (field.value.trim() === "") return;
-                    await consultarDocumento(field.value, "destinatarioDoc");
                     field.onBlur();
+                    await consultarDocumento(field.value, "destinatarioDoc");
                   }}
                   value={field.value}
                   onAccept={(valor) => {

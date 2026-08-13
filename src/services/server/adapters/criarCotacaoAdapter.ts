@@ -75,8 +75,8 @@ export default async function criarCotacaoAdapter(dados: CotacaoCompletaDadosCid
           modal: "rodo",
           quoteStretchBidCubagesAttributes: dados.cubagens.map((item, index) => ({
             realWeight: index === 0 ? Number(parseNumberBR(dados.pesoReal)) : 0,
-            height: Number(item.height.replace(",", ".")),
-            width: Number(item.width.replace(",", ".")),
+            height: Number(parseNumberBR(item.height)),
+            width: Number(parseNumberBR(item.width)),
             length: Number(parseNumberBR(item.length)),
             volume: Number(item.volume),
             package: { name: "DIVERSOS" }

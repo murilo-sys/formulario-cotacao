@@ -1,18 +1,17 @@
-"use client";
-
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CotacaoCompletaDados, CotacaoCompletaSchema, CotacaoDados } from "@/schemas/cotacaoSchema";
 import { motion } from "framer-motion";
-import FormParticipantes from "./sections/FormParticipantes";
-import FormMercadoriaNatureza from "./sections/FormMercadoria/FormMercadoriaNatureza";
-import { ModalMercadoriaBloqueada } from "../modals/ModalMercadoriaBloqueada";
+import FormParticipantes from "../sections/FormParticipantes";
+import FormMercadoriaNatureza from "../sections/FormMercadoria/FormMercadoriaNatureza";
+import { ModalMercadoriaBloqueada } from "../../modals/ModalMercadoriaBloqueada";
 import { useFormCompleto } from "@/hooks/useFormCompleto";
-import { ButtonCotacao } from "../ui/buttons/ButtonCotacao";
+import { ButtonCotacao } from "../../ui/buttons/ButtonCotacao";
 import criarCotacao from "@/services/criarCotacao";
+import ModalSucessoCotacao from "../../modals/ModalSucessoCotacao";
 
 interface FormCompletoProps {
-  dadosSimulacao: CotacaoDados;
+  dadosSimulacao?: CotacaoDados;
 }
 
 export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
@@ -22,15 +21,15 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     mode: "onBlur",
     reValidateMode: "onBlur",
     defaultValues: {
-      solicitanteNome: dadosSimulacao.solicitanteNome,
-      solicitanteDoc: dadosSimulacao.solicitanteDoc,
+      solicitanteNome: dadosSimulacao?.solicitanteNome || "",
+      solicitanteDoc: dadosSimulacao?.solicitanteDoc || "",
       destinatarioDoc: "",
       remetenteDoc: "",
       pagadorFrete: "rem",
-      valorNfe: dadosSimulacao.valorNfe ?? "",
-      cubagens: [...dadosSimulacao.cubagens],
-      totalVolumes: dadosSimulacao.totalVolumes ?? "",
-      pesoReal: dadosSimulacao.pesoReal ?? ""
+      valorNfe: dadosSimulacao?.valorNfe ?? "",
+      cubagens: dadosSimulacao?.cubagens.length ? [...dadosSimulacao.cubagens] : [{ volume: "", length: "", width: "", height: "" }],
+      totalVolumes: dadosSimulacao?.totalVolumes ?? "",
+      pesoReal: dadosSimulacao?.pesoReal ?? ""
     }
   });
 
@@ -44,7 +43,7 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
   } = rhf;
 
   //Hook form completo
-  const { erroModalAtivo, carregando, setCarregando } = useFormCompleto(errors);
+  const { erroModalAtivo, carregando, setCarregando, cotacaoSequenceCode, setCotacaoSequenceCode } = useFormCompleto(errors);
 
   //handler de enviar cotação
   async function handlerSubmeterCotacaoCompleta(dadosFormulario: CotacaoCompletaDados) {
@@ -61,6 +60,9 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
 
     //Deu certo a partir daqui
     setCarregando(false);
+
+    //Define o sequenceCode da cotacao
+    setCotacaoSequenceCode(responseCotacao.sequenceCode);
   }
 
   return (
@@ -101,6 +103,9 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
           }}
         />
       )}
+
+      {/* Modal de sucesso */}
+      <ModalSucessoCotacao sequenceCode={cotacaoSequenceCode} fechar={setCotacaoSequenceCode} />
     </FormProvider>
   );
 }

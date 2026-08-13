@@ -7,6 +7,8 @@ export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>) {
   //useState da animação botão carregando
   const [carregando, setCarregando] = useState<true | false>(false);
 
+  const [cotacaoSequenceCode, setCotacaoSequenceCode] = useState<number | null>(null);
+
   //consulta se existe erros
   const entradasErros = Object.entries(errors);
   const erroEncontrado = entradasErros.find(([, erro]) => {
@@ -19,6 +21,8 @@ export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>) {
   return {
     erroModalAtivo,
     carregando,
-    setCarregando
+    setCarregando,
+    cotacaoSequenceCode,
+    setCotacaoSequenceCode
   };
 }
