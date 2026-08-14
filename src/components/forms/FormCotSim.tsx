@@ -12,7 +12,7 @@ import CotacaoCard from "../cards/CotacaoCard";
 import dynamic from "next/dynamic";
 
 //Carregamento dinamico, apenas quando chamado
-const FormularioCotacaoCompleto = dynamic(() => import("./FormCotCompleto/FormCotCompleto"));
+const FormularioCotacaoCompleto = dynamic(() => import("./FormCotCompleto"));
 
 import { ToggleSwitch } from "../ui/ToggleSwitch";
 import FormSolicitante from "./sections/FormSolicitante";

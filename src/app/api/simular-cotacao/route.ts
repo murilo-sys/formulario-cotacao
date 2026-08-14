@@ -5,6 +5,7 @@ import { apiSimularValor } from "@/services/server/adapters/simularValorAdapter"
 import { calcularFator } from "@/services/server/utils/calcularFator";
 import { calcularPesoCubado } from "@/services/server/utils/calcularPesoCubado";
 import { cnpj } from "cpf-cnpj-validator";
+import consultarPessoaAdapter from "@/services/server/adapters/consultarPessoaAdapter";
 
 export async function POST(request: NextRequest) {
   //Lê o body da requisição
@@ -14,8 +15,8 @@ export async function POST(request: NextRequest) {
   const dados = {
     solicitanteDoc: cnpj.strip(body.solicitanteDoc) || null,
     solicitanteNome: body.solicitanteNome?.replace(/[^a-zA-ZÀ-ÿ\s]/g, "") || null,
-    cepOrigem: body.cepOrigem?.replace(/\D/g, "") || null,
-    cepDestino: body.cepDestino?.replace(/\D/g, "") || null,
+    cepOrigem: body.cepOrigem?.replace(/\D/g, "") || (await consultarPessoaAdapter(body.remetenteDoc || null)).cep || null,
+    cepDestino: body.cepDestino?.replace(/\D/g, "") || (await consultarPessoaAdapter(body.destinatarioDoc || null)).cep || null,
     pesoReal: body.pesoReal?.replace(/[^0-9,]/g, "").replace(",", ".") || null,
     totalVolumes: body.totalVolumes?.replace(/\D/g, "") || null,
     valorNfe: body.valorNfe?.replace(/[^0-9,]/g, "").replace(",", ".") || null,
@@ -69,14 +70,14 @@ export async function POST(request: NextRequest) {
   // REQUISIÇÃO MODAL RODOVIÁRIO
   try {
     //Faz a requisição
-    const cotacaoRodo = await apiSimularValor("rodo", dadosValidados, token, dadosValidados.difalOpcao);
+    const { total, difal, prazo } = await apiSimularValor("rodo", dadosValidados, token, dadosValidados.difalOpcao);
 
     //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
     resultado.rodo = {
       dados: {
-        total: cotacaoRodo.data.data[0].summary.total,
-        difal: dadosValidados.difalOpcao ? cotacaoRodo.data.data[0].details.fiscal_detail.difal_tax_value_destination : null,
-        prazo: cotacaoRodo.data.data[0].details.delivery_time
+        total: total,
+        difal: difal,
+        prazo: prazo
       }
     };
   } catch (error) {
@@ -107,15 +108,15 @@ export async function POST(request: NextRequest) {
       }
 
       //Faz a requisição no modal aéreo
-      const cotacaoAereo = await apiSimularValor("air", dadosValidados, token, dadosValidados.difalOpcao);
+      const { total, difal, prazo } = await apiSimularValor("air", dadosValidados, token, dadosValidados.difalOpcao);
 
       //Valida se existe .air para typescript não acusar erro
       if (!resultado.air) {
         resultado.air = {
           dados: {
-            total: cotacaoAereo.data.data[0].summary.total,
-            difal: dadosValidados.difalOpcao ? cotacaoAereo.data.data[0].details.fiscal_detail.difal_tax_value_destination : null,
-            prazo: cotacaoAereo.data.data[0].details.delivery_time
+            total: total,
+            difal: difal,
+            prazo: prazo
           }
         };
       }

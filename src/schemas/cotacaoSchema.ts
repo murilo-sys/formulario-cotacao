@@ -116,11 +116,13 @@ export interface CotacaoDadosCard {
   prazo: string;
 }
 
+//Tipo do CotacaoCardType
 export interface CotacaoCardType {
   rodo: CotacaoDadosCard;
   air?: CotacaoDadosCard;
 }
 
+// Response do criar cotação
 export type CotacaoResponse =
   | {
       notFound: true;
@@ -130,10 +132,17 @@ export type CotacaoResponse =
       dados: CotacaoCardType;
     };
 
-// Criar Cotação
+// Interface criar cotação
 export interface CriarCotacaoResponse {
   valido: true;
   sequenceCode: number;
-  valor?: string;
-  dataValidade?: string;
+}
+
+// Interface Cotação Valores para Confirmação
+export interface CotacaoValoresConfirmacaoType {
+  total: string;
+  difal: string;
+  prazo: string;
+  subtotal: string;
+  impostos: string;
 }

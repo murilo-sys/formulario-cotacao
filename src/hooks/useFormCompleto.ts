@@ -1,5 +1,5 @@
 import { LISTA_INFOS_MODAL, TYPE_INFO_MODAL } from "@/constants/modalAlertas";
-import { CotacaoCompletaDados } from "@/schemas/cotacaoSchema";
+import { CotacaoCompletaDados, CotacaoValoresConfirmacaoType } from "@/schemas/cotacaoSchema";
 import { useState } from "react";
 import { FieldErrors } from "react-hook-form";
 
@@ -7,7 +7,11 @@ export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>) {
   //useState da animação botão carregando
   const [carregando, setCarregando] = useState<true | false>(false);
 
+  //Sequence code da cotação
   const [cotacaoSequenceCode, setCotacaoSequenceCode] = useState<number | null>(null);
+
+  //Valores da simulação para confirmar
+  const [cotacaoValoresConfirmacao, setCotacaoValoresConfirmacao] = useState<CotacaoValoresConfirmacaoType | null>(null);
 
   //consulta se existe erros
   const entradasErros = Object.entries(errors);
@@ -23,6 +27,8 @@ export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>) {
     carregando,
     setCarregando,
     cotacaoSequenceCode,
-    setCotacaoSequenceCode
+    setCotacaoSequenceCode,
+    cotacaoValoresConfirmacao,
+    setCotacaoValoresConfirmacao
   };
 }

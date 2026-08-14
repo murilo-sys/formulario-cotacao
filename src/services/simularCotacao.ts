@@ -1,18 +1,36 @@
-import { CotacaoDados, CotacaoResponse } from "@/schemas/cotacaoSchema";
+import { CotacaoCompletaDados, CotacaoDados, CotacaoResponse } from "@/schemas/cotacaoSchema";
 
-export async function simularCotacao(dados: CotacaoDados): Promise<CotacaoResponse> {
-  //Transforme os dados recebidos em parametros para o fetch
-  const params = {
-    solicitanteDoc: dados.solicitanteDoc,
-    solicitanteNome: dados.solicitanteNome,
-    cepOrigem: dados.cepOrigem,
-    cepDestino: dados.cepDestino,
-    pesoReal: dados.pesoReal,
-    valorNfe: dados.valorNfe,
-    totalVolumes: dados.totalVolumes,
-    cubagens: dados.cubagens,
-    difalOpcao: dados.difalOpcao
-  };
+export async function simularCotacao(dados: CotacaoDados | CotacaoCompletaDados): Promise<CotacaoResponse> {
+  let params = {} as CotacaoDados | CotacaoCompletaDados;
+
+  if ("remetenteDoc" in dados) {
+    //Transforme os dados recebidos em parametros para o fetch
+    params = {
+      solicitanteDoc: dados.solicitanteDoc,
+      solicitanteNome: dados.solicitanteNome,
+      pesoReal: dados.pesoReal,
+      valorNfe: dados.valorNfe,
+      totalVolumes: dados.totalVolumes,
+      cubagens: dados.cubagens,
+      remetenteDoc: dados.remetenteDoc,
+      destinatarioDoc: dados.destinatarioDoc,
+      pagadorFrete: dados.pagadorFrete,
+      naturezaMercadoria: dados.naturezaMercadoria
+    };
+  } else {
+    //Transforme os dados recebidos em parametros para o fetch
+    params = {
+      solicitanteDoc: dados.solicitanteDoc,
+      solicitanteNome: dados.solicitanteNome,
+      cepOrigem: dados.cepOrigem,
+      cepDestino: dados.cepDestino,
+      pesoReal: dados.pesoReal,
+      valorNfe: dados.valorNfe,
+      totalVolumes: dados.totalVolumes,
+      cubagens: dados.cubagens,
+      difalOpcao: dados.difalOpcao || false
+    };
+  }
 
   // Fetch das cotações
   const resposta = await fetch(`/api/simular-cotacao`, {

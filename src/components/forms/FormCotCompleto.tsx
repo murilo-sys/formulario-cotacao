@@ -2,13 +2,14 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CotacaoCompletaDados, CotacaoCompletaSchema, CotacaoDados } from "@/schemas/cotacaoSchema";
 import { motion } from "framer-motion";
-import FormParticipantes from "../sections/FormParticipantes";
-import FormMercadoriaNatureza from "../sections/FormMercadoria/FormMercadoriaNatureza";
-import { ModalMercadoriaBloqueada } from "../../modals/ModalMercadoriaBloqueada";
+import FormParticipantes from "./sections/FormParticipantes";
+import FormMercadoriaNatureza from "./sections/FormMercadoria/FormMercadoriaNatureza";
+import { ModalMercadoriaBloqueada } from "./../modals/ModalMercadoriaBloqueada";
 import { useFormCompleto } from "@/hooks/useFormCompleto";
-import { ButtonCotacao } from "../../ui/buttons/ButtonCotacao";
-import criarCotacao from "@/services/criarCotacao";
-import ModalSucessoCotacao from "../../modals/ModalSucessoCotacao";
+import { ButtonCotacao } from "./../ui/buttons/ButtonCotacao";
+import ModalSucessoCotacao from "./../modals/ModalSucessoCotacao";
+import ModalConfirmacaoCotacao from "../modals/ModalConfirmacaoCotacao";
+import { simularCotacao } from "@/services/simularCotacao";
 
 interface FormCompletoProps {
   dadosSimulacao?: CotacaoDados;
@@ -43,13 +44,13 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
   } = rhf;
 
   //Hook form completo
-  const { erroModalAtivo, carregando, setCarregando, cotacaoSequenceCode, setCotacaoSequenceCode } = useFormCompleto(errors);
+  const { erroModalAtivo, carregando, setCarregando, cotacaoSequenceCode, setCotacaoSequenceCode, cotacaoValoresConfirmacao, setCotacaoValoresConfirmacao } = useFormCompleto(errors);
 
   //handler de enviar cotação
   async function handlerSubmeterCotacaoCompleta(dadosFormulario: CotacaoCompletaDados) {
     setCarregando(true);
 
-    const responseCotacao = await criarCotacao(dadosFormulario);
+    const responseCotacao = await simularCotacao(dadosFormulario);
 
     //caso não seja valido
     if (!responseCotacao.valido) {
@@ -103,6 +104,9 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
           }}
         />
       )}
+
+      {/* Modal de confirmação */}
+      <ModalConfirmacaoCotacao valoresConfirmacao={cotacaoValoresConfirmacao} fechar={() => setCotacaoValoresConfirmacao(null)} />
 
       {/* Modal de sucesso */}
       <ModalSucessoCotacao sequenceCode={cotacaoSequenceCode} fechar={setCotacaoSequenceCode} />

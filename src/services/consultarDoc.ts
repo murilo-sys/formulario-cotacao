@@ -4,6 +4,7 @@ import axios from "axios";
 const cacheDocumentos = new Map<string, boolean>();
 
 export default async function consultarDoc(doc: string): Promise<boolean> {
+  //Se não houver doc return false
   if (!doc) return false;
 
   //Verifica se existe no cache
@@ -25,7 +26,10 @@ export default async function consultarDoc(doc: string): Promise<boolean> {
       return true;
     }
 
+    //Seta o cache como false
     cacheDocumentos.set(doc, false);
+
+    //Return como false
     return false;
   } catch (error) {
     //Verifica se é um erro Axios

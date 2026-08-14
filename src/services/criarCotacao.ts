@@ -14,8 +14,7 @@ export default async function criarCotacao(formularioDados: CotacaoCompletaDados
 
     return {
       valido: true,
-      sequenceCode: responseCotacao.data.sequenceCode,
-      dataValidade: "10"
+      sequenceCode: responseCotacao.data.sequenceCode
     };
   } catch (error) {
     if (axios.isAxiosError(error)) {

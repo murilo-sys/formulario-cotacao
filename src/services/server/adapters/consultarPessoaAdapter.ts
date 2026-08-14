@@ -1,61 +1,33 @@
 import "server-only";
 
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
-export interface RespostaGraphQLPessoa {
-  data?: {
-    company?: {
-      edges: Array<{
-        node?: {
-          cnpj: string;
-          mainAddress: {
-            city: {
-              name: string;
-              state: {
-                code: string;
-              };
-            };
-          };
-        };
-      }>;
-    };
-    individual?: {
-      edges: Array<{
-        node?: {
-          cpf: string;
-          mainAddress: {
-            city: {
-              name: string;
-              state: {
-                code: string;
-              };
-            };
-          };
-        };
-      }>;
-    };
-  };
+export interface DadosPessoaConsultada {
+  valido: boolean;
+  cidade?: string;
+  estado?: string;
+  cep?: string;
 }
 
-//Lê a variavel de ambiente
+// Lê a variável de ambiente
 const token = process.env.TOKEN_GRAPHQL_API;
 
 // Cache em memória dos documentos já consultados
-const cacheDocumentos = new Map<string, RespostaGraphQLPessoa>();
+const cacheDocumentos = new Map<string, DadosPessoaConsultada>();
 
-export default async function consultarPessoa(doc: string): Promise<AxiosResponse<RespostaGraphQLPessoa>> {
-  //Caso não tenha o token
+export default async function consultarPessoa(doc: string): Promise<DadosPessoaConsultada> {
+  // Caso não tenha o token
   if (!token) {
-    console.error("Token API graphql não cadastrada.");
+    console.error("Token API GraphQL não cadastrada.");
     throw new Error("Token API GraphQL não configurada");
   }
 
-  //Verifica se existe no cache
+  // Verifica se existe no cache
   if (cacheDocumentos.has(doc)) {
-    //retorna o valor caso exista
-    return cacheDocumentos.get(doc) as AxiosResponse<RespostaGraphQLPessoa>;
+    return cacheDocumentos.get(doc)!;
   }
-  //Query dinamica
+
+  // Query dinâmica
   const query = `${
     doc.length === 14
       ? `query company($params: CompanyInput!, $after: String, $before: String, $first: Int, $last: Int) {
@@ -64,6 +36,7 @@ export default async function consultarPessoa(doc: string): Promise<AxiosRespons
           node {
             cnpj
             mainAddress {
+              postalCode
               city {
                 name
                 state {
@@ -81,6 +54,7 @@ export default async function consultarPessoa(doc: string): Promise<AxiosRespons
       node{
         cpf
         mainAddress{
+          postalCode
           city{
             name
             state{
@@ -94,18 +68,15 @@ export default async function consultarPessoa(doc: string): Promise<AxiosRespons
 }`
   }`;
 
-  //Variables dinamica
+  // Variáveis dinâmicas
   const variables = {
     params: doc.length === 14 ? { cnpj: doc } : { cpf: doc }
   };
 
-  //Faz a consulta
+  // Faz a consulta GraphQL
   const consulta = await axios.post(
     "https://globalcargo.eslcloud.com.br/graphql",
-    {
-      query: query,
-      variables: variables
-    },
+    { query, variables },
     {
       headers: {
         "Content-Type": "application/json",
@@ -115,9 +86,28 @@ export default async function consultarPessoa(doc: string): Promise<AxiosRespons
     }
   );
 
-  //Define o cache
-  cacheDocumentos.set(doc, consulta);
+  // Extrai com segurança checando se o nó e os relacionamentos existem
+  const data = consulta.data?.data;
+  const nodeCompany = data?.company?.edges?.[0]?.node;
+  const nodeIndividual = data?.individual?.edges?.[0]?.node;
+  const node = nodeCompany || nodeIndividual;
 
-  //Retorna consulta
-  return consulta;
+  // Se não encontrou o cadastro ou faltam dados essenciais
+  if (!node || !node.mainAddress?.city?.name || !node.mainAddress?.city?.state?.code) {
+    const resultadoInvalido: DadosPessoaConsultada = { valido: false };
+    cacheDocumentos.set(doc, resultadoInvalido);
+    return resultadoInvalido;
+  }
+
+  // Monta o objeto limpo e formatado
+  const resultadoValido: DadosPessoaConsultada = {
+    valido: true,
+    cidade: node.mainAddress.city.name,
+    estado: node.mainAddress.city.state.code,
+    cep: node.mainAddress.postalCode
+  };
+
+  // Salva no cache e retorna
+  cacheDocumentos.set(doc, resultadoValido);
+  return resultadoValido;
 }
