@@ -7,6 +7,7 @@ export interface DadosPessoaConsultada {
   cidade?: string;
   estado?: string;
   cep?: string;
+  contribuinte?: boolean;
 }
 
 // Lê a variável de ambiente
@@ -35,6 +36,7 @@ export default async function consultarPessoa(doc: string): Promise<DadosPessoaC
         edges {
           node {
             cnpj
+            taxpayer
             mainAddress {
               postalCode
               city {
@@ -104,7 +106,8 @@ export default async function consultarPessoa(doc: string): Promise<DadosPessoaC
     valido: true,
     cidade: node.mainAddress.city.name,
     estado: node.mainAddress.city.state.code,
-    cep: node.mainAddress.postalCode
+    cep: node.mainAddress.postalCode,
+    contribuinte: node.taxpayer
   };
 
   // Salva no cache e retorna

@@ -52,9 +52,9 @@ export async function POST(request: NextRequest) {
 
           // Chama a sua função apiSimularValor existente:
           const cotAereo = await apiSimularValor("air", { ...dados, pesoTaxado }, process.env.TOKEN_API!, dados.difalOpcao);
-          dados.totalAir = cotAereo.data.data[0].summary.total;
-          dados.prazoAir = cotAereo.data.data[0].details.delivery_time;
-          dados.difalAir = dados.difalOpcao ? cotAereo.data.data[0].details.fiscal_detail.difal_tax_value_destination : null;
+          dados.totalAir = cotAereo.total;
+          dados.prazoAir = cotAereo.prazo;
+          dados.difalAir = cotAereo.difal;
         } catch {}
       }
     }

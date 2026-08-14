@@ -59,7 +59,7 @@ export async function simularCotacao(dados: CotacaoDados | CotacaoCompletaDados)
     throw new Error("Erro durante a simulação. Tente novamente mais tarde.");
   }
 
-  // Transforma em
+  // Transforma em json
   const respostaDados = await resposta.json();
 
   const resultado: {

@@ -11,17 +11,19 @@ export async function POST(request: NextRequest) {
   //Lê o body da requisição
   const body = await request.json();
 
+  const consultaDestinatario = body.destinatarioDoc && (await consultarPessoaAdapter(body.destinatarioDoc || null));
+
   //Pega as variaveis da URL e guarda em dados
   const dados = {
     solicitanteDoc: cnpj.strip(body.solicitanteDoc) || null,
     solicitanteNome: body.solicitanteNome?.replace(/[^a-zA-ZÀ-ÿ\s]/g, "") || null,
     cepOrigem: body.cepOrigem?.replace(/\D/g, "") || (await consultarPessoaAdapter(body.remetenteDoc || null)).cep || null,
-    cepDestino: body.cepDestino?.replace(/\D/g, "") || (await consultarPessoaAdapter(body.destinatarioDoc || null)).cep || null,
+    cepDestino: body.cepDestino?.replace(/\D/g, "") || consultaDestinatario.cep || null,
     pesoReal: body.pesoReal?.replace(/[^0-9,]/g, "").replace(",", ".") || null,
     totalVolumes: body.totalVolumes?.replace(/\D/g, "") || null,
     valorNfe: body.valorNfe?.replace(/[^0-9,]/g, "").replace(",", ".") || null,
     cubagens: body.cubagens || null,
-    difalOpcao: Boolean(body.difalOpcao)
+    difalOpcao: body.difalOpcao ?? (body.pagadorFrete === "dest" && !consultaDestinatario.contribuinte ? true : false)
   };
 
   //Faz a validação usando o zod (princio da verdade unica)

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CotacaoCompletaDados, CotacaoCompletaSchema, CotacaoDados } from "@/schemas/cotacaoSchema";
@@ -7,15 +8,19 @@ import FormMercadoriaNatureza from "./sections/FormMercadoria/FormMercadoriaNatu
 import { ModalMercadoriaBloqueada } from "./../modals/ModalMercadoriaBloqueada";
 import { useFormCompleto } from "@/hooks/useFormCompleto";
 import { ButtonCotacao } from "./../ui/buttons/ButtonCotacao";
+import criarCotacao from "@/services/criarCotacao";
+import { simularCotacao } from "@/services/simularCotacao";
 import ModalSucessoCotacao from "./../modals/ModalSucessoCotacao";
 import ModalConfirmacaoCotacao from "../modals/ModalConfirmacaoCotacao";
-import { simularCotacao } from "@/services/simularCotacao";
 
 interface FormCompletoProps {
   dadosSimulacao?: CotacaoDados;
 }
 
 export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
+  // Guarda os dados preenchidos temporariamente para usar no momento da aprovação
+  const [dadosFormularioSalvos, setDadosFormularioSalvos] = useState<CotacaoCompletaDados | null>(null);
+
   // React-hook-form
   const rhf = useForm<CotacaoCompletaDados>({
     resolver: zodResolver(CotacaoCompletaSchema),
@@ -34,7 +39,6 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     }
   });
 
-  // Extrai os metodos do RHF
   const {
     handleSubmit,
     setFocus,
@@ -43,27 +47,76 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     clearErrors
   } = rhf;
 
-  //Hook form completo
-  const { erroModalAtivo, carregando, setCarregando, cotacaoSequenceCode, setCotacaoSequenceCode, cotacaoValoresConfirmacao, setCotacaoValoresConfirmacao } = useFormCompleto(errors);
+  // Custom hook para estados do formulário completo
+  const {
+    erroModalAtivo,
+    carregando,
+    setCarregando,
+    cotacaoSequenceCode,
+    setCotacaoSequenceCode,
+    cotacaoValoresConfirmacao,
+    setCotacaoValoresConfirmacao
+  } = useFormCompleto(errors);
 
-  //handler de enviar cotação
+  // 1. PASSO 1: Submissão do Formulário ➔ Executa a Simulação dos valores e abre o Modal de Confirmação
   async function handlerSubmeterCotacaoCompleta(dadosFormulario: CotacaoCompletaDados) {
     setCarregando(true);
+    setDadosFormularioSalvos(dadosFormulario);
 
-    const responseCotacao = await simularCotacao(dadosFormulario);
+    try {
+      const responseSimulacao = await simularCotacao(dadosFormulario);
 
-    //caso não seja valido
-    if (!responseCotacao.valido) {
-      alert(responseCotacao.erro || "Erro desconhecido, tente novamente mais tarde...");
+      if (responseSimulacao.notFound) {
+        alert("Trecho ou cotação não disponível para simulação.");
+        setCarregando(false);
+        return;
+      }
+
+      // Prepara os valores confirmados para exibir no modal
+      const rodo = responseSimulacao.dados.rodo;
+      setCotacaoValoresConfirmacao({
+        total: rodo.total,
+        prazo: rodo.prazo,
+        difal: rodo.difal || "R$ 0,00",
+        subtotal: rodo.total,
+        impostos: "0"
+      });
+    } catch (error) {
+      console.error(error);
+      alert("Ocorreu um erro durante a simulação dos valores. Tente novamente.");
+    } finally {
       setCarregando(false);
-      return;
     }
+  }
 
-    //Deu certo a partir daqui
-    setCarregando(false);
+  // 2. PASSO 2A: Usuário APROVOU no Modal de Confirmação ➔ Cria a cotação e abre o Modal de Sucesso
+  async function handleAprovarCotacao() {
+    setCotacaoValoresConfirmacao(null); // Fecha o modal de confirmação
+    if (!dadosFormularioSalvos) return;
 
-    //Define o sequenceCode da cotacao
-    setCotacaoSequenceCode(responseCotacao.sequenceCode);
+    setCarregando(true);
+
+    try {
+      const responseCriar = await criarCotacao(dadosFormularioSalvos);
+
+      if (!responseCriar.valido) {
+        alert(responseCriar.erro || "Não foi possível criar a cotação.");
+        return;
+      }
+
+      // Abre o Modal de Sucesso com o sequenceCode
+      setCotacaoSequenceCode(responseCriar.sequenceCode);
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao criar cotação. Tente novamente mais tarde.");
+    } finally {
+      setCarregando(false);
+    }
+  }
+
+  // 3. PASSO 2B: Usuário RECUSOU no Modal de Confirmação ➔ Apenas fecha o modal
+  function handleRecusarCotacao() {
+    setCotacaoValoresConfirmacao(null);
   }
 
   return (
@@ -74,17 +127,17 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
           animate={{ opacity: 1, height: "auto" }}
           transition={{ duration: 0.3, ease: "easeOut" }}
           exit={{ opacity: 0, height: 0 }}
-          //Set focus no campo de remetente quando terminar animação
           onAnimationComplete={() => {
             setFocus("remetenteDoc");
           }}
           className="flex flex-col gap-7 bg-white rounded-xl px-8 py-6 drop-shadow-lg"
         >
-          {/*Sections Participantes cotação*/}
+          {/* Seção Participantes */}
           <FormParticipantes />
 
-          {/*Sections Informações da mercadoria*/}
+          {/* Seção Informações da Mercadoria */}
           <FormMercadoriaNatureza />
+
           <div className="flex flex-row w-full justify-end items-end">
             <ButtonCotacao carregando={carregando} type="submit">
               Criar Cotação
@@ -93,7 +146,9 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
         </motion.div>
       </form>
 
-      {/* Modal de alerta */}
+      {/* 4. MODAIS IRMÃOS (Nível do Formulário Pai) */}
+
+      {/* Modal de alerta de mercadoria bloqueada */}
       {erroModalAtivo && (
         <ModalMercadoriaBloqueada
           info={erroModalAtivo?.tipo}
@@ -105,11 +160,19 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
         />
       )}
 
-      {/* Modal de confirmação */}
-      <ModalConfirmacaoCotacao valoresConfirmacao={cotacaoValoresConfirmacao} fechar={() => setCotacaoValoresConfirmacao(null)} />
+      {/* Modal de Confirmação de Valores (Aprovar / Recusar) */}
+      <ModalConfirmacaoCotacao
+        valoresConfirmacao={cotacaoValoresConfirmacao}
+        onAprovar={handleAprovarCotacao}
+        onRecusar={handleRecusarCotacao}
+      />
 
-      {/* Modal de sucesso */}
-      <ModalSucessoCotacao sequenceCode={cotacaoSequenceCode} fechar={setCotacaoSequenceCode} />
+      {/* Modal de Sucesso da Cotação (Sequence Code) */}
+      <ModalSucessoCotacao
+        sequenceCode={cotacaoSequenceCode}
+        fechar={() => setCotacaoSequenceCode(null)}
+      />
     </FormProvider>
   );
 }
+
