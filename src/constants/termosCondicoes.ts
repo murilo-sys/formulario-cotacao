@@ -2,7 +2,7 @@ export const TERMOS_CONDICOES = `Prazo de entrega: o prazo informado em dias út
 
 Esta cotação terá validade de 10 (dez) dias úteis, contados a partir da data de sua solicitação.
 
-Qualquer alteração nas características da carga encontra no recebimento com divergência no peso, volume, dimensões, Valor da Nota Fiscal, origem ou destino, remetente, destinatário ou demais condições que influencia em seu valor final, poderá implicar a perda de eventuais negociações.
+Qualquer alteração nas características da carga encontrada no recebimento com divergência no peso, volume, dimensões, Valor da Nota Fiscal, origem ou destino, remetente, destinatário ou demais condições que influencia em seu valor final, poderá implicar a perda de eventuais negociações.
 
 Serviços e condições especiais: esta cotação não contempla serviços de coleta ou entrega realizados em condições especiais, tais como TDE (Taxa de Dificuldade de Entrega) servindo para serviço de Coleta / TDA (Taxa de Dificuldade de Acesso):
 Quando identificadas ou solicitadas, tais condições poderão gerar cobrança complementar, mediante apuração da necessidade e dos custos envolvidos, inclusive durante ou após a realização do transporte.

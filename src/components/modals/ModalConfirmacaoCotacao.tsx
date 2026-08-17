@@ -89,7 +89,7 @@ export default function ModalConfirmacaoCotacao({ valoresConfirmacao, onAprovar,
               Voltar
             </button>
             <button type="button" disabled={!termosCondicoes || false} className="cursor-pointer enabled:hover:-translate-y-0.5 disabled:bg-blue-200 disabled:border-blue-100 border border-blue-600 bg-blue-800 hover:bg-blue-900 text-white font-medium px-4 py-2 rounded-xl transition-all" onClick={onAprovar}>
-              {"Aprovar cotação"}
+              {"Salvar cotação"}
             </button>
           </div>
         </motion.div>
