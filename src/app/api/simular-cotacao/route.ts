@@ -69,63 +69,41 @@ export async function POST(request: NextRequest) {
   // Cria a variavel resultado
   const resultado = {} as { rodo: { dados: { total: string; difal?: string; prazo: string; impostos: string; subtotal: string } }; air?: { dados: { total: string; difal?: string; prazo: string; impostos: string; subtotal: string } } };
 
-  // REQUISIÇÃO MODAL RODOVIÁRIO
-  try {
-    //Faz a requisição
-    const { total, difal, prazo, impostos, subtotal } = await apiSimularValor("rodo", dadosValidados, token, dadosValidados.difalOpcao);
-
-    //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
-    resultado.rodo = {
-      dados: {
-        total: total,
-        difal: difal,
-        prazo: prazo,
-        impostos: impostos,
-        subtotal: subtotal
-      }
-    };
-  } catch (error) {
-    //Verifica se o error é do "tipo" Axios
-    if (axios.isAxiosError(error)) {
-      // Caso seja erro 404, não faz nada
-      if (error.response && error.response.status === 404) {
-      } else {
-        //Printa o erro caso não seja 404
-        console.error(error.message);
-      }
-    }
-  }
-
-  // REQUISIÇÃO MODAL AÉREO
-
   //Lê a variavel AIR_MODAL
   const modalAereo = process.env.NEXT_PUBLIC_AIR_MODAL;
 
+  let requisicao;
+
   if (modalAereo === "true") {
-    //Se o modalAereo estiver permitido, faz a consulta
+    const [{ total: totalRodo, difal: difalRodo, prazo: prazoRodo, impostos: impostosRodo, subtotal: subtotalRodo }, { total: totalAir, difal: difalAir, prazo: prazoAir, impostos: impostosAir, subtotal: subtotalAir }] = await Promise.all([apiSimularValor("rodo", dadosValidados, token, dadosValidados.difalOpcao), apiSimularValor("air", dadosValidados, token, dadosValidados.difalOpcao)]);
+    requisicao = {
+      totalRodo,
+      difalRodo,
+      prazoRodo,
+      impostosRodo,
+      subtotalRodo,
+      totalAir,
+      difalAir,
+      prazoAir,
+      impostosAir,
+      subtotalAir
+    };
+  }
+
+  //Verifica se a requisicao é valida
+  if (requisicao) {
+    // REQUISIÇÃO MODAL RODOVIÁRIO
     try {
-      //AIR é sempre 167 o fator. Caso tenha vindo fator 300 no modal AIR, transforma para 167
-      if (fator === 300) {
-        dadosValidados.pesoCubado = (Number(dadosValidados.pesoCubado) / 300) * 167;
-
-        dadosValidados.pesoTaxado = Number(validacao.data.pesoReal) > dadosValidados.pesoCubado ? Number(validacao.data.pesoReal) : dadosValidados.pesoCubado;
-      }
-
-      //Faz a requisição no modal aéreo
-      const { total, difal, prazo, impostos, subtotal } = await apiSimularValor("air", dadosValidados, token, dadosValidados.difalOpcao);
-
-      //Valida se existe .air para typescript não acusar erro
-      if (!resultado.air) {
-        resultado.air = {
-          dados: {
-            total: total,
-            difal: difal,
-            prazo: prazo,
-            impostos: impostos,
-            subtotal: subtotal
-          }
-        };
-      }
+      //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
+      resultado.rodo = {
+        dados: {
+          total: requisicao.totalRodo,
+          difal: requisicao.difalRodo,
+          prazo: requisicao.prazoRodo,
+          impostos: requisicao.impostosRodo,
+          subtotal: requisicao.subtotalRodo
+        }
+      };
     } catch (error) {
       //Verifica se o error é do "tipo" Axios
       if (axios.isAxiosError(error)) {
@@ -134,6 +112,43 @@ export async function POST(request: NextRequest) {
         } else {
           //Printa o erro caso não seja 404
           console.error(error.message);
+        }
+      }
+    }
+
+    // REQUISIÇÃO MODAL AÉREO
+
+    if (modalAereo === "true") {
+      //Se o modalAereo estiver permitido, faz a consulta
+      try {
+        //AIR é sempre 167 o fator. Caso tenha vindo fator 300 no modal AIR, transforma para 167
+        if (fator === 300) {
+          dadosValidados.pesoCubado = (Number(dadosValidados.pesoCubado) / 300) * 167;
+
+          dadosValidados.pesoTaxado = Number(validacao.data.pesoReal) > dadosValidados.pesoCubado ? Number(validacao.data.pesoReal) : dadosValidados.pesoCubado;
+        }
+
+        //Valida se existe .air para typescript não acusar erro
+        if (!resultado.air) {
+          resultado.air = {
+            dados: {
+              total: requisicao.totalAir,
+              difal: requisicao.difalAir,
+              prazo: requisicao.prazoAir,
+              impostos: requisicao.impostosAir,
+              subtotal: requisicao.subtotalAir
+            }
+          };
+        }
+      } catch (error) {
+        //Verifica se o error é do "tipo" Axios
+        if (axios.isAxiosError(error)) {
+          // Caso seja erro 404, não faz nada
+          if (error.response && error.response.status === 404) {
+          } else {
+            //Printa o erro caso não seja 404
+            console.error(error.message);
+          }
         }
       }
     }
