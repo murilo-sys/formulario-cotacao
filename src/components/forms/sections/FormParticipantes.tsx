@@ -15,7 +15,7 @@ export default function FormParticipantes() {
     formState: { errors }
   } = useFormContext<CotacaoCompletaDados>();
 
-  const { consultarDocumento } = useValidarDocumento();
+  const { consultarDocumento, enderecoOrigem, enderecoDestino } = useValidarDocumento();
 
   const classNameBase = "p-1 active:scale-95 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer w-full flex justify-center border border-blue-200 rounded-md ";
 
@@ -43,10 +43,10 @@ export default function FormParticipantes() {
                   placeholder="CPF ou CNPJ"
                   erro={errors.remetenteDoc?.message}
                   id="remetenteDoc"
+                  rua={enderecoOrigem}
                   type="text"
                   mask={mascaraCpfCnpj}
                   onBlur={async () => {
-                    if (field.value.trim() === "") return;
                     field.onBlur();
                     await consultarDocumento(field.value, "remetenteDoc");
                   }}
@@ -76,9 +76,9 @@ export default function FormParticipantes() {
                   erro={errors.destinatarioDoc?.message}
                   id="destinatarioDoc"
                   type="text"
+                  rua={enderecoDestino}
                   mask={mascaraCpfCnpj}
                   onBlur={async () => {
-                    if (field.value.trim() === "") return;
                     field.onBlur();
                     await consultarDocumento(field.value, "destinatarioDoc");
                   }}

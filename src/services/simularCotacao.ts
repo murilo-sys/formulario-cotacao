@@ -44,7 +44,7 @@ export async function simularCotacao(dados: CotacaoDados | CotacaoCompletaDados)
   // Caso tenha sido diferente de 200-299
   if (!resposta.ok) {
     //Caso tenha sido 404 status
-    if (resposta.status === 404) {
+    if (resposta.status === 404 || resposta.status === 400) {
       return {
         notFound: true
       };

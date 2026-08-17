@@ -1,11 +1,13 @@
 import axios from "axios";
 
-// Cache em memória dos documentos já consultados
-const cacheDocumentos = new Map<string, boolean>();
+type cacheDocumentoType = { valido: true; cidade: string; estado: string } | { valido: false };
 
-export default async function consultarDoc(doc: string): Promise<boolean> {
+// Cache em memória dos documentos já consultados
+const cacheDocumentos = new Map<string, cacheDocumentoType>();
+
+export default async function consultarDoc(doc: string) {
   //Se não houver doc return false
-  if (!doc) return false;
+  if (!doc) return { valido: false };
 
   //Verifica se existe no cache
   if (cacheDocumentos.has(doc)) {
@@ -22,25 +24,33 @@ export default async function consultarDoc(doc: string): Promise<boolean> {
 
     if (!response.data.notFound) {
       //Seta o valor capturado no cache
-      cacheDocumentos.set(doc, true);
-      return true;
+      cacheDocumentos.set(doc, {
+        valido: true,
+        cidade: response.data?.cidade,
+        estado: response.data?.estado
+      });
+      return {
+        valido: true,
+        cidade: response.data?.cidade,
+        estado: response.data?.estado
+      };
     }
 
     //Seta o cache como false
-    cacheDocumentos.set(doc, false);
+    cacheDocumentos.set(doc, { valido: false });
 
     //Return como false
-    return false;
+    return { valido: false };
   } catch (error) {
     //Verifica se é um erro Axios
     if (axios.isAxiosError(error)) {
       //Caso o status seja 404
       if (error.status === 404) {
-        cacheDocumentos.set(doc, false);
-        return false;
+        cacheDocumentos.set(doc, { valido: false });
+        return { valido: false };
       }
     }
 
-    return false;
+    return { valido: false };
   }
 }

@@ -3,7 +3,7 @@ import axios from "axios";
 import { cnpj, cpf } from "cpf-cnpj-validator";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest): Promise<NextResponse<{ message?: unknown; notFound: true | false }>> {
+export async function GET(request: NextRequest) {
   //Lê os params
   const params = request.nextUrl.searchParams;
 
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<{ message?
       return NextResponse.json({ notFound: true }, { status: 404 });
     }
 
-    return NextResponse.json({ notFound: false }, { status: 200 });
+    return NextResponse.json({ notFound: false, cidade: response.cidade, estado: response.estado }, { status: 200 });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log(error.response);

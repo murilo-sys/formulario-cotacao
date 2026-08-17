@@ -13,7 +13,7 @@ export default function ModalConfirmacaoCotacao({ valoresConfirmacao, onAprovar,
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 lg:p-0">
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex flex-col gap-4 w-full max-w-md lg:max-w-xl bg-white rounded-2xl py-8 pb-6 px-6 shadow-xl">
-        <h3 className="text-xl font-bold text-[#0c3d7c]">CONFIRMAÇÃO DE COTAÇÃO</h3>
+        <h3 className="text-xl font-bold text-[#0c3d7c]">CONFIRME SUA COTAÇÃO</h3>
 
         {/* Sub total e prazo de entrega */}
         <div className="border-b border-dotted border-blue-900">

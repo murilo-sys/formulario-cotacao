@@ -17,8 +17,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<CriarCota
   //Faz um safeParse/Check dos dados no schema usando zod
   const dados = CotacaoCompletaSchema.safeParse(body);
 
-  //Caso o check não tenha sucesso
   if (!dados.success) {
+    //Caso o check não tenha sucesso
     //Mapeia os erros
     const errosFormatados = dados.error.issues.map((valor) => {
       return {
@@ -29,7 +29,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<CriarCota
 
     return NextResponse.json(errosFormatados, { status: 400 });
   }
-  //Usando promise.all para consultar todos juntos
+
+  //Usando promise.all para consultar todos juntos ao mesmo tempo
   const [consultaDestinatario, consultaRemetente, consultaSolicitante] = await Promise.all([consultarDocBackend(dados.data.destinatarioDoc), consultarDocBackend(dados.data.remetenteDoc), consultarDocBackend(dados.data.solicitanteDoc)]);
 
   //Validar o documento destinatarioDoc
