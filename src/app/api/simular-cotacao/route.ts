@@ -67,19 +67,21 @@ export async function POST(request: NextRequest) {
   }
 
   // Cria a variavel resultado
-  const resultado = {} as { rodo: { dados: { total: string; difal?: string; prazo: string } }; air?: { dados: { total: string; difal?: string; prazo: string } } };
+  const resultado = {} as { rodo: { dados: { total: string; difal?: string; prazo: string; impostos: string; subtotal: string } }; air?: { dados: { total: string; difal?: string; prazo: string; impostos: string; subtotal: string } } };
 
   // REQUISIÇÃO MODAL RODOVIÁRIO
   try {
     //Faz a requisição
-    const { total, difal, prazo } = await apiSimularValor("rodo", dadosValidados, token, dadosValidados.difalOpcao);
+    const { total, difal, prazo, impostos, subtotal } = await apiSimularValor("rodo", dadosValidados, token, dadosValidados.difalOpcao);
 
     //Caso tenha sido um sucesso, faz um "push" para dentro do resultado
     resultado.rodo = {
       dados: {
         total: total,
         difal: difal,
-        prazo: prazo
+        prazo: prazo,
+        impostos: impostos,
+        subtotal: subtotal
       }
     };
   } catch (error) {
@@ -110,7 +112,7 @@ export async function POST(request: NextRequest) {
       }
 
       //Faz a requisição no modal aéreo
-      const { total, difal, prazo } = await apiSimularValor("air", dadosValidados, token, dadosValidados.difalOpcao);
+      const { total, difal, prazo, impostos, subtotal } = await apiSimularValor("air", dadosValidados, token, dadosValidados.difalOpcao);
 
       //Valida se existe .air para typescript não acusar erro
       if (!resultado.air) {
@@ -118,7 +120,9 @@ export async function POST(request: NextRequest) {
           dados: {
             total: total,
             difal: difal,
-            prazo: prazo
+            prazo: prazo,
+            impostos: impostos,
+            subtotal: subtotal
           }
         };
       }

@@ -48,17 +48,9 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
   } = rhf;
 
   // Custom hook para estados do formulário completo
-  const {
-    erroModalAtivo,
-    carregando,
-    setCarregando,
-    cotacaoSequenceCode,
-    setCotacaoSequenceCode,
-    cotacaoValoresConfirmacao,
-    setCotacaoValoresConfirmacao
-  } = useFormCompleto(errors);
+  const { erroModalAtivo, carregando, setCarregando, cotacaoSequenceCode, setCotacaoSequenceCode, cotacaoValoresConfirmacao, setCotacaoValoresConfirmacao } = useFormCompleto(errors);
 
-  // 1. PASSO 1: Submissão do Formulário ➔ Executa a Simulação dos valores e abre o Modal de Confirmação
+  // Submissão do Formulário: Executa a Simulação dos valores e abre o Modal de Confirmação
   async function handlerSubmeterCotacaoCompleta(dadosFormulario: CotacaoCompletaDados) {
     setCarregando(true);
     setDadosFormularioSalvos(dadosFormulario);
@@ -77,9 +69,9 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
       setCotacaoValoresConfirmacao({
         total: rodo.total,
         prazo: rodo.prazo,
-        difal: rodo.difal || "R$ 0,00",
-        subtotal: rodo.total,
-        impostos: "0"
+        difal: rodo.difal || "0",
+        subtotal: rodo.subtotal,
+        impostos: rodo.impostos || "0"
       });
     } catch (error) {
       console.error(error);
@@ -89,7 +81,7 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     }
   }
 
-  // 2. PASSO 2A: Usuário APROVOU no Modal de Confirmação ➔ Cria a cotação e abre o Modal de Sucesso
+  // Usuário APROVOU no Modal de Confirmação
   async function handleAprovarCotacao() {
     setCotacaoValoresConfirmacao(null); // Fecha o modal de confirmação
     if (!dadosFormularioSalvos) return;
@@ -114,7 +106,7 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     }
   }
 
-  // 3. PASSO 2B: Usuário RECUSOU no Modal de Confirmação ➔ Apenas fecha o modal
+  // Usuário RECUSOU no Modal de Confirmação
   function handleRecusarCotacao() {
     setCotacaoValoresConfirmacao(null);
   }
@@ -146,8 +138,6 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
         </motion.div>
       </form>
 
-      {/* 4. MODAIS IRMÃOS (Nível do Formulário Pai) */}
-
       {/* Modal de alerta de mercadoria bloqueada */}
       {erroModalAtivo && (
         <ModalMercadoriaBloqueada
@@ -161,18 +151,10 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
       )}
 
       {/* Modal de Confirmação de Valores (Aprovar / Recusar) */}
-      <ModalConfirmacaoCotacao
-        valoresConfirmacao={cotacaoValoresConfirmacao}
-        onAprovar={handleAprovarCotacao}
-        onRecusar={handleRecusarCotacao}
-      />
+      <ModalConfirmacaoCotacao valoresConfirmacao={cotacaoValoresConfirmacao} onAprovar={handleAprovarCotacao} onRecusar={handleRecusarCotacao} />
 
       {/* Modal de Sucesso da Cotação (Sequence Code) */}
-      <ModalSucessoCotacao
-        sequenceCode={cotacaoSequenceCode}
-        fechar={() => setCotacaoSequenceCode(null)}
-      />
+      <ModalSucessoCotacao sequenceCode={cotacaoSequenceCode} fechar={() => setCotacaoSequenceCode(null)} />
     </FormProvider>
   );
 }
-

@@ -114,6 +114,8 @@ export interface CotacaoDadosCard {
   total: string;
   difal?: string;
   prazo: string;
+  impostos: string;
+  subtotal: string;
 }
 
 //Tipo do CotacaoCardType

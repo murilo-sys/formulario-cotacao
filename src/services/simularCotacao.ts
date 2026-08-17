@@ -63,13 +63,15 @@ export async function simularCotacao(dados: CotacaoDados | CotacaoCompletaDados)
   const respostaDados = await resposta.json();
 
   const resultado: {
-    rodo: { total: string; difal?: string; prazo: string };
-    air?: { total: string; difal?: string; prazo: string };
+    rodo: { total: string; difal?: string; impostos: string; prazo: string; subtotal: string };
+    air?: { total: string; difal?: string; impostos: string; prazo: string; subtotal: string };
   } = {
     rodo: {
       total: respostaDados.rodo.dados.total,
       prazo: respostaDados.rodo.dados.prazo,
-      difal: respostaDados.rodo.dados.difal
+      difal: respostaDados.rodo.dados.difal,
+      impostos: respostaDados.rodo.dados.impostos,
+      subtotal: respostaDados.rodo.dados.subtotal
     }
   };
 
@@ -77,7 +79,9 @@ export async function simularCotacao(dados: CotacaoDados | CotacaoCompletaDados)
     resultado.air = {
       total: respostaDados.air.dados.total,
       prazo: respostaDados.air.dados.prazo,
-      difal: respostaDados.air.dados.difal
+      difal: respostaDados.air.dados.difal,
+      impostos: respostaDados.air.dados.impostos,
+      subtotal: respostaDados.rodo.dados.subtotal
     };
   }
 
