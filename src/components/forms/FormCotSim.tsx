@@ -198,7 +198,7 @@ export default function FormularioCotacaoSimulacao() {
                   <div className="flex flex-col items-end gap-1">
                     <div className="flex flex-row justify-end items-center gap-3">
                       {/* Botão de Difal */}
-                      <ToggleSwitch name="difalOpcao" control={control} label="Incluir difal?" />
+                      <ToggleSwitch name="difalOpcao" control={control} label="Incluir difal" tooltip="DIFAL (Diferencial de Alíquota): Imposto cobrado em operações de frete interestaduais quando o destinatário não é contribuinte do ICMS e pagador do frete."></ToggleSwitch>
 
                       {/* Botao de submit */}
                       <div className="flex flex-col gap-1">
