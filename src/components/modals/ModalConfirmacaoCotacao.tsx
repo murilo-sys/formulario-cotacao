@@ -1,3 +1,4 @@
+import { TERMOS_CONDICOES } from "@/constants/termosCondicoes";
 import { CotacaoValoresConfirmacaoType } from "@/schemas/cotacaoSchema";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -71,15 +72,17 @@ export default function ModalConfirmacaoCotacao({ valoresConfirmacao, onAprovar,
         </motion.div>
       )}
       {etapa === 2 && (
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="flex flex-col gap-4 w-full max-w-md lg:max-w-xl bg-white rounded-2xl py-8 pb-6 px-6 shadow-xl">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="gap-2 flex flex-col w-full max-w-md lg:max-w-xl bg-white rounded-2xl py-8 pb-6 px-6 shadow-xl">
           <h3 className="text-xl font-bold text-[#0c3d7c]">TERMOS E CONDIÇÕES DE USO</h3>
 
-          <p>bla bla bla...</p>
+          <div className="flex flex-col gap-2">
+            <div className="text-black max-h-48 overflow-y-auto whitespace-pre-line select-none border border-blue-900 p-3">{TERMOS_CONDICOES}</div>
 
-          <label htmlFor="termosCondicoes">
-            Li e concordo com este texto maravilhoso
-            <input type="checkbox" checked={termosCondicoes} onChange={(e) => setTermosCondicoes(e.target.checked)} id="termosCondicoes" />
-          </label>
+            <label htmlFor="termosCondicoes" className="flex flex-row gap-2">
+              <input type="checkbox" checked={termosCondicoes} onChange={(e) => setTermosCondicoes(e.target.checked)} id="termosCondicoes" />
+              Li e concordo com este texto maravilhoso
+            </label>
+          </div>
 
           <div className="flex flex-row justify-end gap-3 mt-4">
             <button type="button" className="cursor-pointer border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 font-medium px-4 py-2 rounded-xl transition-all" onClick={() => setEtapa(1)}>
