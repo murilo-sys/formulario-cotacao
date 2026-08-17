@@ -11,6 +11,8 @@ interface ModalConfirmacaoCotacaoProps {
 export default function ModalConfirmacaoCotacao({ valoresConfirmacao, onAprovar, onRecusar }: ModalConfirmacaoCotacaoProps) {
   const [etapa, setEtapa] = useState<1 | 2>(1);
 
+  const [termosCondicoes, setTermosCondicoes] = useState<boolean>(false);
+
   if (!valoresConfirmacao) return null;
 
   return (
@@ -76,14 +78,14 @@ export default function ModalConfirmacaoCotacao({ valoresConfirmacao, onAprovar,
 
           <label htmlFor="termosCondicoes">
             Li e concordo com este texto maravilhoso
-            <input type="checkbox" id="termosCondicoes" />
+            <input type="checkbox" checked={termosCondicoes} onChange={(e) => setTermosCondicoes(e.target.checked)} id="termosCondicoes" />
           </label>
 
           <div className="flex flex-row justify-end gap-3 mt-4">
             <button type="button" className="cursor-pointer border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 font-medium px-4 py-2 rounded-xl transition-all" onClick={() => setEtapa(1)}>
               Voltar
             </button>
-            <button type="button" className="cursor-pointer border border-blue-600 bg-blue-800 hover:bg-blue-900 text-white font-medium px-4 py-2 rounded-xl transition-all" onClick={onAprovar}>
+            <button type="button" disabled={!termosCondicoes || false} className="cursor-pointer enabled:hover:-translate-y-0.5 disabled:bg-blue-200 disabled:border-blue-100 border border-blue-600 bg-blue-800 hover:bg-blue-900 text-white font-medium px-4 py-2 rounded-xl transition-all" onClick={onAprovar}>
               {"Aprovar cotação"}
             </button>
           </div>
