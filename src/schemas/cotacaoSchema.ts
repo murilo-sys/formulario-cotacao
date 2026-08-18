@@ -43,6 +43,7 @@ export const CotacaoSchema = z.object({
     .refine((valor) => (valor.length === 14 ? cnpj.isValid(valor) : cpf.isValid(valor)), {
       message: "Documento inválido"
     }),
+  solicitanteEmail: z.email("Email inválido").optional().or(z.literal("")),
   cepOrigem: z.string().length(8, "O CEP de origem está incompleto"),
   cepDestino: z.string().length(8, "O CEP de destino está incompleto"),
   pesoReal: z

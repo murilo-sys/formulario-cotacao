@@ -31,7 +31,8 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
       valorNfe: dadosSimulacao?.valorNfe ?? "",
       cubagens: dadosSimulacao?.cubagens.length ? [...dadosSimulacao.cubagens] : [{ volume: "", length: "", width: "", height: "" }],
       totalVolumes: dadosSimulacao?.totalVolumes ?? "",
-      pesoReal: dadosSimulacao?.pesoReal ?? ""
+      pesoReal: dadosSimulacao?.pesoReal ?? "",
+      solicitanteEmail: ""
     }
   });
 
@@ -39,17 +40,17 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
     handleSubmit,
     setFocus,
     setValue,
+    getValues,
     formState: { errors },
     clearErrors
   } = rhf;
 
   // Custom hook para estados do formulário completo
-  const { erroModalAtivo, carregando, setCarregando, cotacaoSequenceCode, setCotacaoSequenceCode, cotacaoValoresConfirmacao, setCotacaoValoresConfirmacao, setDadosFormularioSalvos, handleAprovarCotacao } = useFormCompleto(errors);
+  const { erroModalAtivo, carregando, setCarregando, cotacaoSequenceCode, setCotacaoSequenceCode, cotacaoValoresConfirmacao, setCotacaoValoresConfirmacao, handleAprovarCotacao } = useFormCompleto(errors, getValues);
 
   // Submissão do Formulário: Executa a Simulação dos valores e abre o Modal de Confirmação
   async function handlerSubmeterCotacaoCompleta(dadosFormulario: CotacaoCompletaDados) {
     setCarregando(true);
-    setDadosFormularioSalvos(dadosFormulario);
 
     try {
       const responseSimulacao = await simularCotacao(dadosFormulario);
@@ -128,7 +129,7 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
       <ModalConfirmacaoCotacao
         valoresConfirmacao={cotacaoValoresConfirmacao}
         onAprovar={() => {
-          handleAprovarCotacao(true);
+          handleAprovarCotacao();
         }}
         onRecusar={() => {
           setCotacaoValoresConfirmacao(null);

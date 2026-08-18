@@ -2,9 +2,9 @@ import { LISTA_INFOS_MODAL, TYPE_INFO_MODAL } from "@/constants/modalAlertas";
 import { CotacaoCompletaDados, CotacaoValoresConfirmacaoType } from "@/schemas/cotacaoSchema";
 import criarCotacao from "@/services/criarCotacao";
 import { useState } from "react";
-import { FieldErrors } from "react-hook-form";
+import { FieldErrors, UseFormGetValues } from "react-hook-form";
 
-export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>) {
+export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>, getValues: UseFormGetValues<CotacaoCompletaDados>) {
   //useState da animação botão carregando
   const [carregando, setCarregando] = useState<true | false>(false);
 
@@ -13,9 +13,6 @@ export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>) {
 
   //Valores da simulação para confirmar
   const [cotacaoValoresConfirmacao, setCotacaoValoresConfirmacao] = useState<CotacaoValoresConfirmacaoType | null>(null);
-
-  // Guarda os dados preenchidos temporariamente para usar no momento da aprovação
-  const [dadosFormularioSalvos, setDadosFormularioSalvos] = useState<CotacaoCompletaDados | null>(null);
 
   //consulta se existe erros
   const entradasErros = Object.entries(errors);
@@ -27,27 +24,23 @@ export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>) {
   const erroModalAtivo = erroEncontrado ? { campo: erroEncontrado[0] as keyof CotacaoCompletaDados, tipo: erroEncontrado[1]?.message as TYPE_INFO_MODAL } : null;
 
   // Usuário APROVOU no Modal de Confirmação
-  async function handleCriarCotacao(aprovado: boolean) {
+  async function handleCriarCotacao() {
     setCotacaoValoresConfirmacao(null); // Fecha o modal de confirmação
-    if (!dadosFormularioSalvos) return;
 
-    //Caso a cotação esteja aprovada
-    if (aprovado) {
-      setCarregando(true);
-    }
+    //Pega os dados do formulario
+    const dadosFormularios = getValues();
+    if (!dadosFormularios) return;
+
+    setCarregando(true);
 
     try {
-      const responseCriar = await criarCotacao(dadosFormularioSalvos);
-
+      const responseCriar = await criarCotacao(dadosFormularios);
       if (!responseCriar.valido) {
         alert(responseCriar.erro || "Não foi possível criar a cotação.");
         return;
       }
-
-      // Abre o Modal de Sucesso com o sequenceCode Caso a cotação esteja aprovada
-      if (aprovado) {
-        setCotacaoSequenceCode(responseCriar.sequenceCode);
-      }
+      // Abre o Modal de Sucesso
+      setCotacaoSequenceCode(responseCriar.sequenceCode);
     } catch (error) {
       console.error(error);
       alert("Erro ao criar cotação. Tente novamente mais tarde.");
@@ -64,8 +57,6 @@ export function useFormCompleto(errors: FieldErrors<CotacaoCompletaDados>) {
     setCotacaoSequenceCode,
     cotacaoValoresConfirmacao,
     setCotacaoValoresConfirmacao,
-    handleAprovarCotacao: handleCriarCotacao,
-    dadosFormularioSalvos,
-    setDadosFormularioSalvos
+    handleAprovarCotacao: handleCriarCotacao
   };
 }
