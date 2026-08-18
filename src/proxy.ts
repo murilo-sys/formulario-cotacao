@@ -2,29 +2,40 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { Redis } from "@upstash/redis";
 import { Ratelimit } from "@upstash/ratelimit";
+import { validarRecaptchaUseCase } from "./services/server/use-cases/validarRecaptchaUseCase";
 
 const redis = Redis.fromEnv();
 
+// Regra: limite de 1 requisição em um intervalo de 15 segundos PADRÃO
 const ratelimitPadrao = new Ratelimit({
   redis: redis,
-  // Regra: limite de 1 requisição em um intervalo de 15 segundos
   limiter: Ratelimit.slidingWindow(1, "15 s"),
   analytics: true
 });
 
+// Regra: limite de 2 requisições em um intervalo de 15 segundos para consultar documento
 const ratelimitConsultarDoc = new Ratelimit({
   redis: redis,
-  // Regra: limite de 2 requisições em um intervalo de 15 segundos
   limiter: Ratelimit.slidingWindow(2, "15 s"),
   analytics: true
 });
 
 export async function proxy(request: NextRequest) {
+  //Caso esteja no ambiente de desenvolvimento, não passa pelo rate limit
   if (process.env.NODE_ENV === "development") {
     return NextResponse.next();
   }
 
-  //Pega os heardes da requisição
+  //Validação do recaptcha
+  const recaptchaToken = request.headers.get("x-recaptcha-token");
+  const validacaoCaptcha = await validarRecaptchaUseCase(recaptchaToken || "");
+
+  //Caso não seja válido
+  if (!validacaoCaptcha.valido) {
+    return NextResponse.json({ erro: validacaoCaptcha.motivo || "Acesso não autorizado" }, { status: 403 });
+  }
+
+  //Pega os heardes da requisição para verificação de origins
   const origin = request.headers.get("origin");
   const referer = request.headers.get("referer");
   const host = request.headers.get("host");
@@ -43,6 +54,7 @@ export async function proxy(request: NextRequest) {
   //Concatena os ip e o caminho
   const identifier = `${ip}:${path}`;
 
+  //Faz o filtro se deve passar pelo limit consultar doc ou rate limit padrão
   const limiter = path.includes("/api/consultar-doc") ? ratelimitConsultarDoc : ratelimitPadrao;
 
   //Faz a verificação do ratelimit
@@ -56,5 +68,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/:path*"]
+  matcher: ["/api/((?!registrar-abandono).*)"]
 };
