@@ -21,7 +21,6 @@
 ## 📑 Sumário
 
 - [Sobre o Projeto](#-sobre-o-projeto)
-- [Demonstração](#-demonstração)
 - [Principais Funcionalidades](#-principais-funcionalidades)
 - [Arquitetura e Camadas](#-arquitetura-e-camadas)
 - [Tecnologias Utilizadas](#-tecnologias-utilizadas)
@@ -42,19 +41,6 @@ O sistema atua como uma ponte estratégica entre o cliente final e o ERP logíst
 - **Funil de recuperação de leads**, registrando automaticamente dados de cotações abandonadas para a equipe comercial.
 
 Tudo isso envelopado em uma interface interativa, construída com animações fluidas e protegida contra abusos por camadas de *Rate Limiting* e *Google reCAPTCHA v3*.
-
----
-
-## 🖥️ Demonstração
-
-<div align="center">
-
-<!-- Inserir aqui o GIF ou Print da aplicação em funcionamento -->
-![Demonstração do Formulário de Cotação](https://placehold.co/1200x600/0c3d7c/FFFFFF/png?text=Preview+do+Formul%C3%A1rio+de+Cota%C3%A7%C3%A3o+Global+Cargo)
-
-*Interface responsiva e dinâmica: formulário em etapas, cálculo de cubagens em tempo real e modais de confirmação.*
-
-</div>
 
 ---
 
