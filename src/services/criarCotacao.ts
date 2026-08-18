@@ -1,3 +1,4 @@
+import api from "@/lib/api";
 import { CotacaoCompletaDados, CriarCotacaoResponse } from "@/schemas/cotacaoSchema";
 import axios from "axios";
 
@@ -8,7 +9,7 @@ interface CriarCotacaoResponseError {
 
 export default async function criarCotacao(formularioDados: CotacaoCompletaDados): Promise<CriarCotacaoResponse | CriarCotacaoResponseError> {
   try {
-    const responseCotacao = await axios.post("/api/criar-cotacao", {
+    const responseCotacao = await api.post("/criar-cotacao", {
       ...formularioDados
     });
 

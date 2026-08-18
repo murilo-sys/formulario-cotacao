@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,13 +18,15 @@ export const metadata: Metadata = {
   description: ""
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      {recaptchaKey && <Script src={`https://www.google.com/recaptcha/api.js?render=${recaptchaKey}`} strategy="afterInteractive" />}
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

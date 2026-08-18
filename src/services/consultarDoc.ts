@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "@/lib/api";
 
 type cacheDocumentoType = { valido: true; cidade: string; estado: string } | { valido: false };
 
@@ -17,10 +18,10 @@ export default async function consultarDoc(doc: string) {
 
   try {
     //Formata a url com o parametro correto
-    const url = `/api/consultar-doc?documento=${doc}`;
+    const url = `/consultar-doc?documento=${doc}`;
 
     // Faz o get no endpoint para verificar
-    const response = await axios.get(url);
+    const response = await api.get(url);
 
     if (!response.data.notFound) {
       //Seta o valor capturado no cache
