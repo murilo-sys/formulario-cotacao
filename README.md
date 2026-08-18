@@ -25,15 +25,9 @@
 - [Principais Funcionalidades](#-principais-funcionalidades)
 - [Arquitetura e Camadas](#-arquitetura-e-camadas)
 - [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [Pré-requisitos](#-pré-requisitos)
-- [Instalação](#-instalação)
-- [Variáveis de Ambiente](#-variáveis-de-ambiente)
-- [Execução](#-execução)
 - [Estrutura de Pastas](#-estrutura-de-pastas)
-- [Roadmap](#-roadmap)
 - [Distribuição e Uso](#-distribuição-e-uso)
 - [Licença](#-licença)
-- [Autor](#-autor)
 
 ---
 
@@ -117,84 +111,6 @@ flowchart TD
 
 ---
 
-## 📦 Pré-requisitos
-
-Antes de iniciar, certifique-se de possuir em seu ambiente:
-
-* [Node.js](https://nodejs.org/) (versão `20.x` ou superior recomendada)
-* [pnpm](https://pnpm.io/) (versão `9.x` ou superior) — *ou npm / yarn / bun*
-* Credenciais de API configuradas (ESL Cloud, Google reCAPTCHA v3 e Upstash Redis)
-
----
-
-## 🚀 Instalação
-
-1. **Clone o repositório:**
-   ```bash
-   git clone https://github.com/seu-usuario/formulario-cotacao.git
-   cd formulario-cotacao
-   ```
-
-2. **Instale as dependências:**
-   ```bash
-   pnpm install
-   ```
-
----
-
-## ⚙️ Variáveis de Ambiente
-
-Crie um arquivo `.env.local` na raiz do projeto e configure as chaves necessárias:
-
-```env
-# Tokens de Acesso ao ERP (ESL Cloud)
-TOKEN_API=seu_token_api_rest
-TOKEN_GRAPHQL_API=seu_token_api_graphql
-
-# Configurações de Modais e Features
-NEXT_PUBLIC_AIR_MODAL=true
-NEXT_PUBLIC_COT_COMPLETO=true
-
-# Google reCAPTCHA v3
-NEXT_PUBLIC_RECAPTCHA_SITE_KEY=sua_chave_publica_recaptcha
-RECAPTCHA_SECRET_KEY=sua_chave_privada_recaptcha
-
-# Upstash Redis (Rate Limiting)
-UPSTASH_REDIS_REST_URL=https://sua-instancia.upstash.io
-UPSTASH_REDIS_REST_TOKEN=seu_token_upstash
-
-# Webhook para Registro de Abandono (Telemetria / Churn)
-GOOGLE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/seu_id_script/exec
-```
-
----
-
-## 💻 Execução
-
-### Ambiente de Desenvolvimento
-
-Para rodar a aplicação com *Hot Reload*:
-
-```bash
-pnpm dev
-```
-
-Abra [http://localhost:3000](http://localhost:3000) em seu navegador.
-
-### Build de Produção
-
-Para testar o build otimizado de produção:
-
-```bash
-# 1. Compilação e verificação de tipos
-pnpm build
-
-# 2. Inicialização do servidor de produção
-pnpm start
-```
-
----
-
 ## 📂 Estrutura de Pastas
 
 ```text
@@ -232,19 +148,6 @@ formulario-cotacao/
 
 ---
 
-## 🗺️ Roadmap
-
-- [x] Formulário dinâmico de cubagem com limite por volume total
-- [x] Integração completa com GraphQL do ERP para criação de cotações
-- [x] Sistema de proteção anti-bot com reCAPTCHA v3 e Upstash Rate Limiting
-- [x] Telemetria de cotações abandonadas via Webhook e `sendBeacon`
-- [ ] Implementação de suíte de testes unitários com **Vitest** para os cálculos de frete e cubagem
-- [ ] Migração do cache em memória dos adapters para o **Redis**
-- [ ] Substituição dos `alert()` por sistema de notificações Toast acessíveis (Sonner)
-- [ ] Dashboard administrativo para visualização de métricas de conversão
-
----
-
 ## 🔒 Distribuição e Uso
 
 > ### ⚠️ AVISO DE PROPRIEDADE INTELECTUAL E DIREITOS RESERVADOS
@@ -259,18 +162,8 @@ formulario-cotacao/
 
 ## 📄 Licença
 
-Copyright © 2026 **Murilo Santiago / Global Cargo**. Todos os direitos reservados.  
+Copyright © 2026 **Global Cargo**. Todos os direitos reservados.  
 *Proprietary License — All Rights Reserved.*
-
----
-
-## 👤 Autor
-
-Desenvolvido com dedicação por **Murilo Santiago**.
-
-- **LinkedIn**: [linkedin.com/in/murilosantiago](https://www.linkedin.com/) *(atualize com seu perfil)*
-- **GitHub**: [@murilosantiago](https://github.com/) *(atualize com seu usuário)*
-- **E-mail**: [murilod_santiago@hotmail.com](mailto:murilod_santiago@hotmail.com)
 
 ---
 
