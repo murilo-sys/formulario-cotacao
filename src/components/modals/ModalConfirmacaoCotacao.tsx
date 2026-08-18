@@ -78,9 +78,9 @@ export default function ModalConfirmacaoCotacao({ valoresConfirmacao, onAprovar,
           <div className="flex flex-col gap-2">
             <div className="text-black max-h-48 overflow-y-auto whitespace-pre-line select-none border border-blue-900 p-3">{TERMOS_CONDICOES}</div>
 
-            <label htmlFor="termosCondicoes" className="flex flex-row gap-2">
-              <input type="checkbox" checked={termosCondicoes} onChange={(e) => setTermosCondicoes(e.target.checked)} id="termosCondicoes" />
-              Li e concordo com este texto maravilhoso
+            <label htmlFor="termosCondicoes" className="flex flex-row items-center gap-2 text-sm text-gray-700 cursor-pointer select-none">
+              <input type="checkbox" checked={termosCondicoes} onChange={(e) => setTermosCondicoes(e.target.checked)} id="termosCondicoes" className="cursor-pointer" />
+              Declaro que li e aceito os termos e condições de transporte.
             </label>
           </div>
 

@@ -131,7 +131,7 @@ export default function FormCotCompleto({ dadosSimulacao }: FormCompletoProps) {
           handleAprovarCotacao(true);
         }}
         onRecusar={() => {
-          handleAprovarCotacao(false);
+          setCotacaoValoresConfirmacao(null);
         }}
       />
 
