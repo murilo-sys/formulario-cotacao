@@ -15,7 +15,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function Input({ className, mask, onAccept, erro, prefixo, rua, ref, ...props }: InputProps) {
-  const baseClasses = `transitio-all duration-300 w-full border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`;
+  const baseClasses = `transition-all duration-300 w-full border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`;
 
   return (
     <div className="flex flex-col w-full gap-1">

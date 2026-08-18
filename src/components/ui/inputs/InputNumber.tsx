@@ -10,7 +10,7 @@ interface InputNumberProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function InputNumber({ className, erro, prefixo, ref, ...props }: InputNumberProps) {
-  const baseClasses = `transitio-all duration-300 border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`;
+  const baseClasses = `transition-all duration-300 border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`;
 
   return (
     <div className={`relative w-full ${erro ? "bg-red-100 animate-shake" : ""}`}>
