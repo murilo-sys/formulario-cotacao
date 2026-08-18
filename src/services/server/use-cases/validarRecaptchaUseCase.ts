@@ -6,11 +6,6 @@ type ValidarRecaptchaResult = { valido: false; motivo: string } | { valido: true
 const SCORE_MINIMO = 0.5;
 
 export async function validarRecaptchaUseCase(token: string): Promise<ValidarRecaptchaResult> {
-  //Caso esteja em ambiente de desenvolvimento
-  if (process.env.NODE_ENV === "development" && !token) {
-    return { valido: true };
-  }
-
   //Caso não tenha token
   if (!token) {
     return { valido: false, motivo: "Token de recaptcha ausente" };
