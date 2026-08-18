@@ -26,7 +26,7 @@ export function InputMedida({ className, erro, prefixo, onChange, ...props }: In
 
   return (
     <div className={`relative w-full ${erro ? "bg-red-100 animate-shake" : ""}`}>
-      <input {...props} className={`${className} ${baseClasses ? baseClasses : ""}`} onChange={handleChange} />
+      <input {...props} inputMode="numeric" enterKeyHint="next" className={`${className} ${baseClasses ? baseClasses : ""}`} onChange={handleChange} />
 
       {prefixo ? <span className={`absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none`}>{prefixo + " |"}</span> : ""}
     </div>

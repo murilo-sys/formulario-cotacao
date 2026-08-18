@@ -14,16 +14,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   ref?: React.Ref<HTMLInputElement>;
 }
 
-export function Input({
-  className,
-  mask,
-  onAccept,
-  erro,
-  prefixo,
-  rua,
-  ref,
-  ...props
-}: InputProps) {
+export function Input({ className, mask, onAccept, erro, prefixo, rua, ref, ...props }: InputProps) {
   const baseClasses = `transitio-all duration-300 w-full border border-zinc-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ""}`;
 
   return (
@@ -32,24 +23,13 @@ export function Input({
         {mask && onAccept ? (
           <>
             {/*@ts-expect-error: Ignorando a tipagem complexa da biblioteca react-imask */}
-            <IMaskInput
-              {...props}
-              inputRef={ref}
-              mask={mask}
-              unmask={true}
-              onAccept={onAccept}
-              className={baseClasses}
-            />
+            <IMaskInput {...props} inputRef={ref} mask={mask} unmask={true} inputMode="numeric" enterKeyHint="next" onAccept={onAccept} className={baseClasses} />
           </>
         ) : (
           <input {...props} ref={ref} className={`w-full ${baseClasses}`} />
         )}
 
-        {prefixo && (
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
-            {prefixo + " |"}
-          </span>
-        )}
+        {prefixo && <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">{prefixo + " |"}</span>}
       </div>
 
       {!prefixo && (
@@ -62,13 +42,7 @@ export function Input({
           transition={{ duration: 0.3, ease: "easeOut" }}
           className="flex flex-row border border-blue-200 bg-blue-50 w-fit rounded-xl px-2 gap-1"
         >
-          <Image
-            src={"/icons/address.svg"}
-            alt="Icone de localização"
-            width={18}
-            height={18}
-            className="w-3.5 h-auto"
-          />
+          <Image src={"/icons/address.svg"} alt="Icone de localização" width={18} height={18} className="w-3.5 h-auto" />
 
           <span className={"text-sm"}>{rua}</span>
         </motion.div>

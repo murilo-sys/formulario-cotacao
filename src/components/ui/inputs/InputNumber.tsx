@@ -15,7 +15,7 @@ export function InputNumber({ className, erro, prefixo, ref, ...props }: InputNu
   return (
     <div className={`relative w-full ${erro ? "bg-red-100 animate-shake" : ""}`}>
       {/* @ts-expect-error: Ignorando a tipagem complexa da biblioteca react-imask */}
-      <IMaskInput inputRef={ref} {...props} className={`${baseClasses} ${prefixo ? "pl-11" : ""}`} mask={Number} scale={2} unmask={false} thousandsSeparator="." radix="," padFractionalZeros={true} normalizeZeros={true} mapToRadix={["."]} />
+      <IMaskInput inputRef={ref} {...props} inputMode="numeric" enterKeyHint="next" className={`${baseClasses} ${prefixo ? "pl-11" : ""}`} mask={Number} scale={2} unmask={false} thousandsSeparator="." radix="," padFractionalZeros={true} normalizeZeros={true} mapToRadix={["."]} />
 
       {prefixo ? <span className={`absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none`}>{prefixo + " |"}</span> : ""}
     </div>
