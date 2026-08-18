@@ -15,17 +15,17 @@ export const ItemCubagemSchema = z.object({
     .string()
     .min(1, "Largura inválida")
     .regex(/^[0-9,.]+$/, "largura com caracteres inválidos")
-    .refine((valor) => parseNumberBR(valor) > 0, { message: "Altura deve ser maior que zero" }),
+    .refine((valor) => parseNumberBR(valor) > 0, { message: "Largura deve ser maior que zero" }),
   length: z
     .string()
     .min(1, "Comprimento inválido")
     .regex(/^[0-9,.]+$/, "Comprimento com caracteres inválidos")
-    .refine((valor) => parseNumberBR(valor) > 0, { message: "Altura deve ser maior que zero" }),
+    .refine((valor) => parseNumberBR(valor) > 0, { message: "Comprimento deve ser maior que zero" }),
   volume: z
     .string()
     .min(1, "Quantidade inválida")
     .regex(/^[0-9]+$/, "Quantidade com caracteres inválidos")
-    .refine((valor) => parseNumberBR(valor) > 0, { message: "Altura deve ser maior que zero" })
+    .refine((valor) => parseNumberBR(valor) > 0, { message: "Volumes deve ser maior que zero" })
 });
 
 export type CubagemType = z.infer<typeof ItemCubagemSchema>;
