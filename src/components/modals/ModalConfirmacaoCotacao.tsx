@@ -85,7 +85,9 @@ export default function ModalConfirmacaoCotacao({ valoresConfirmacao, onAprovar,
 
           <div>
             <div>
-              <label htmlFor="email">Receba uma cópia detalhada em seu e-mail (opcional)</label>
+              <label className="font-medium" htmlFor="email">
+                Receba uma cópia detalhada em seu e-mail
+              </label>
               <Controller name="solicitanteEmail" control={control} render={({ field }) => <Input {...field} type="email" placeholder="Digite aqui seu email..." />} />
               {errors.solicitanteEmail && <span className="text-red-500 text-xs">{errors.solicitanteEmail.message}</span>}
             </div>
@@ -101,7 +103,7 @@ export default function ModalConfirmacaoCotacao({ valoresConfirmacao, onAprovar,
                   setValue("solicitanteEmail", "");
                 }}
               >
-                Recusar
+                Voltar
               </button>
 
               {/* Proximo */}
