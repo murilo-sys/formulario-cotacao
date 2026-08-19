@@ -3,7 +3,7 @@ import consultarDoc from "@/services/consultarDoc";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-type CampoDocumento = "remetenteDoc" | "destinatarioDoc";
+type CampoDocumento = "remetenteDoc" | "destinatarioDoc" | "solicitanteDoc";
 
 export function useValidarDocumento() {
   // useState endereco origem

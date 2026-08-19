@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { CotacaoCompletaSchema, CriarCotacaoResponse } from "@/schemas/cotacaoSchema";
 import consultarDocBackend from "@/services/server/use-cases/consultarDocUseCase";
 import criarCotacaoAdapter from "@/services/server/adapters/criarCotacaoAdapter";
+import { enviarEmailCotacaoUseCase } from "@/services/server/use-cases/enviarEmailCotacaoUseCase";
+import { OPCOES_NATUREZA } from "@/constants/naturezas";
 
 interface CotacaoErroResponseType {
   campo?: string;
@@ -61,6 +63,29 @@ export async function POST(request: NextRequest): Promise<NextResponse<CriarCota
 
     if (!cotacao.sequenceCode) {
       return NextResponse.json([{ erro: "Não foi possivel criar sua cotação, verifique as informações inseridas e tente novamente..." }], { status: 400 });
+    }
+
+    //Caso houver email do solicitante, dispara o email
+    if (dadosValidos.solicitanteEmail?.trim() !== "") {
+      const natureza = OPCOES_NATUREZA.find((opcao) => opcao.value === dadosValidos.naturezaMercadoria);
+
+      //Chama a função para enviar e-mail
+      enviarEmailCotacaoUseCase({
+        destinatarioEmail: dadosValidos.solicitanteEmail || "",
+        sequenceCode: cotacao.sequenceCode,
+        solicitanteNome: dadosValidos.solicitanteNome,
+        remetenteDoc: dadosValidos.remetenteDoc,
+        destinatarioDoc: dadosValidos.destinatarioDoc,
+        cidadeOrigem: dadosValidos.cidadeOrigem,
+        estadoOrigem: dadosValidos.estadoOrigem,
+        cidadeDestino: dadosValidos.cidadeDestino,
+        estadoDestino: dadosValidos.estadoDestino,
+        pagador: dadosValidos.pagadorFrete === "dest" ? "Destinatário" : "Remetente",
+        pesoReal: dadosValidos.pesoReal,
+        totalVolumes: dadosValidos.totalVolumes,
+        valorNfe: dadosValidos.valorNfe,
+        naturezaMercadoria: natureza ? natureza.label : dadosValidos.naturezaMercadoria
+      });
     }
 
     return NextResponse.json({ valido: true, sequenceCode: cotacao.sequenceCode });
