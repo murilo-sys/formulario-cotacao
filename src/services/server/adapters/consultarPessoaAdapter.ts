@@ -2,13 +2,7 @@ import "server-only";
 
 import axios from "axios";
 
-export interface DadosPessoaConsultada {
-  valido: boolean;
-  cidade?: string;
-  estado?: string;
-  cep?: string;
-  contribuinte?: boolean;
-}
+export type DadosPessoaConsultada = { valido: true; cidade: string; estado: string; cep: string; contribuinte: boolean } | { valido: false };
 
 // Lê a variável de ambiente
 const token = process.env.TOKEN_GRAPHQL_API;
@@ -95,7 +89,7 @@ export default async function consultarPessoa(doc: string): Promise<DadosPessoaC
   const node = nodeCompany || nodeIndividual;
 
   // Se não encontrou o cadastro ou faltam dados essenciais
-  if (!node || !node.mainAddress?.city?.name || !node.mainAddress?.city?.state?.code) {
+  if (!node || !node.mainAddress?.city?.name || !node.mainAddress?.city?.state?.code || !node.mainAddress.postalCode || !node.taxpayer) {
     const resultadoInvalido: DadosPessoaConsultada = { valido: false };
     cacheDocumentos.set(doc, resultadoInvalido);
     return resultadoInvalido;

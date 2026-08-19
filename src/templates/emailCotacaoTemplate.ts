@@ -2,6 +2,10 @@ import "server-only";
 
 export interface DadosTemplateCotacao {
   sequenceCode: number;
+  valorTotal: string;
+  subTotal: string;
+  impostos: string;
+  difal?: string;
   solicitanteNome: string;
   remetenteDoc: string;
   destinatarioDoc: string;
@@ -51,19 +55,31 @@ export function gerarHtmlCotacao(dados: DadosTemplateCotacao): string {
     <p style="margin: 6px 0 0 0; font-size: 14px;"><strong>Natureza da Carga:</strong> ${dados.naturezaMercadoria}</p>
   </div>
 
+  <div style="background-color: #ffffff; border: 1px solid #e2e8f0; padding: 15px; margin: 20px 0; border-radius: 6px;">
+    <h3 style="color: #1a3a6b; margin-top: 0; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Valores e Impostos</h3>
+    <p style="margin: 0; font-size: 14px;"><strong>Valor total:</strong> R$ ${dados.valorTotal || "Não informado"}</p>
+    <p style="margin: 6px 0 0 0; font-size: 14px;"><strong>Sub-total:</strong> R$ ${dados.subTotal}</p>
+    <p style="margin: 6px 0 0 0; font-size: 14px;"><strong>Impostos:</strong> R$ ${dados.impostos}</p>
+    ${dados.difal && dados.difal !== "0" ? `<p style="margin: 6px 0 0 0; font-size: 14px;"><strong>Difal:</strong> R$ ${dados.difal}</p>` : ""}
+  </div>
+
   <div style="background-color: #f8fafc; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 0 6px 6px 0;">
     <p style="margin: 0 0 10px 0; font-size: 14px; color: #333333;">
       <strong style="color: #d9383a;">Atenção:</strong> Em sua Nota Fiscal deverá constar os dados da Global Cargo <strong>(GLOBAL AIR CARGO LTDA - CNPJ 00.945.958/0001-55)</strong> no campo de transportador. Nos casos em que a NF já está emitida e não consta o CNPJ, enviar o XML da Nota Fiscal para <strong>xml@globalcargo.com.br</strong>.
     </p>
   </div>
   
-  <p style="margin: 0 0 30px 0; font-size: 15px;">
+  <span style="margin: 0 0 30px 0; font-size: 15px;">
+                <strong>Aviso:</strong> Os valores e prazos informados nesta simulação são de tabela padrão e não contemplam acordos comerciais ou negociações prévias.
+              </span>
+  
+  <p style="margin:  30px 0; font-size: 15px;">
     Em caso de dúvidas, entre em contato com a equipe de suporte da Global informando o número da sua solicitação.
   </p>
   
   <p style="margin: 0; color: #555555; font-size: 15px;">Atenciosamente,</p>
   <p style="margin: 4px 0 0 0; font-weight: bold; color: #1a3a6b; font-size: 18px; letter-spacing: 0.5px;">
-    Global Cargo</span>
+    Global Cargo
   </p>
   <p style="margin: 0; font-size: 12px; color: #d9383a">Paixão por entregar bem ✓</p>
   

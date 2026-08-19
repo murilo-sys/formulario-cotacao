@@ -11,13 +11,14 @@ export async function POST(request: NextRequest) {
   //Lê o body da requisição
   const body = await request.json();
 
-  const consultaDestinatario = body.destinatarioDoc && (await consultarPessoaAdapter(body.destinatarioDoc || null));
+  const consultaDestinatario = body.destinatarioDoc && (await consultarPessoaAdapter(body.destinatarioDoc));
+  const consultaRemetente = body.remetenteDoc && (await consultarPessoaAdapter(body.remetenteDoc));
 
   //Pega as variaveis da URL e guarda em dados
   const dados = {
     solicitanteDoc: cnpj.strip(body.solicitanteDoc) || null,
     solicitanteNome: body.solicitanteNome?.replace(/[^a-zA-ZÀ-ÿ\s]/g, "") || null,
-    cepOrigem: body.cepOrigem?.replace(/\D/g, "") || (await consultarPessoaAdapter(body.remetenteDoc || null)).cep || null,
+    cepOrigem: body.cepOrigem?.replace(/\D/g, "") || consultaRemetente.cep || null,
     cepDestino: body.cepDestino?.replace(/\D/g, "") || consultaDestinatario.cep || null,
     pesoReal: body.pesoReal?.replace(/[^0-9,]/g, "").replace(",", ".") || null,
     totalVolumes: body.totalVolumes?.replace(/\D/g, "") || null,

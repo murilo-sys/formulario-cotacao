@@ -6,6 +6,10 @@ import consultarDocBackend from "@/services/server/use-cases/consultarDocUseCase
 import criarCotacaoAdapter from "@/services/server/adapters/criarCotacaoAdapter";
 import { enviarEmailCotacaoUseCase } from "@/services/server/use-cases/enviarEmailCotacaoUseCase";
 import { OPCOES_NATUREZA } from "@/constants/naturezas";
+import { apiSimularValor } from "@/services/server/adapters/simularValorAdapter";
+import { calcularPesoCubado } from "@/services/server/utils/calcularPesoCubado";
+import { calcularFator } from "@/services/server/utils/calcularFator";
+import parseNumberBR from "@/utils/parseNumberBR";
 
 interface CotacaoErroResponseType {
   campo?: string;
@@ -50,12 +54,21 @@ export async function POST(request: NextRequest): Promise<NextResponse<CriarCota
     return NextResponse.json([{ campo: "solicitanteDoc", erro: "Documento não cadastrado no sistema" }], { status: 400 });
   }
 
+  //Caso o cepDestino ou cepOrigem for fator 300, então é fator 300 geral
+  const fator = (await calcularFator(consultaDestinatario.cep)) == 300 || (await calcularFator(consultaRemetente.cep)) == 300 ? 300 : 167;
+
+  const pesoCubado = calcularPesoCubado(dados.data.cubagens, fator);
+
   const dadosValidos = {
     ...dados.data,
+    cepOrigem: consultaRemetente.cep,
     cidadeOrigem: consultaRemetente.cidade,
     estadoOrigem: consultaRemetente.estado,
+    cepDestino: consultaDestinatario.cep,
     cidadeDestino: consultaDestinatario.cidade,
-    estadoDestino: consultaDestinatario.estado
+    estadoDestino: consultaDestinatario.estado,
+    pesoTaxado: parseNumberBR(dados.data.pesoReal) > pesoCubado ? parseNumberBR(dados.data.pesoReal) : pesoCubado,
+    difalOpcao: dados.data.pagadorFrete === "dest" && !consultaDestinatario.contribuinte ? true : false
   };
 
   try {
@@ -69,23 +82,35 @@ export async function POST(request: NextRequest): Promise<NextResponse<CriarCota
     if (dadosValidos.solicitanteEmail?.trim() !== "") {
       const natureza = OPCOES_NATUREZA.find((opcao) => opcao.value === dadosValidos.naturezaMercadoria);
 
-      //Chama a função para enviar e-mail
-      enviarEmailCotacaoUseCase({
-        destinatarioEmail: dadosValidos.solicitanteEmail || "",
-        sequenceCode: cotacao.sequenceCode,
-        solicitanteNome: dadosValidos.solicitanteNome,
-        remetenteDoc: dadosValidos.remetenteDoc,
-        destinatarioDoc: dadosValidos.destinatarioDoc,
-        cidadeOrigem: dadosValidos.cidadeOrigem,
-        estadoOrigem: dadosValidos.estadoOrigem,
-        cidadeDestino: dadosValidos.cidadeDestino,
-        estadoDestino: dadosValidos.estadoDestino,
-        pagador: dadosValidos.pagadorFrete === "dest" ? "Destinatário" : "Remetente",
-        pesoReal: dadosValidos.pesoReal,
-        totalVolumes: dadosValidos.totalVolumes,
-        valorNfe: dadosValidos.valorNfe,
-        naturezaMercadoria: natureza ? natureza.label : dadosValidos.naturezaMercadoria
-      });
+      try {
+        const token = process.env.TOKEN_API || "";
+
+        const simulacao = await apiSimularValor("rodo", dadosValidos, token, dadosValidos.pagadorFrete === "dest" && !consultaDestinatario.contribuinte ? true : false);
+
+        //Chama a função para enviar e-mail
+        await enviarEmailCotacaoUseCase({
+          destinatarioEmail: dadosValidos.solicitanteEmail || "",
+          sequenceCode: cotacao.sequenceCode,
+          solicitanteNome: dadosValidos.solicitanteNome,
+          remetenteDoc: dadosValidos.remetenteDoc,
+          destinatarioDoc: dadosValidos.destinatarioDoc,
+          cidadeOrigem: dadosValidos.cidadeOrigem,
+          estadoOrigem: dadosValidos.estadoOrigem,
+          cidadeDestino: dadosValidos.cidadeDestino,
+          estadoDestino: dadosValidos.estadoDestino,
+          pagador: dadosValidos.pagadorFrete === "dest" ? "Destinatário" : "Remetente",
+          pesoReal: dadosValidos.pesoReal,
+          totalVolumes: dadosValidos.totalVolumes,
+          valorNfe: dadosValidos.valorNfe,
+          naturezaMercadoria: natureza ? natureza.label : dadosValidos.naturezaMercadoria,
+          valorTotal: simulacao.total,
+          subTotal: simulacao.subtotal,
+          impostos: simulacao.impostos,
+          difal: simulacao.difal
+        });
+      } catch (error) {
+        console.error("[criar-cotacao]: Não foi possível enviar e-mail:", error);
+      }
     }
 
     return NextResponse.json({ valido: true, sequenceCode: cotacao.sequenceCode });

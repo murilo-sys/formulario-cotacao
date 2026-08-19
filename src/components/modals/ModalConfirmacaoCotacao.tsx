@@ -84,12 +84,15 @@ export default function ModalConfirmacaoCotacao({ valoresConfirmacao, onAprovar,
           </div>
 
           <div>
-            <div>
+            <div className="bg-gray-50 border p-1 rounded-sm">
               <label className="font-medium" htmlFor="email">
                 Receba uma cópia detalhada em seu e-mail
               </label>
               <Controller name="solicitanteEmail" control={control} render={({ field }) => <Input {...field} type="email" placeholder="Digite aqui seu email..." />} />
               {errors.solicitanteEmail && <span className="text-red-500 text-xs">{errors.solicitanteEmail.message}</span>}
+              <span className="text-sm text-gray-500 text-md text-center">
+                <strong>Aviso:</strong> Os valores e prazos informados nesta simulação são de tabela padrão e não contemplam acordos comerciais ou negociações prévias.
+              </span>
             </div>
 
             {/* Botoes de recusar e próximo */}

@@ -84,7 +84,7 @@ export const CotacaoCompletaSchema = CotacaoSchema.omit({
     }),
   pesoReal: CotacaoSchema.shape.pesoReal.refine(
     (valor) => {
-      return parseNumberBR(valor) < 5000;
+      return parseNumberBR(valor) < 500;
     },
     {
       message: "pesoElevado"
