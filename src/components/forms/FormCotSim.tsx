@@ -53,6 +53,9 @@ export default function FormularioCotacaoSimulacao() {
   //Dados da cotação
   const [cotacaoDados, setCotacaoDados] = useState<CotacaoResponse | null>(null);
 
+  //UseState se o solicitante tem cadastro, caso não tenha não poderá criar cotação
+  const [solicitanteExisteNoSistema, setSolicitanteExisteNoSistema] = useState<boolean>(false);
+
   //useState para verificar se VIACEP está ativo ou não
   const [apiCepCheck, setApiCepCheck] = useState<"carregando" | "online" | "offline">("carregando");
 
@@ -219,8 +222,11 @@ export default function FormularioCotacaoSimulacao() {
                 <AnimatePresence>
                   <FormSolicitante
                     key={"formSolicitante"}
-                    solicitanteVerificadoAction={(valor) => {
-                      setSolicitanteVerificado(valor);
+                    solicitanteValido={(valor) => {
+                      setSolicitanteExisteNoSistema(valor);
+                    }}
+                    solicitanteVerificadoAction={() => {
+                      setSolicitanteVerificado(true);
                     }}
                   />
                 </AnimatePresence>
@@ -233,6 +239,7 @@ export default function FormularioCotacaoSimulacao() {
               <CotacaoCard
                 key={"cotacao-card"}
                 resultado={cotacaoDados}
+                solicitanteValido={solicitanteExisteNoSistema}
                 clicadoFuncao={() => {
                   setCotacaoCompleta(true);
                 }}

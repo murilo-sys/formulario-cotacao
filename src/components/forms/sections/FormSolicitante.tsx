@@ -6,12 +6,14 @@ import { mascaraCpfCnpj } from "@/utils/mascaras";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/inputs/Input";
 import { Label } from "@/components/ui/Label";
+import { useValidarDocumento } from "@/hooks/useValidarDocumento";
 
 type FormSolicitanteProps = {
-  solicitanteVerificadoAction: (valor: boolean) => void;
+  solicitanteVerificadoAction: () => void;
+  solicitanteValido: (valor: boolean) => void;
 };
 
-export default function FormSolicitante({ solicitanteVerificadoAction: solicitanteVerificado }: FormSolicitanteProps) {
+export default function FormSolicitante({ solicitanteVerificadoAction: solicitanteVerificado, solicitanteValido }: FormSolicitanteProps) {
   //useFormContext para importar o useForm do formulário principal "integrando" eles
   const {
     control,
@@ -20,12 +22,14 @@ export default function FormSolicitante({ solicitanteVerificadoAction: solicitan
     formState: { errors }
   } = useFormContext<CotacaoDados>();
 
+  const { consultarDocumento } = useValidarDocumento(solicitanteValido);
+
   async function validarCampos() {
     const valoresValidos = await trigger(["solicitanteDoc", "solicitanteNome"]);
 
     if (!valoresValidos) return;
 
-    solicitanteVerificado(true);
+    solicitanteVerificado();
   }
 
   return (
@@ -52,9 +56,10 @@ export default function FormSolicitante({ solicitanteVerificadoAction: solicitan
                 id="solicitanteDoc"
                 type="text"
                 mask={mascaraCpfCnpj}
-                onBlur={() => {
+                onBlur={async () => {
                   if (field.value.trim() === "") return;
-                  trigger("solicitanteDoc");
+                  const valido = await trigger("solicitanteDoc");
+                  if (valido) await consultarDocumento(field.value, "solicitanteDoc");
                   field.onBlur();
                 }}
                 value={field.value}

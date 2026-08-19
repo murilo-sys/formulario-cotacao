@@ -5,7 +5,7 @@ import { useFormContext } from "react-hook-form";
 
 type CampoDocumento = "remetenteDoc" | "destinatarioDoc" | "solicitanteDoc";
 
-export function useValidarDocumento() {
+export function useValidarDocumento(solicitanteValido?: (valor: boolean) => void) {
   // useState endereco origem
   const [enderecoOrigem, setEnderencoOrigem] = useState<string>("");
 
@@ -19,7 +19,7 @@ export function useValidarDocumento() {
     // Faz a verificação da sintaxe usando trigger no zod
     const sintaxeValida = await trigger(campo);
 
-    //Se não for true, retorna false
+    //Verifica sintaxe, caso inválido define os endereços como vazio
     if (!sintaxeValida) {
       if (campo === "destinatarioDoc") if (enderecoDestino.trim() !== "") setEnderencoDestino("");
       if (campo === "remetenteDoc") if (enderecoOrigem.trim() !== "") setEnderencoOrigem("");
@@ -31,11 +31,21 @@ export function useValidarDocumento() {
 
     //Caso não seja valido
     if (!consultaDoc.valido) {
-      setError(campo, { type: "manual", message: "cadastroInexistente" });
+      //Caso seja campo de remetente ou destinatario, usa setError para abrir modal
+      if (campo === "destinatarioDoc" || campo === "remetenteDoc") setError(campo, { type: "manual", message: "cadastroInexistente" });
+
+      //Caso campo seja de solicitanteDoc, define que ele não é valido e não poderá criar uma cotação
+      if (campo === "solicitanteDoc" && solicitanteValido) solicitanteValido(false);
+
+      //Caso campo de destinatario ou remetente os endereços sejam diferente de "", então seta como ""
       if (campo === "destinatarioDoc") if (enderecoDestino.trim() !== "") setEnderencoDestino("");
       if (campo === "remetenteDoc") if (enderecoOrigem.trim() !== "") setEnderencoOrigem("");
+
       return;
     }
+
+    //Caso campo seja de solicitanteDoc, define que ele É valido e poderá criar uma cotação
+    if (campo === "solicitanteDoc" && solicitanteValido) solicitanteValido(true);
 
     const enderecoFormatado = `${consultaDoc.estado.trim()} - ${consultaDoc.cidade.trim()}`;
 

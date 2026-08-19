@@ -9,10 +9,11 @@ import Card from "./Card";
 interface CotacaoCardProps {
   resultado: CotacaoResponse;
   clicadoFuncao: () => void;
+  solicitanteValido: boolean;
   clicado: boolean;
 }
 
-export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: CotacaoCardProps) {
+export default function CotacaoCard({ clicadoFuncao, clicado, resultado, solicitanteValido }: CotacaoCardProps) {
   //Cria ref para a div
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -56,7 +57,7 @@ export default function CotacaoCard({ clicadoFuncao, clicado, resultado }: Cotac
           <div className="flex flex-col justify-center items-center gap-3">
             <p className="text-sm text-gray-500 text-md text-center">Valores apresentados sujeitos a alteração mediante conferência de documentação.</p>
 
-            {COT_COMPLETO === "true" && <AnimatePresence>{!clicado && <ButtonCriar key={"botao-criar"} clicarFuncao={clicadoFuncao} />}</AnimatePresence>}
+            {COT_COMPLETO === "true" && solicitanteValido && <AnimatePresence>{!clicado && <ButtonCriar key={"botao-criar"} clicarFuncao={clicadoFuncao} />}</AnimatePresence>}
           </div>
         </div>
       )}
